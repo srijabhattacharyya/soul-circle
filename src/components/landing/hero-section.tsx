@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -20,10 +21,10 @@ export function HeroSection({ data }: { data: HeroSectionData }) {
               <Image
                 src="/images/logo.png"
                 alt="SoulCircle Logo"
-                width={96}
-                height={96}
+                width={128}
+                height={128}
                 quality={100}
-                className="h-24 w-24"
+                className="h-24 w-24 md:h-32 md:w-32"
                 data-ai-hint="logo"
               />
             </div>
