@@ -2,9 +2,11 @@ import { Header } from '@/components/landing/header';
 import { HeroSection } from '@/components/landing/hero-section';
 import { HowItHelpsSection } from '@/components/landing/how-it-helps-section';
 import { DisclaimerSection } from '@/components/landing/disclaimer-section';
-import { landingPageData } from '@/lib/mock-data';
+import { getLandingPageContent } from '@/lib/content-service';
 
-export default function Home() {
+export default async function Home() {
+  const landingPageData = await getLandingPageContent();
+
   return (
     <div className="flex flex-col min-h-dvh bg-background">
       <Header />
