@@ -22,6 +22,7 @@ export function HeroSection({ data }: { data: HeroSectionData }) {
                 alt="SoulCircle Logo"
                 width={96}
                 height={96}
+                quality={100}
                 className="h-24 w-24"
                 data-ai-hint="logo"
               />
