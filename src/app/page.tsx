@@ -1,28 +1,23 @@
-import { Button } from '@/components/ui/button';
-import Image from 'next/image';
+import {
+  DisclaimerSection,
+} from '@/components/landing/disclaimer-section';
+import { Header } from '@/components/landing/header';
+import { HeroSection } from '@/components/landing/hero-section';
+import {
+  HowItHelpsSection,
+} from '@/components/landing/how-it-helps-section';
+import { getLandingPageContent } from '@/lib/content-service';
 
-export default function Home() {
+export default async function Home() {
+  const content = await getLandingPageContent();
   return (
     <div className="flex flex-col min-h-dvh bg-background">
+      <Header />
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="w-full pt-16 bg-background">
-          <div className="container mx-auto px-4 md:px-6 text-center">
-            <div className="h-20" aria-hidden="true" /> {/* Logo whitespace */}
-            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-              Your Safe Space for Mental Wellness
-            </h1>
-            <div className="mt-8 flex justify-center gap-4">
-              <Button
-                size="lg"
-                className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-md"
-              >
-                Get Started
-              </Button>
-            </div>
-          </div>
-        </section>
+        <HeroSection data={content.hero_section} />
+        <HowItHelpsSection data={content.how_it_helps_section} />
       </main>
+      <DisclaimerSection data={content.disclaimer_section} />
     </div>
   );
 }
