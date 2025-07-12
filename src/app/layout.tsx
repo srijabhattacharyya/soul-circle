@@ -2,11 +2,18 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { AppHeader } from '@/components/app-header';
+import { Inter } from 'next/font/google';
+import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
   title: 'SoulCircle',
   description: 'Because your story deserves a listening circle.',
 };
+
+const fontInter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+});
 
 export default function RootLayout({
   children,
@@ -15,19 +22,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className="font-body antialiased">
+      <body
+        className={cn('font-body antialiased', fontInter.variable)}
+      >
         <AppHeader />
         <main className="pt-16">{children}</main>
         <Toaster />
