@@ -4,7 +4,7 @@ import Image from 'next/image';
 export function Logo(props: SVGProps<SVGSVGElement>) {
   return (
     <Image
-      src="/logo.png"
+      src="/logo.jpeg"
       alt="SoulCircle Logo"
       width={96}
       height={96}
