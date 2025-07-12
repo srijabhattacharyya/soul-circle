@@ -7,7 +7,7 @@ type LogoProps = {
 export function Logo({ className }: LogoProps) {
   return (
     <Image
-      src="https://placehold.co/96x96.png"
+      src="/logo.png"
       alt="SoulCircle Logo"
       width={96}
       height={96}
