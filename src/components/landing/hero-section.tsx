@@ -35,7 +35,7 @@ export function HeroSection({ data }: { data: HeroSectionData }) {
               {data.tagline}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 mt-4 justify-center">
-              <Button size="lg" variant="ghost" className='bg-accent text-accent-foreground hover:bg-accent/90 hover:text-accent-foreground'>{data.button_get_started_label}</Button>
+              <Button size="lg" className='bg-accent text-accent-foreground hover:bg-primary hover:text-primary-foreground border-2 border-transparent hover:border-primary-foreground transition-colors'>{data.button_get_started_label}</Button>
               <Button size="lg" variant="outline">
                 {data.button_learn_more_label}
               </Button>
