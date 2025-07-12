@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -27,15 +28,15 @@ export function HeroSection({ data }: { data: HeroSectionData }) {
                 data-ai-hint="logo"
               />
             </div>
-            <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none font-headline">
+            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl xl:text-6xl/none font-headline">
               {data.catch_line}
             </h1>
             <p className="max-w-[700px] text-primary-foreground/90 mx-auto sm:text-xl">
               {data.tagline}
             </p>
             <div className="w-full max-w-sm mx-auto flex flex-col sm:flex-row gap-2">
-              <Button size="lg" className='bg-accent text-accent-foreground hover:bg-primary hover:text-primary-foreground border-2 border-transparent hover:border-primary-foreground transition-colors w-full'>{data.button_get_started_label}</Button>
-              <Button size="lg" className="bg-accent text-accent-foreground hover:bg-primary hover:text-primary-foreground border-2 border-transparent hover:border-primary-foreground transition-colors w-full">
+              <Button className='bg-accent text-accent-foreground hover:bg-primary hover:text-primary-foreground border-2 border-transparent hover:border-primary-foreground transition-colors w-full h-10 px-4 py-2 md:h-11 md:px-8'>{data.button_get_started_label}</Button>
+              <Button className="bg-accent text-accent-foreground hover:bg-primary hover:text-primary-foreground border-2 border-transparent hover:border-primary-foreground transition-colors w-full h-10 px-4 py-2 md:h-11 md:px-8">
                 {data.button_learn_more_label}
               </Button>
             </div>
