@@ -9,7 +9,7 @@ export default function LearnMorePage() {
             <div className="grid gap-12 lg:grid-cols-2 lg:gap-24 items-start">
               <div className="flex justify-center">
                 <Image
-                  src="https://placehold.co/400x300.png"
+                  src="/images/srija.png"
                   width="400"
                   height="300"
                   alt="Srija"
