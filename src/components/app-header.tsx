@@ -15,13 +15,13 @@ export function AppHeader() {
       <nav className="flex items-center gap-4">
         <Button variant="ghost" className="hover:bg-primary/90 hover:text-primary-foreground" asChild>
           <Link href="/">
-            <Home className="mr-2" />
+            <Home className="mr-2 h-4 w-4" />
             Landing Page
           </Link>
         </Button>
         <Button variant="ghost" className="hover:bg-primary/90 hover:text-primary-foreground" asChild>
           <Link href="/learn-more">
-            <BookOpen className="mr-2" />
+            <BookOpen className="mr-2 h-4 w-4" />
             Learn More
           </Link>
         </Button>
