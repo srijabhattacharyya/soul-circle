@@ -22,21 +22,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        {/* Image Section */}
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-secondary">
-          <div className="container mx-auto px-4 md:px-6 flex justify-center">
-            <div className="shadow-lg rounded-lg overflow-hidden">
-               <Image
-                  src="https://placehold.co/400x300.png"
-                  alt="Srija Preview"
-                  width={400}
-                  height={300}
-                  data-ai-hint="woman smiling"
-                />
-            </div>
-          </div>
-        </section>
       </main>
     </div>
   );
