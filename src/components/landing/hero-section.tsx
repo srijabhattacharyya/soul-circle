@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -13,10 +12,10 @@ type HeroSectionData = {
 
 export function HeroSection({ data }: { data: HeroSectionData }) {
   return (
-    <section className="w-full py-20 md:py-32 animate-in fade-in-0 slide-in-from-bottom-5 duration-1000 bg-primary text-primary-foreground">
+    <section className="w-full py-12 md:py-24 lg:py-32 bg-primary text-primary-foreground animate-in fade-in-0 slide-in-from-bottom-5 duration-1000">
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid gap-6 lg:gap-12">
-          <div className="flex flex-col justify-center space-y-6 text-center">
+          <div className="flex flex-col justify-center space-y-4 text-center">
             <div className="flex justify-center">
               <Image
                 src="/images/logo.png"
@@ -28,15 +27,15 @@ export function HeroSection({ data }: { data: HeroSectionData }) {
                 data-ai-hint="logo"
               />
             </div>
-            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl font-headline">
+            <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none font-headline">
               {data.catch_line}
             </h1>
-            <p className="max-w-[700px] text-primary-foreground/90 md:text-xl mx-auto">
+            <p className="max-w-[700px] text-primary-foreground/90 mx-auto sm:text-xl">
               {data.tagline}
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 mt-4 justify-center">
-              <Button size="lg" className='bg-accent text-accent-foreground hover:bg-primary hover:text-primary-foreground border-2 border-transparent hover:border-primary-foreground transition-colors'>{data.button_get_started_label}</Button>
-              <Button size="lg" className="bg-accent text-accent-foreground hover:bg-primary hover:text-primary-foreground border-2 border-transparent hover:border-primary-foreground transition-colors">
+            <div className="w-full max-w-sm mx-auto flex flex-col sm:flex-row gap-2">
+              <Button size="lg" className='bg-accent text-accent-foreground hover:bg-primary hover:text-primary-foreground border-2 border-transparent hover:border-primary-foreground transition-colors w-full'>{data.button_get_started_label}</Button>
+              <Button size="lg" className="bg-accent text-accent-foreground hover:bg-primary hover:text-primary-foreground border-2 border-transparent hover:border-primary-foreground transition-colors w-full">
                 {data.button_learn_more_label}
               </Button>
             </div>
