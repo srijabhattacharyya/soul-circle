@@ -12,7 +12,7 @@ type HeroSectionData = {
 
 export function HeroSection({ data }: { data: HeroSectionData }) {
   return (
-    <section className="w-full py-20 md:py-32 animate-in fade-in-0 slide-in-from-bottom-5 duration-1000">
+    <section className="w-full py-20 md:py-32 animate-in fade-in-0 slide-in-from-bottom-5 duration-1000 bg-primary text-primary-foreground">
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid gap-6 lg:gap-12">
           <div className="flex flex-col justify-center space-y-6 text-center">
@@ -30,11 +30,11 @@ export function HeroSection({ data }: { data: HeroSectionData }) {
             <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl font-headline">
               {data.catch_line}
             </h1>
-            <p className="max-w-[700px] text-muted-foreground md:text-xl mx-auto">
+            <p className="max-w-[700px] text-primary-foreground/90 md:text-xl mx-auto">
               {data.tagline}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 mt-4 justify-center">
-              <Button size="lg">{data.button_get_started_label}</Button>
+              <Button size="lg" variant="secondary">{data.button_get_started_label}</Button>
               <Button size="lg" variant="outline">
                 {data.button_learn_more_label}
               </Button>
