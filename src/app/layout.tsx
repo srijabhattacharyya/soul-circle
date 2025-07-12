@@ -1,16 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
-import {
-  Sidebar,
-  SidebarProvider,
-  SidebarInset,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-} from '@/components/ui/sidebar';
-import Link from 'next/link';
-import { Home, BookOpen } from 'lucide-react';
 import { AppHeader } from '@/components/app-header';
 
 export const metadata: Metadata = {
@@ -38,32 +28,8 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased">
-        <SidebarProvider>
-          <Sidebar>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link href="/">
-                    <Home />
-                    Landing Page
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link href="/learn-more">
-                    <BookOpen />
-                    Learn More
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </Sidebar>
-          <SidebarInset>
-            <AppHeader />
-            {children}
-          </SidebarInset>
-        </SidebarProvider>
+        <AppHeader />
+        <main className="pt-16">{children}</main>
         <Toaster />
       </body>
     </html>

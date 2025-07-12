@@ -1,27 +1,31 @@
 'use client';
 
-import { SidebarTrigger } from '@/components/ui/sidebar';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import Image from 'next/image';
+import { Home, BookOpen } from 'lucide-react';
 
 export function AppHeader() {
   return (
-    <header className="px-4 lg:px-6 h-16 flex items-center justify-between bg-primary text-primary-foreground fixed top-0 left-0 right-0 z-50 border-b md:left-[var(--sidebar-width)] transition-[left] peer-data-[state=collapsed]:md:left-[var(--sidebar-width-icon)]">
-      <div className='flex items-center gap-2'>
-        <SidebarTrigger className="md:hidden" />
+    <header className="px-4 lg:px-6 h-16 flex items-center justify-between bg-primary text-primary-foreground fixed top-0 left-0 right-0 z-50 border-b">
+      <div className="flex items-center gap-4">
         <Link href="/" className="flex items-center gap-2" prefetch={false}>
           <span className="font-bold text-lg">SoulCircle</span>
         </Link>
       </div>
-      <div className="flex items-center gap-4">
+      <nav className="flex items-center gap-4">
         <Button variant="ghost" className="hover:bg-primary/90 hover:text-primary-foreground" asChild>
-          <Link href="#">Log In</Link>
+          <Link href="/">
+            <Home className="mr-2" />
+            Landing Page
+          </Link>
         </Button>
-        <Button variant="secondary" className="hover:bg-secondary/90 hover:text-secondary-foreground" asChild>
-          <Link href="#">Sign Up</Link>
+        <Button variant="ghost" className="hover:bg-primary/90 hover:text-primary-foreground" asChild>
+          <Link href="/learn-more">
+            <BookOpen className="mr-2" />
+            Learn More
+          </Link>
         </Button>
-      </div>
+      </nav>
     </header>
   );
 }
