@@ -35,7 +35,7 @@ export function HeroSection({ data }: { data: HeroSectionData }) {
               {data.tagline}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 mt-4 justify-center">
-              <Button size="lg" variant="secondary">{data.button_get_started_label}</Button>
+              <Button size="lg" variant="default">{data.button_get_started_label}</Button>
               <Button size="lg" variant="outline">
                 {data.button_learn_more_label}
               </Button>
