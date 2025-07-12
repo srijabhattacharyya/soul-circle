@@ -1,6 +1,4 @@
-import { Button } from '@/components/ui/button';
 import Image from 'next/image';
-import Link from 'next/link';
 
 export default function LearnMorePage() {
   return (
@@ -11,11 +9,11 @@ export default function LearnMorePage() {
             <div className="grid gap-12 lg:grid-cols-2 lg:gap-24 items-center">
               <div className="flex justify-center">
                 <Image
-                  src="https://placehold.co/400x400.png"
+                  src="https://placehold.co/400x300.png"
                   width="400"
-                  height="400"
+                  height="300"
                   alt="Srija"
-                  className="rounded-lg shadow-lg"
+                  className="rounded-lg shadow-lg object-cover"
                   data-ai-hint="founder portrait"
                 />
               </div>
