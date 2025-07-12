@@ -14,7 +14,7 @@ export function HeroSection({ data }: { data: HeroSectionData }) {
   return (
     <section className="w-full py-20 md:py-32 animate-in fade-in-0 slide-in-from-bottom-5 duration-1000">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="grid gap-6 lg:grid-cols-2 lg:gap-12">
+        <div className="grid gap-6 lg:gap-12">
           <div className="flex flex-col justify-center space-y-6 text-center lg:text-left">
             <div className="flex justify-center lg:justify-start">
               <Image
@@ -40,14 +40,6 @@ export function HeroSection({ data }: { data: HeroSectionData }) {
               </Button>
             </div>
           </div>
-          <Image
-            src="https://placehold.co/600x600.png"
-            data-ai-hint="Indian woman"
-            alt="A smiling woman"
-            width={600}
-            height={600}
-            className="mx-auto aspect-square overflow-hidden rounded-xl object-cover"
-          />
         </div>
       </div>
     </section>
