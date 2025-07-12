@@ -7,7 +7,7 @@ export default function LearnMorePage() {
         <section className="w-full py-12 md:py-24 lg:py-32">
           <div className="container px-4 md:px-6">
             <div className="grid gap-12 lg:grid-cols-2 lg:gap-24 items-start">
-              <div className="flex items-center justify-center">
+              <div className="flex flex-col items-center justify-center space-y-4">
                 <Image
                   src="https://placehold.co/400x300.png"
                   alt="Founder's Photo"
@@ -16,6 +16,14 @@ export default function LearnMorePage() {
                   className="rounded-lg object-cover"
                   data-ai-hint="portrait founder"
                 />
+                <div className="pt-4 text-muted-foreground text-sm text-center">
+                  <p className="font-semibold">By Srija Bhattacharyya</p>
+                  <p>3rd Year Student, B.Tech CSE</p>
+                  <p>
+                    Kalinga Institute of Industrial Technology (KIIT),
+                    Bhubaneswar
+                  </p>
+                </div>
               </div>
               <div className="flex flex-col justify-center space-y-4">
                 <p className="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed text-left">
@@ -37,11 +45,6 @@ export default function LearnMorePage() {
                   users through conversation, journaling, self-help tools, and
                   mood tracking.
                 </p>
-                <div className="pt-4 text-muted-foreground text-sm">
-                  <p className="font-semibold">By Srija Bhattacharyya</p>
-                  <p>3rd Year Student, B.Tech CSE</p>
-                  <p>Kalinga Institute of Industrial Technology (KIIT), Bhubaneswar</p>
-                </div>
               </div>
             </div>
           </div>
