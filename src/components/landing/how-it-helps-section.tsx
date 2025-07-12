@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -25,7 +26,7 @@ type HowItHelpsData = {
 
 export function HowItHelpsSection({ data }: { data: HowItHelpsData }) {
   return (
-    <section className="w-full py-12 md:py-24 lg:py-32 bg-secondary animate-in fade-in-0 slide-in-from-bottom-5 delay-200 duration-1000">
+    <section className="w-full py-12 md:py-24 lg:py-32 bg-background animate-in fade-in-0 slide-in-from-bottom-5 delay-200 duration-1000">
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col items-center space-y-8 text-center">
           <div className="space-y-2">
@@ -37,13 +38,20 @@ export function HowItHelpsSection({ data }: { data: HowItHelpsData }) {
             {data.boxes.map((box) => {
               const Icon = icons[box.icon];
               return (
-                <Card key={box.heading} className="text-left flex flex-col hover:shadow-lg transition-shadow duration-300">
+                <Card
+                  key={box.heading}
+                  className="text-left flex flex-col hover:shadow-lg transition-shadow duration-300 border-black"
+                >
                   <CardHeader>
                     {Icon && <Icon className="w-8 h-8 mb-2 text-primary" />}
-                    <CardTitle className="font-headline text-lg">{box.heading}</CardTitle>
+                    <CardTitle className="font-headline text-lg">
+                      {box.heading}
+                    </CardTitle>
                   </CardHeader>
                   <CardContent className="flex-grow">
-                    <p className="text-muted-foreground text-sm">{box.content}</p>
+                    <p className="text-muted-foreground text-sm">
+                      {box.content}
+                    </p>
                   </CardContent>
                 </Card>
               );
