@@ -19,13 +19,6 @@ export default function Home() {
               >
                 Get Started
               </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="shadow-md"
-              >
-                Read More
-              </Button>
             </div>
           </div>
         </section>
