@@ -2,7 +2,6 @@
 
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import Link from 'next/link';
-import { SoulCircleIcon } from '@/components/landing/soulcircle-icon';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 
@@ -12,7 +11,7 @@ export function AppHeader() {
       <div className='flex items-center gap-2'>
         <SidebarTrigger className="md:hidden" />
         <Link href="/" className="flex items-center gap-2" prefetch={false}>
-          <Image src="/logo.png" alt="SoulCircle Logo" width={32} height={32} className='hidden md:flex' />
+          <Image src="https://placehold.co/96x96.png" alt="SoulCircle Logo" width={32} height={32} className='hidden md:flex' />
           <span className="font-bold text-lg">SoulCircle</span>
         </Link>
       </div>
