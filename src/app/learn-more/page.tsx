@@ -6,19 +6,9 @@ export default function LearnMorePage() {
       <main className="flex-1">
         <section className="w-full py-12 md:py-24 lg:py-32">
           <div className="container px-4 md:px-6">
-            <div className="grid gap-12 lg:grid-cols-2 lg:gap-24 items-start">
-              <div className="flex justify-center">
-                <Image
-                  src="/images/srija.png"
-                  width="400"
-                  height="300"
-                  alt="Srija"
-                  className="rounded-lg shadow-lg object-cover"
-                  data-ai-hint="founder portrait"
-                />
-              </div>
-              <div className="flex flex-col justify-center space-y-4">
-                <p className="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+            <div className="grid gap-12 lg:gap-24">
+              <div className="flex flex-col justify-center space-y-4 max-w-3xl mx-auto text-center">
+                <p className="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed text-left">
                   During my years of hostel life, I have had countless
                   late-night conversations with friends battling emotional
                   stress, anxiety, and depression—often in silence. Many of
@@ -27,7 +17,7 @@ export default function LearnMorePage() {
                   or help navigate a tough moment—especially during exam time
                   or periods of academic pressure.
                 </p>
-                <p className="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                <p className="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed text-left">
                   In our hectic schedules, reaching out to a professional
                   counsellor isn’t always possible. This realization gave
                   birth to SoulCircle—an AI-powered mental wellness companion
