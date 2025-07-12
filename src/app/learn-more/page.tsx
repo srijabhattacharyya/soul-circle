@@ -6,8 +6,18 @@ export default function LearnMorePage() {
       <main className="flex-1">
         <section className="w-full py-12 md:py-24 lg:py-32">
           <div className="container px-4 md:px-6">
-            <div className="grid gap-12 lg:gap-24">
-              <div className="flex flex-col justify-center space-y-4 max-w-3xl mx-auto text-center">
+            <div className="grid gap-12 lg:grid-cols-2 lg:gap-24 items-start">
+              <div className="flex items-center justify-center">
+                <Image
+                  src="https://placehold.co/400x300.png"
+                  alt="Founder's Photo"
+                  width={400}
+                  height={300}
+                  className="rounded-lg object-cover"
+                  data-ai-hint="portrait founder"
+                />
+              </div>
+              <div className="flex flex-col justify-center space-y-4">
                 <p className="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed text-left">
                   During my years of hostel life, I have had countless
                   late-night conversations with friends battling emotional
