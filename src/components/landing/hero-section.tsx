@@ -1,7 +1,6 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Logo } from './logo';
 
 type HeroSectionData = {
   catch_line: string;
@@ -15,7 +14,6 @@ export function HeroSection({ data }: { data: HeroSectionData }) {
     <section className="w-full py-20 md:py-32 animate-in fade-in-0 slide-in-from-bottom-5 duration-1000">
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col items-center space-y-6 text-center">
-          <Logo className="mb-4" />
           <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl font-headline">
             {data.catch_line}
           </h1>
