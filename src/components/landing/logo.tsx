@@ -1,14 +1,17 @@
-import type { SVGProps } from 'react';
 import Image from 'next/image';
 
-export function Logo(props: SVGProps<SVGSVGElement>) {
+type LogoProps = {
+  className?: string;
+};
+
+export function Logo({ className }: LogoProps) {
   return (
     <Image
       src="https://placehold.co/96x96.png"
       alt="SoulCircle Logo"
       width={96}
       height={96}
-      className={props.className}
+      className={className}
       data-ai-hint="logo"
     />
   );
