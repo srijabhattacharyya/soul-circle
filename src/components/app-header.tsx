@@ -11,7 +11,7 @@ export function AppHeader() {
       <div className='flex items-center gap-2'>
         <SidebarTrigger className="md:hidden" />
         <Link href="/" className="flex items-center gap-2" prefetch={false}>
-          <Image src="/images/logo.png" alt="SoulCircle Logo" width={32} height={32} />
+          <Image src="/images/logo.png" alt="SoulCircle Logo" width={32} height={32} data-ai-hint="logo" />
           <span className="font-bold text-lg">SoulCircle</span>
         </Link>
       </div>
