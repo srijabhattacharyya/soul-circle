@@ -29,10 +29,10 @@ export default function Home() {
             <div className="shadow-lg rounded-lg overflow-hidden">
                <Image
                   src="https://placehold.co/400x300.png"
-                  alt="SoulCircle Preview"
+                  alt="Srija Preview"
                   width={400}
                   height={300}
-                  data-ai-hint="calm abstract"
+                  data-ai-hint="woman smiling"
                 />
             </div>
           </div>
