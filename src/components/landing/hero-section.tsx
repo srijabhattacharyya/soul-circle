@@ -30,7 +30,7 @@ export function HeroSection({ data }: { data: HeroSectionData }) {
             </div>
           </div>
           <Image
-            src="https://placehold.co/600x600.png"
+            src="/images/hero.png"
             data-ai-hint="Indian woman"
             alt="A smiling woman"
             width={600}
