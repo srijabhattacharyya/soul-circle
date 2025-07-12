@@ -1,6 +1,3 @@
-import { doc, getDoc } from "firebase/firestore"; 
-import { db } from "@/lib/firebase";
-
 const MOCK_DATA = {
   hero_section: {
     logo_placeholder_text: "96x96",
@@ -42,21 +39,6 @@ const MOCK_DATA = {
 };
 
 export async function getLandingPageContent() {
-  try {
-    const docRef = doc(db, "landing-page", "content");
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
-      return docSnap.data();
-    } else {
-      // doc.data() will be undefined in this case
-      console.log("No such document! Using mock data.");
-      return MOCK_DATA;
-    }
-  } catch (error) {
-    console.error("Error getting document:", error);
-    // Return mock data as a fallback if there's an error
-    return MOCK_DATA;
-  }
+  // Returning mock data directly as a fallback.
+  return MOCK_DATA;
 }
