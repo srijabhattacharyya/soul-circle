@@ -176,25 +176,6 @@ const Sidebar = React.forwardRef<
     ref
   ) => {
     const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
-    const [isMounted, setIsMounted] = React.useState(false)
-
-    React.useEffect(() => {
-      setIsMounted(true)
-    }, [])
-
-    if (!isMounted) {
-      return (
-        <div className="hidden md:flex md:w-[--sidebar-width] flex-col h-svh p-2 text-sidebar-foreground">
-          <div className="flex flex-col gap-2 p-2">
-            <Skeleton className="h-8 w-full" />
-          </div>
-          <div className="flex-1 p-2 space-y-2">
-            <SidebarMenuSkeleton showIcon />
-            <SidebarMenuSkeleton showIcon />
-          </div>
-        </div>
-      )
-    }
 
     if (collapsible === "none") {
       return (
@@ -677,25 +658,7 @@ const SidebarMenuSkeleton = React.forwardRef<
   }, []);
 
   if (!width) {
-    return (
-      <div
-        ref={ref}
-        data-sidebar="menu-skeleton"
-        className={cn("rounded-md h-8 flex gap-2 px-2 items-center", className)}
-        {...props}
-      >
-        {showIcon && (
-          <Skeleton
-            className="size-4 rounded-md"
-            data-sidebar="menu-skeleton-icon"
-          />
-        )}
-        <Skeleton
-          className="h-4 flex-1"
-          data-sidebar="menu-skeleton-text"
-        />
-      </div>
-    )
+    return null;
   }
 
   return (
