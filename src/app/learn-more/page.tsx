@@ -37,6 +37,11 @@ export default function LearnMorePage() {
                   users through conversation, journaling, self-help tools, and
                   mood tracking.
                 </p>
+                <div className="pt-4 text-muted-foreground text-sm">
+                  <p className="font-semibold">By Srija Bhattacharyya</p>
+                  <p>3rd Year Student, B.Tech CSE</p>
+                  <p>Kalinga Institute of Industrial Technology (KIIT), Bhubaneswar</p>
+                </div>
               </div>
             </div>
           </div>
