@@ -18,7 +18,7 @@ export function AppHeader() {
         <Button variant="ghost" className="hover:bg-secondary/90 hover:text-secondary-foreground" asChild>
           <Link href="#">Log In</Link>
         </Button>
-        <Button variant="default" asChild>
+        <Button variant="default" className="hover:bg-accent hover:text-accent-foreground" asChild>
           <Link href="#">Sign Up</Link>
         </Button>
       </div>
