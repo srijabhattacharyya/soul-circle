@@ -183,7 +183,17 @@ const Sidebar = React.forwardRef<
     }, [])
 
     if (!isMounted) {
-      return null
+      return (
+        <div className="hidden md:flex md:w-[--sidebar-width] flex-col h-svh p-2 text-sidebar-foreground">
+          <div className="flex flex-col gap-2 p-2">
+            <Skeleton className="h-8 w-full" />
+          </div>
+          <div className="flex-1 p-2 space-y-2">
+            <SidebarMenuSkeleton showIcon />
+            <SidebarMenuSkeleton showIcon />
+          </div>
+        </div>
+      )
     }
 
     if (collapsible === "none") {
@@ -770,5 +780,3 @@ export {
   SidebarTrigger,
   useSidebar,
 }
-
-    
