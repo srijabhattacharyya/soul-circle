@@ -16,6 +16,16 @@ export function HeroSection({ data }: { data: HeroSectionData }) {
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid gap-6 lg:grid-cols-2 lg:gap-12">
           <div className="flex flex-col justify-center space-y-6 text-center lg:text-left">
+            <div className="flex justify-center lg:justify-start">
+              <Image
+                src="/images/logo.png"
+                alt="SoulCircle Logo"
+                width={96}
+                height={96}
+                className="h-24 w-24"
+                data-ai-hint="logo"
+              />
+            </div>
             <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl font-headline">
               {data.catch_line}
             </h1>
