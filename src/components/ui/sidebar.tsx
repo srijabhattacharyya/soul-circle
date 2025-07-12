@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -176,6 +177,10 @@ const Sidebar = React.forwardRef<
     ref
   ) => {
     const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
+
+    if (isMobile === undefined) {
+      return <div className="hidden md:block w-[--sidebar-width] group-data-[collapsible=icon]:w-[--sidebar-width-icon]"></div>;
+    }
 
     if (collapsible === "none") {
       return (
