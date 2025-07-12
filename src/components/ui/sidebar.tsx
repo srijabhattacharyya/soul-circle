@@ -669,10 +669,34 @@ const SidebarMenuSkeleton = React.forwardRef<
     showIcon?: boolean
   }
 >(({ className, showIcon = false, ...props }, ref) => {
-  // Random width between 50 to 90%.
-  const width = React.useMemo(() => {
-    return `${Math.floor(Math.random() * 40) + 50}%`
-  }, [])
+  const [width, setWidth] = React.useState<string | undefined>(undefined);
+
+  React.useEffect(() => {
+    // Random width between 50 to 90%.
+    setWidth(`${Math.floor(Math.random() * 40) + 50}%`);
+  }, []);
+
+  if (!width) {
+    return (
+      <div
+        ref={ref}
+        data-sidebar="menu-skeleton"
+        className={cn("rounded-md h-8 flex gap-2 px-2 items-center", className)}
+        {...props}
+      >
+        {showIcon && (
+          <Skeleton
+            className="size-4 rounded-md"
+            data-sidebar="menu-skeleton-icon"
+          />
+        )}
+        <Skeleton
+          className="h-4 flex-1"
+          data-sidebar="menu-skeleton-text"
+        />
+      </div>
+    )
+  }
 
   return (
     <div
