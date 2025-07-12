@@ -25,7 +25,7 @@ type HowItHelpsData = {
 
 export function HowItHelpsSection({ data }: { data: HowItHelpsData }) {
   return (
-    <section className="w-full py-20 md:py-32 bg-card animate-in fade-in-0 slide-in-from-bottom-5 delay-200 duration-1000">
+    <section className="w-full py-20 md:py-32 bg-secondary animate-in fade-in-0 slide-in-from-bottom-5 delay-200 duration-1000">
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col items-center space-y-12 text-center">
           <div className="space-y-4">
