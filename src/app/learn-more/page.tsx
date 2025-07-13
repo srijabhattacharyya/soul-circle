@@ -33,12 +33,7 @@ export default function LearnMorePage() {
                 </div>
               </div>
             </div>
-          </div>
-        </section>
-
-        <section className="w-full py-12 md:py-16">
-          <div className="container px-4 md:px-6 learn-more-page">
-            <div className="max-w-3xl mx-auto space-y-4">
+            <div className="max-w-3xl mx-auto space-y-4 mt-8">
                 <p>
                   During my years of hostel life, I have had countless
                   late-night conversations with friends battling emotional
