@@ -9,7 +9,7 @@ export default function LearnMorePage() {
       <main className="flex-1">
         <section className="w-full pt-24 md:pt-32 lg:pt-40 pb-6 md:pb-8 lg:pb-0">
           <div className="container px-4 md:px-6 learn-more-page">
-            <div className="grid gap-12 lg:grid-cols-2 lg:gap-24 items-start">
+            <div className="grid gap-12 items-start">
               <div className="flex flex-col items-center justify-center space-y-4">
                 <Image
                   src="https://placehold.co/200x150.png"
@@ -32,7 +32,13 @@ export default function LearnMorePage() {
                   </p>
                 </div>
               </div>
-              <div className="flex flex-col justify-center space-y-4">
+            </div>
+          </div>
+        </section>
+
+        <section className="w-full py-12 md:py-16">
+          <div className="container px-4 md:px-6 learn-more-page">
+            <div className="max-w-3xl mx-auto space-y-4">
                 <p>
                   During my years of hostel life, I have had countless
                   late-night conversations with friends battling emotional
@@ -52,7 +58,6 @@ export default function LearnMorePage() {
                   users through conversation, journaling, self-help tools, and
                   mood tracking.
                 </p>
-              </div>
             </div>
           </div>
         </section>
