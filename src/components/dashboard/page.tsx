@@ -84,7 +84,7 @@ export function Dashboard() {
             <CardContent>
                 <div className="flex flex-wrap gap-4">
                     {quickAccess.map(item => (
-                        <Button key={item.title} asChild variant="outline" className="bg-white text-black border-black/20 hover:bg-gray-100">
+                        <Button key={item.title} asChild variant="outline" className="bg-white text-black border-black/20 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200">
                             <Link href={item.link}>
                                 {item.icon}
                                 {item.title}
