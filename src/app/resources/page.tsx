@@ -15,6 +15,7 @@ import { useToast } from '@/hooks/use-toast';
 import { findResources, type ResourceFinderOutput } from '@/ai/flows/resource-finder-flow';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Textarea } from '@/components/ui/textarea';
 
 
 const concerns = [
@@ -31,6 +32,7 @@ const concerns = [
 
 export default function ResourceLibraryPage() {
   const [selectedConcern, setSelectedConcern] = useState<string>('');
+  const [userQuery, setUserQuery] = useState('');
   const [resources, setResources] = useState<ResourceFinderOutput['resources']>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
@@ -49,7 +51,7 @@ export default function ResourceLibraryPage() {
     setIsSearching(true);
     setResources([]); // Clear previous results
     try {
-      const result = await findResources({ concern: selectedConcern });
+      const result = await findResources({ concern: selectedConcern, userInput: userQuery });
       setResources(result.resources);
     } catch (error) {
       console.error('Error fetching resources:', error);
@@ -69,7 +71,7 @@ export default function ResourceLibraryPage() {
     setIsFetchingMore(true);
     try {
         const existingTitles = resources.map(r => r.title);
-        const result = await findResources({ concern: selectedConcern, existingTitles });
+        const result = await findResources({ concern: selectedConcern, userInput: userQuery, existingTitles });
         setResources(prev => [...prev, ...result.resources]);
 
     } catch (error) {
@@ -94,11 +96,11 @@ export default function ResourceLibraryPage() {
           </p>
         </header>
 
-        <div className="bg-white rounded-xl shadow-md p-6 mb-8 max-w-lg mx-auto">
+        <div className="bg-white rounded-xl shadow-md p-6 mb-8 max-w-lg mx-auto space-y-4">
           <div className="flex flex-col sm:flex-row items-center gap-4">
             <Select onValueChange={setSelectedConcern} value={selectedConcern}>
               <SelectTrigger className="w-full text-black bg-white">
-                <SelectValue placeholder="Select a concern..." />
+                <SelectValue placeholder="Select a primary concern..." />
               </SelectTrigger>
               <SelectContent>
                 {concerns.map((concern) => (
@@ -112,6 +114,12 @@ export default function ResourceLibraryPage() {
               {isSearching ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Find Resources'}
             </Button>
           </div>
+           <Textarea 
+            value={userQuery}
+            onChange={(e) => setUserQuery(e.target.value)}
+            placeholder="Optional: Describe your specific need for more tailored results. e.g., 'I feel anxious before meetings at work.'"
+            className="text-black bg-white"
+          />
         </div>
 
         <main className="space-y-6">

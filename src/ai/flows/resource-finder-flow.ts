@@ -13,6 +13,7 @@ import { z } from 'zod';
 
 const ResourceFinderInputSchema = z.object({
   concern: z.string().describe('The mental health topic or concern (e.g., "Anxiety", "Exam pressure").'),
+  userInput: z.string().optional().describe('A specific user query to refine the resource search.'),
   existingTitles: z.array(z.string()).optional().describe('A list of resource titles that have already been provided to the user, to avoid duplication.'),
 });
 export type ResourceFinderInput = z.infer<typeof ResourceFinderInputSchema>;
@@ -42,9 +43,14 @@ const prompt = ai.definePrompt({
   prompt: `You are an expert in compiling mental health and wellness resources. 
   Your task is to find exactly 3 highly relevant and trusted external resources for the given concern.
   Provide a diverse set of resource types if possible (e.g., articles, videos, tools, apps, or official helplines).
-  Ensure the links are from reputable sources (e.g., government health organizations, respected non-profits, academic institutions, well-known mental health startups).
+  Ensure the links are from reputable, well-known, and current sources (e.g., government health organizations like NIMH, respected non-profits like NAMI, academic institutions, or major health publishers like Healthline). Avoid obscure blogs or very old content.
 
   Concern: {{{concern}}}
+
+  {{#if userInput}}
+  The user has provided this specific request for context: "{{{userInput}}}"
+  Please tailor the resources to address this specific need in addition to the general concern.
+  {{/if}}
 
   {{#if existingTitles}}
   Please find new resources that are not in the following list:
