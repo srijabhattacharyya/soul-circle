@@ -35,7 +35,7 @@ export function HeroSection({ data }: { data: HeroSectionData }) {
               {data.tagline}
             </p>
             <div className="w-full max-w-sm mx-auto flex flex-col sm:flex-row gap-2">
-              <Button asChild className='bg-accent text-accent-foreground hover:bg-accent/90 transition-colors w-full h-10 px-4 py-2 md:h-11 md:px-8'><Link href="#">{data.button_get_started_label}</Link></Button>
+              <Button asChild className='bg-accent text-accent-foreground hover:bg-accent/90 transition-colors w-full h-10 px-4 py-2 md:h-11 md:px-8'><Link href="/login">{data.button_get_started_label}</Link></Button>
               <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 transition-colors w-full h-10 px-4 py-2 md:h-11 md:px-8">
                 <Link href="/learn-more">{data.button_learn_more_label}</Link>
               </Button>
