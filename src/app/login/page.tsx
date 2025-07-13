@@ -6,10 +6,9 @@ import { useAuth } from '@/components/auth-provider';
 import { Button } from '@/components/ui/button';
 import { signInWithGoogle } from '@/lib/firebase/service';
 import { useToast } from '@/hooks/use-toast';
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
-import { auth } from '@/lib/firebase/config'; // Import auth to check initialization
+import { isConfigValid } from '@/lib/firebase/config';
 
 const GoogleIcon = () => (
     <svg className="mr-2 h-4 w-4" viewBox="0 0 48 48">
@@ -22,17 +21,9 @@ const GoogleIcon = () => (
 
 export default function LoginPage() {
   const router = useRouter();
-  const { user, loading } = useAuth();
+  const { user, loading, firebaseReady } = useAuth();
   const { toast } = useToast();
   const [isSigningIn, setIsSigningIn] = useState(false);
-  const [firebaseReady, setFirebaseReady] = useState(false);
-
-  useEffect(() => {
-    // Check if Firebase is ready
-    if (auth) {
-      setFirebaseReady(true);
-    }
-  }, []);
 
   useEffect(() => {
     if (!loading && user) {
@@ -42,7 +33,7 @@ export default function LoginPage() {
   
   const handleSignIn = async () => {
     if (!firebaseReady) {
-        toast({ title: 'Error', description: 'Authentication service is not ready.', variant: 'destructive' });
+        toast({ title: 'Service Unavailable', description: 'Authentication service is not configured. Running in offline mode.', variant: 'destructive' });
         return;
     }
     setIsSigningIn(true);
@@ -61,7 +52,7 @@ export default function LoginPage() {
     }
   };
 
-  if (loading || user || !firebaseReady) {
+  if (loading || user) {
     return (
         <div className="flex h-screen w-full items-center justify-center bg-background">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -77,7 +68,7 @@ export default function LoginPage() {
         <Button
           onClick={handleSignIn}
           className="w-full bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 shadow-sm"
-          disabled={isSigningIn}
+          disabled={isSigningIn || !isConfigValid}
         >
           {isSigningIn ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -86,6 +77,9 @@ export default function LoginPage() {
           )}
           Sign in with Google
         </Button>
+        {!isConfigValid && (
+            <p className="text-xs text-red-500 mt-4">Firebase is not configured. You can continue in offline mode.</p>
+        )}
       </div>
     </div>
   );
