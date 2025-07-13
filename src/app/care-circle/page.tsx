@@ -17,7 +17,7 @@ const counsellors = [
     name: 'Dr. Ananya Banerjee',
     specialty: 'Emotional Resilience, Trauma Recovery',
     description: "Hello dear, I’m Dr. Ananya. Life can be overwhelming, but you're not alone. Let's walk through your thoughts gently, and I’ll help you find peace, clarity, and self-compassion.",
-    imageUrl: 'https://placehold.co/400x300.png',
+    imageUrl: '/images/ananya-banerjee.png',
     link: '/care-circle/dr-ananya-banerjee',
     age: 50,
     gender: 'Female',
