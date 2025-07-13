@@ -4,7 +4,6 @@
 import Link from 'next/link';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Home, Info, User, CloudSun, Zap, Settings, Scale, BookHeart, LogOut, Menu } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { useAuth } from './auth-provider';
 import { auth } from '@/lib/firebase/config';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -15,6 +14,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator
 } from '@/components/ui/dropdown-menu';
+import { useState } from 'react';
 
 
 const DesktopNav = () => {
@@ -72,15 +72,23 @@ const DesktopNav = () => {
 
 const MobileNav = () => {
     const { user } = useAuth();
+    const [isOpen, setIsOpen] = useState(false);
      const handleLogout = () => {
         if (auth) {
             auth.signOut();
         }
+        setIsOpen(false);
     };
+
+    const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
+        <Link href={href} onClick={() => setIsOpen(false)} className={buttonVariants({ variant: "ghost", size: "lg" })}>
+            {children}
+        </Link>
+    );
 
     return (
         <div className="md:hidden">
-            <Sheet>
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
                 <SheetTrigger asChild>
                     <Button variant="ghost" size="icon">
                         <Menu />
@@ -88,17 +96,17 @@ const MobileNav = () => {
                 </SheetTrigger>
                 <SheetContent side="left">
                     <nav className="grid gap-4 mt-8">
-                        <Link href="/" className={buttonVariants({ variant: "ghost", size: "lg" })}>Home</Link>
-                        <Link href="/about" className={buttonVariants({ variant: "ghost", size: "lg" })}>About</Link>
-                        <Link href="/legal" className={buttonVariants({ variant: "ghost", size: "lg" })}>Legal</Link>
-                        <Link href="/resources" className={buttonVariants({ variant: "ghost", size: "lg" })}>Resources</Link>
+                        <NavLink href="/">Home</NavLink>
+                        <NavLink href="/about">About</NavLink>
+                        <NavLink href="/legal">Legal</NavLink>
+                        <NavLink href="/resources">Resources</NavLink>
                         {user && (
                             <>
-                                <Link href="/profile" className={buttonVariants({ variant: "ghost", size: "lg" })}>Profile</Link>
-                                <Link href="/inner-weather" className={buttonVariants({ variant: "ghost", size: "lg" })}>Inner Weather</Link>
-                                <Link href="/mind-haven" className={buttonVariants({ variant: "ghost", size: "lg" })}>Mind Haven</Link>
-                                <Link href="/soothe-studio" className={buttonVariants({ variant: "ghost", size: "lg" })}>Soothe Studio</Link>
-                                <Link href="/settings" className={buttonVariants({ variant: "ghost", size: "lg" })}>Settings</Link>
+                                <NavLink href="/profile">Profile</NavLink>
+                                <NavLink href="/inner-weather">Inner Weather</NavLink>
+                                <NavLink href="/mind-haven">Mind Haven</NavLink>
+                                <NavLink href="/soothe-studio">Soothe Studio</NavLink>
+                                <NavLink href="/settings">Settings</NavLink>
                                 <Button variant="ghost" size="lg" onClick={handleLogout}>Logout</Button>
                             </>
                         )}
