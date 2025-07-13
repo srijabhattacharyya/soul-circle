@@ -38,6 +38,28 @@ export function AppHeader() {
           Landing
         </Link>
         <Link
+          href="/learn-more"
+          prefetch={false}
+          className={cn(
+            buttonVariants({ variant: 'ghost' }),
+            'hover:bg-accent/90 hover:text-accent-foreground'
+          )}
+        >
+          <Info className="mr-2 h-4 w-4" />
+          Learn More
+        </Link>
+        <Link
+          href="/learn-further"
+          prefetch={false}
+          className={cn(
+            buttonVariants({ variant: 'ghost' }),
+            'hover:bg-accent/90 hover:text-accent-foreground'
+          )}
+        >
+          <BookOpen className="mr-2 h-4 w-4" />
+          Learn Further
+        </Link>
+        <Link
           href="/about"
           prefetch={false}
           className={cn(
@@ -142,5 +164,3 @@ export function AppHeader() {
     </header>
   );
 }
-
-    
