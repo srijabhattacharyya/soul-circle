@@ -64,53 +64,70 @@ export function ChatRoom({
   const chatHistoryRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!isConfigValid) {
-        toast({
-            title: 'Connection Error',
-            description: 'Cannot connect to the chat service. Please try again later.',
-            variant: 'destructive',
-        });
+    // This effect runs when the component mounts and whenever the dependencies change.
+    // It's responsible for setting up the real-time chat listener and fetching the counsellor's persona.
+    if (!user || !isConfigValid) {
+        // If there's no user or Firebase isn't configured, we can't proceed.
+        if (!isConfigValid) {
+             toast({
+                title: 'Offline Mode',
+                description: 'Chat features are disabled. Please check your Firebase configuration.',
+                variant: 'destructive',
+            });
+        }
+        return;
     }
-  }, [toast]);
 
-  useEffect(() => {
-    if (user && isConfigValid) {
-      // Fetch counsellor persona
-      getCounsellorPersona(counsellorId)
-        .then(setPersona)
-        .catch(() => {
-          toast({
+    // 1. Fetch the AI counsellor's persona.
+    // The send button will be disabled until this is successfully fetched.
+    getCounsellorPersona(counsellorId)
+    .then(p => {
+        if(p) {
+            setPersona(p);
+        } else {
+             toast({
+                title: 'Error',
+                description: 'Could not load counsellor details. The chat may not function correctly.',
+                variant: 'destructive',
+            });
+        }
+    })
+    .catch(() => {
+        toast({
             title: 'Error',
             description: 'Could not load counsellor details.',
             variant: 'destructive',
-          });
         });
+    });
 
-      // Subscribe to chat history
-      const chatId = `${user.uid}_${counsellorId}`;
-      const docRef = doc(db, 'chats', chatId);
-      
-      const unsubscribe = onSnapshot(docRef, (docSnap) => {
-        if (docSnap.exists()) {
-          setMessages(docSnap.data().messages || []);
-        } else {
-          setMessages([]);
-        }
-      }, (error) => {
-          console.error("Error fetching chat history:", error);
-          toast({
-            title: 'Error',
-            description: 'Could not load chat history.',
-            variant: 'destructive',
-          });
-      });
-
-      return () => unsubscribe();
+    // 2. Subscribe to real-time updates for the chat history.
+    const chatId = `${user.uid}_${counsellorId}`;
+    const docRef = doc(db, 'chats', chatId);
+    
+    const unsubscribe = onSnapshot(docRef, (docSnap) => {
+    if (docSnap.exists()) {
+        setMessages(docSnap.data().messages || []);
+    } else {
+        // If no chat history exists, we start with an empty message list.
+        setMessages([]);
     }
+    }, (error) => {
+        console.error("Error fetching chat history:", error);
+        toast({
+        title: 'Error',
+        description: 'Could not load chat history.',
+        variant: 'destructive',
+        });
+    });
+
+    // 3. Cleanup function: This is crucial. It runs when the component unmounts
+    //    or when the user/counsellorId changes, preventing memory leaks.
+    return () => unsubscribe();
+
   }, [user, counsellorId, toast]);
 
   useEffect(() => {
-    // Auto-scroll to bottom
+    // This effect handles auto-scrolling to the latest message.
     chatHistoryRef.current?.scrollTo({
       top: chatHistoryRef.current.scrollHeight,
       behavior: 'smooth',
@@ -119,30 +136,31 @@ export function ChatRoom({
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || !user || !persona || !isConfigValid) return;
+    if (isLoading || !input.trim() || !user || !persona || !isConfigValid) return;
 
     const userMessage: ChatMessage = { role: 'user', content: input };
+    const currentInput = input;
     setInput('');
     setIsLoading(true);
 
-    // Optimistically update UI
+    // Optimistically update UI with the user's message
     setMessages((prev) => [...prev, userMessage]);
     
-    // Save user message to Firestore
-    await saveMessage(user.uid, counsellorId, userMessage);
-    
     try {
+      // Save user message to Firestore first.
+      await saveMessage(user.uid, counsellorId, userMessage);
+    
       // Get AI response
-      const historyForAI = messages.slice(-10).map(({ role, content }) => ({ role, content }));
+      const historyForAI = [...messages, userMessage].slice(-10).map(({ role, content }) => ({ role, content }));
       const aiResult = await chatWithCounsellor({
         persona,
         history: historyForAI,
-        message: input,
+        message: currentInput,
       });
       
       const counsellorMessage: ChatMessage = { role: 'model', content: aiResult.response };
       
-      // Save counsellor message to Firestore
+      // Save counsellor message to Firestore. This will trigger the onSnapshot listener to update the UI.
       await saveMessage(user.uid, counsellorId, counsellorMessage);
 
     } catch (error) {
@@ -156,6 +174,8 @@ export function ChatRoom({
        await saveMessage(user.uid, counsellorId, errorMessage);
 
     } finally {
+      // This `finally` block ensures that loading is always set to false,
+      // even if there was an error, preventing the UI from getting stuck.
       setIsLoading(false);
     }
   };
