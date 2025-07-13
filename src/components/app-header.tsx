@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Home, BookOpen, Info, User, CloudSun, Feather, Zap, Settings, Scale, BookHeart, LogOut } from 'lucide-react';
+import { Home, Info, User, CloudSun, Zap, Settings, Scale, BookHeart, LogOut } from 'lucide-react';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useAuth } from './auth-provider';
@@ -35,7 +35,7 @@ export function AppHeader() {
           )}
         >
           <Home className="mr-2 h-4 w-4" />
-          Landing
+          Home
         </Link>
         <Link
           href="/about"
@@ -94,17 +94,6 @@ export function AppHeader() {
             >
               <CloudSun className="mr-2 h-4 w-4" />
               Inner Weather
-            </Link>
-            <Link
-              href="/mind-haven"
-              prefetch={false}
-              className={cn(
-                buttonVariants({ variant: 'ghost' }),
-                'hover:bg-accent/90 hover:text-accent-foreground'
-              )}
-            >
-              <Feather className="mr-2 h-4 w-4" />
-              Mind Haven
             </Link>
             <Link
               href="/soothe-studio"
