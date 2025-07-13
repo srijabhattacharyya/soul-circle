@@ -8,7 +8,6 @@ import { signInWithGoogle } from '@/lib/firebase/service';
 import { useToast } from '@/hooks/use-toast';
 import { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
-import { isConfigValid } from '@/lib/firebase/config';
 
 const GoogleIcon = () => (
     <svg className="mr-2 h-4 w-4" viewBox="0 0 48 48">
@@ -68,7 +67,7 @@ export default function LoginPage() {
         <Button
           onClick={handleSignIn}
           className="w-full bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 shadow-sm"
-          disabled={isSigningIn || !isConfigValid}
+          disabled={isSigningIn || !firebaseReady}
         >
           {isSigningIn ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -77,8 +76,8 @@ export default function LoginPage() {
           )}
           Sign in with Google
         </Button>
-        {!isConfigValid && (
-            <p className="text-xs text-red-500 mt-4">Firebase is not configured. You can continue in offline mode.</p>
+        {!firebaseReady && (
+            <p className="text-xs text-red-500 mt-4">Firebase is not configured. Authentication is disabled.</p>
         )}
       </div>
     </div>

@@ -1,3 +1,4 @@
+
 'use server';
 
 import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs, Timestamp, addDoc, deleteDoc, writeBatch, updateDoc, arrayUnion } from 'firebase/firestore';
@@ -21,13 +22,13 @@ export async function signInWithGoogle() {
     if (!userProfile) {
       // Create a basic profile for new users
       const newUserProfile: Partial<ProfileFormValues> = {
-        name: user.displayName || '',
-        age: 25, // Default age, user should update
+        name: user.displayName || 'New User',
+        age: undefined, 
         gender: 'Prefer not to say',
         counsellingReason: [],
         counsellingGoals: [],
         selfHarmThoughts: 'No',
-        consent: true,
+        consent: false,
       };
       await saveUserProfile(user.uid, newUserProfile);
     }
@@ -40,7 +41,7 @@ export async function signInWithGoogle() {
 
 // USER PROFILE
 export async function getUserProfile(userId: string) {
-  if (!db) throw new Error("Firestore is not initialized.");
+  if (!db) return null; // Return null if db is not initialized
   try {
     const docRef = doc(db, 'userProfiles', userId);
     const docSnap = await getDoc(docRef);
@@ -75,7 +76,7 @@ export async function saveUserProfile(userId: string, data: Partial<ProfileFormV
 
 // MOOD TRACKER
 export async function hasMoodEntryForToday(userId: string): Promise<boolean> {
-  if (!db) throw new Error("Firestore is not initialized.");
+  if (!db) return false;
   const today = new Date();
   const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
   const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
@@ -198,10 +199,10 @@ export async function deleteUserAccountAndData(userId: string) {
     }
     
     try {
-        const collectionsToDelete = ['moodTracker', 'journals', 'savedAffirmations', 'userGoals'];
+        const collectionsToDelete = ['moodTracker', 'journals', 'savedAffirmations', 'userGoals', 'chats'];
         
         for (const coll of collectionsToDelete) {
-            const userDocsQuery = query(collection(db, coll), where('uid', '==', userId));
+            const userDocsQuery = query(collection(db, coll), where('userId', '==', userId));
             const querySnapshot = await getDocs(userDocsQuery);
             const batch = writeBatch(db);
             querySnapshot.forEach((doc) => {
@@ -222,7 +223,7 @@ export async function deleteUserAccountAndData(userId: string) {
 
 // CARE CIRCLE / CHAT
 export async function getCounsellorPersona(counsellorId: string): Promise<string | null> {
-  if (!db) throw new Error("Firestore is not initialized.");
+  if (!db) return null;
   try {
     const docRef = doc(db, 'counsellors', counsellorId);
     const docSnap = await getDoc(docRef);
@@ -240,7 +241,6 @@ export async function saveMessage(userId: string, counsellorId: string, message:
     if (!db) throw new Error("Firestore is not initialized.");
     const chatId = `${userId}_${counsellorId}`;
     const docRef = doc(db, 'chats', chatId);
-    const docSnap = await getDoc(docRef);
 
     const messageToSave = {
         ...message,
@@ -248,18 +248,21 @@ export async function saveMessage(userId: string, counsellorId: string, message:
     };
 
     try {
-        if (docSnap.exists()) {
+        // Use updateDoc with arrayUnion to append the new message.
+        // Use setDoc with merge: true as a fallback if the document doesn't exist.
+        await setDoc(docRef, { 
+            messages: arrayUnion(messageToSave),
+            userId,
+            counsellorId,
+        }, { merge: true });
+
+        const docSnap = await getDoc(docRef);
+        if (!docSnap.data()?.createdAt) {
             await updateDoc(docRef, {
-                messages: arrayUnion(messageToSave)
-            });
-        } else {
-            await setDoc(docRef, { 
-                messages: [messageToSave],
-                userId,
-                counsellorId,
                 createdAt: serverTimestamp()
             });
         }
+
     } catch (error) {
         console.error('Error saving message:', error);
         throw new Error('Failed to save message.');

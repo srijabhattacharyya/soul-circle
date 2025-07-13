@@ -15,16 +15,7 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType>({ user: null, loading: true, firebaseReady: false });
 
-const publicPaths = ['/login', '/about', '/legal', '/learn-more', '/care-circle'];
-
-const mockUser: User = {
-    uid: 'dev-user',
-    displayName: 'Dev User',
-    email: 'dev@example.com',
-    photoURL: 'https://placehold.co/100x100',
-    providerId: 'google.com',
-    emailVerified: true,
-} as User;
+const publicPaths = ['/login', '/about', '/legal', '/learn-more', '/care-circle', '/learn-further'];
 
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -35,8 +26,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (!isConfigValid) {
-        console.warn("Firebase config is invalid. Using mock user for development.");
-        setUser(mockUser);
+        // If Firebase is not configured, we are in offline mode.
+        // No user is authenticated.
+        setUser(null);
         setLoading(false);
         return;
     }
@@ -52,7 +44,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (loading) return; 
 
-    const isPublic = publicPaths.includes(pathname) || pathname === '/';
+    // Allow access to the root path (landing page) for everyone.
+    if (pathname === '/') return;
+
+    const isPublic = publicPaths.includes(pathname);
     
     if (!user && !isPublic) {
       router.push('/login');
@@ -70,7 +65,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         </div>
     )
   }
-
+  
+  // If we are not loading, and trying to access a protected route without a user,
+  // show a loader while we redirect to /login.
   const isPublic = publicPaths.includes(pathname) || pathname === '/';
   if (!user && !isPublic) {
       return (
