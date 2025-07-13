@@ -13,6 +13,12 @@ import type { ChatMessage } from '@/components/chat-room';
 export async function signInWithGoogle() {
   if (!auth) throw new Error("Firebase Auth is not initialized.");
   const provider = new GoogleAuthProvider();
+  
+  // Set custom parameters to specify the auth domain, which can resolve stubborn sign-in issues.
+  provider.setCustomParameters({
+    'auth_domain': process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || ''
+  });
+
   try {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
