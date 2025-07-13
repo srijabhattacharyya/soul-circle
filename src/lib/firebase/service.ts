@@ -134,6 +134,26 @@ export async function saveUserGoal(userId: string, goalData: GoalData) {
     }
 }
 
+type UserFeedback = {
+  uid: string;
+  rating: number;
+  text: string;
+};
+
+export async function saveUserFeedback(feedbackData: UserFeedback) {
+    if (!db) throw new Error("Firestore is not initialized.");
+    try {
+        await addDoc(collection(db, 'userFeedback'), {
+            ...feedbackData,
+            timestamp: serverTimestamp(),
+        });
+    } catch(error) {
+        console.error('Error saving user feedback:', error);
+        throw new Error('Failed to save user feedback.');
+    }
+}
+
+
 // NOTE: In a production app, this should be handled by a Cloud Function 
 // triggered by user deletion from Firebase Auth to ensure atomicity and security.
 // Performing this on the client-side is for demonstration purposes.
@@ -174,5 +194,3 @@ export async function deleteUserAccountAndData(userId: string) {
         throw error;
     }
 }
-
-    
