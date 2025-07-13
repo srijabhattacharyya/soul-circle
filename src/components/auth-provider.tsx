@@ -20,9 +20,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // auth will be undefined if the config is invalid
     if (!auth) {
         // Firebase is not configured, so we can't do anything.
-        // We'll just show the loading state indefinitely.
+        // We'll proceed without authentication for now to allow development.
         console.warn("Firebase Auth is not initialized. User authentication will be disabled.");
-        setLoading(true);
+        setLoading(false);
         return;
     }
     const unsubscribe = onAuthStateChanged(auth, (user) => {
