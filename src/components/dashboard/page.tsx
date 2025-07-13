@@ -78,13 +78,13 @@ export function Dashboard() {
         
         <Card className="mt-12 bg-white/70 backdrop-blur-sm rounded-2xl shadow-md border-gray-200">
             <CardHeader>
-                <CardTitle>Quick Access</CardTitle>
-                <CardDescription>Jump right back in where you left off.</CardDescription>
+                <CardTitle className="text-black">Quick Access</CardTitle>
+                <CardDescription className="text-black">Jump right back in where you left off.</CardDescription>
             </CardHeader>
             <CardContent>
                 <div className="flex flex-wrap gap-4">
                     {quickAccess.map(item => (
-                        <Button key={item.title} asChild variant="outline" className="bg-white">
+                        <Button key={item.title} asChild variant="outline" className="bg-white text-black border-black/20 hover:bg-gray-100">
                             <Link href={item.link}>
                                 {item.icon}
                                 {item.title}
