@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -22,10 +23,10 @@ export default function LearnMorePage() {
                   <p className="text-4xl font-bold text-foreground">
                     By Srija Bhattacharyya
                   </p>
-                  <p className="text-xl text-muted-foreground">
+                  <p className="text-2xl text-foreground/90">
                     3rd Year Student, B.Tech CSE
                   </p>
-                  <p className="text-lg text-muted-foreground">
+                  <p className="text-xl text-foreground/80">
                     Kalinga Institute of Industrial Technology (KIIT),
                     Bhubaneswar
                   </p>
