@@ -124,7 +124,7 @@ export default function LoginPage() {
         </form>
 
         <div className="mt-6">
-          <Button variant="link" onClick={() => setIsLoginView(!isLoginView)}>
+          <Button variant="link" onClick={() => setIsLoginView(!isLoginView)} className="text-base">
             {isLoginView ? "Don't have an account? Sign Up" : 'Already have an account? Sign In'}
           </Button>
         </div>
