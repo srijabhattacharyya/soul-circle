@@ -2,47 +2,84 @@
 'use server';
 
 import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs, Timestamp, addDoc, deleteDoc, writeBatch, updateDoc, arrayUnion, orderBy } from 'firebase/firestore';
-import { db, auth as globalAuth, isConfigValid } from './config';
-import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, type User } from 'firebase/auth';
+import { db, isConfigValid } from './config';
+import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, type Auth, type ConfirmationResult } from 'firebase/auth';
 import type { ProfileFormValues } from '@/app/profile/form-schema';
 import type { InnerWeatherFormValues } from '@/app/inner-weather/form-schema';
 import type { JournalFormValues } from '@/app/mind-haven/form-schema';
 import type { ChatMessage } from '@/components/chat-room';
-import { getApp, getApps, initializeApp } from 'firebase/app';
 
-// AUTHENTICATION
-export async function signInWithGoogle() {
-  if (!isConfigValid) throw new Error("Firebase is not configured.");
-  const auth = getAuth();
-  const provider = new GoogleAuthProvider();
-  await signInWithRedirect(auth, provider);
+// --- PHONE AUTHENTICATION ---
+
+declare global {
+    interface Window {
+        recaptchaVerifier?: RecaptchaVerifier;
+    }
 }
 
-export async function handleRedirectResult(auth: any) {
-  try {
-    const result = await getRedirectResult(auth);
-    if (result) {
-      const user = result.user;
-      const userProfile = await getUserProfile(user.uid);
-      if (!userProfile) {
-        const newUserProfile: Partial<ProfileFormValues> = {
-          name: user.displayName || 'New User',
-          age: undefined, 
-          gender: 'Prefer not to say',
-          counsellingReason: [],
-          counsellingGoals: [],
-          selfHarmThoughts: 'No',
-          consent: false,
-        };
-        await saveUserProfile(user.uid, newUserProfile);
-      }
-      return user;
+export async function setupRecaptcha(auth: Auth, containerId: string) {
+    if (!isConfigValid) throw new Error("Firebase is not configured.");
+    if (typeof window === 'undefined') return;
+
+    window.recaptchaVerifier = new RecaptchaVerifier(auth, containerId, {
+        'size': 'invisible',
+        'callback': (response: any) => {
+            // reCAPTCHA solved, allow signInWithPhoneNumber.
+        },
+        'expired-callback': () => {
+            // Response expired. Ask user to solve reCAPTCHA again.
+        }
+    });
+}
+
+export async function sendVerificationCode(auth: Auth, phoneNumber: string): Promise<ConfirmationResult> {
+    if (!isConfigValid) throw new Error("Firebase is not configured.");
+    if (typeof window === 'undefined') throw new Error("This function can only be called on the client.");
+    if (!window.recaptchaVerifier) throw new Error("Recaptcha verifier is not initialized.");
+
+    try {
+        const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier);
+        return confirmationResult;
+    } catch (error: any) {
+        // Handle common errors
+        if (error.code === 'auth/invalid-phone-number') {
+            throw new Error('The phone number is not valid.');
+        }
+        if (error.code === 'auth/too-many-requests') {
+            throw new Error('You have sent too many requests. Please try again later.');
+        }
+        console.error('Phone Sign-In Error:', error);
+        throw new Error('Could not send verification code.');
     }
-    return null;
-  } catch (error: any) {
-    console.error("Error handling redirect result:", error.code, error.message);
-    throw new Error(`Google Sign-In failed: ${error.message}`);
-  }
+}
+
+
+export async function verifyCode(confirmationResult: ConfirmationResult, code: string) {
+    if (!isConfigValid) throw new Error("Firebase is not configured.");
+    try {
+        const result = await confirmationResult.confirm(code);
+        const user = result.user;
+        const userProfile = await getUserProfile(user.uid);
+        if (!userProfile) {
+            const newUserProfile: Partial<ProfileFormValues> = {
+                name: 'New User',
+                age: undefined,
+                gender: 'Prefer not to say',
+                counsellingReason: [],
+                counsellingGoals: [],
+                selfHarmThoughts: 'No',
+                consent: false,
+            };
+            await saveUserProfile(user.uid, newUserProfile);
+        }
+        return user;
+    } catch (error: any) {
+        if (error.code === 'auth/invalid-verification-code') {
+            throw new Error('The verification code is incorrect.');
+        }
+        console.error('Code Verification Error:', error);
+        throw new Error('Could not verify the code.');
+    }
 }
 
 

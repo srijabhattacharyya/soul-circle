@@ -1,49 +1,31 @@
 
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/auth-provider';
 import { Button } from '@/components/ui/button';
-import { signInWithGoogle, handleRedirectResult } from '@/lib/firebase/service';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { setupRecaptcha, sendVerificationCode, verifyCode } from '@/lib/firebase/service';
 import { useToast } from '@/hooks/use-toast';
-import { useEffect, useState } from 'react';
-import { Loader2 } from 'lucide-react';
-import { getAuth } from 'firebase/auth';
-
-const GoogleIcon = () => (
-    <svg className="mr-2 h-7 w-7 md:h-12 md:w-12" viewBox="0 0 48 48">
-      <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C12.955 4 4 12.955 4 24s8.955 20 20 20s20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z" />
-      <path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C16.318 4 9.656 8.337 6.306 14.691z" />
-      <path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.222 0-9.618-3.226-11.283-7.581l-6.522 5.025C9.505 39.556 16.227 44 24 44z" />
-      <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571l6.19 5.238C42.021 35.846 44 30.138 44 24c0-1.341-.138-2.65-.389-3.917z" />
-    </svg>
-  );
+import { Loader2, Phone, MessageSquare } from 'lucide-react';
+import { getAuth, type ConfirmationResult } from 'firebase/auth';
+import toast from 'react-hot-toast';
+import PhoneInput from 'react-phone-number-input/react-hook-form-input';
+import 'react-phone-number-input/style.css'
+import { useForm, FormProvider } from 'react-hook-form';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { user, loading, firebaseReady } = useAuth();
-  const { toast } = useToast();
-  const [isSigningIn, setIsSigningIn] = useState(false);
-  
-  useEffect(() => {
-    if (!loading && firebaseReady) {
-      const auth = getAuth();
-      handleRedirectResult(auth)
-        .then((user) => {
-          if (user) {
-            toast({ title: 'Success!', description: 'You have logged in successfully.' });
-            router.push('/');
-          }
-        })
-        .catch((error) => {
-          toast({
-            title: 'Error',
-            description: 'Failed to sign in with Google. Please try again.',
-            variant: 'destructive',
-          });
-        });
-    }
-  }, [loading, firebaseReady, router, toast]);
+  const { user, loading } = useAuth();
+  const [isSendingCode, setIsSendingCode] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [step, setStep] = useState<'phone' | 'otp'>('phone');
+  const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
+
+  const formMethods = useForm<{ phone: string; code: string }>();
+  const { control, handleSubmit } = formMethods;
 
   useEffect(() => {
     if (!loading && user) {
@@ -51,23 +33,48 @@ export default function LoginPage() {
     }
   }, [user, loading, router]);
   
-  const handleSignIn = async () => {
-    if (!firebaseReady) {
-        toast({ title: 'Service Unavailable', description: 'Authentication service is not configured. Running in offline mode.', variant: 'destructive' });
-        return;
-    }
-    setIsSigningIn(true);
+  useEffect(() => {
+    const auth = getAuth();
+    setupRecaptcha(auth, 'recaptcha-container').catch(err => {
+        console.error("Recaptcha setup failed", err);
+        toast.error("Could not initialize sign-in process. Please refresh the page.");
+    });
+  }, []);
+
+  const handleSendCode = async ({ phone }: { phone: string }) => {
+    setIsSendingCode(true);
+    toast.loading('Sending verification code...');
     try {
-      await signInWithGoogle();
-      // The user will be redirected, so we don't need to do anything else here.
-      // We'll show a loader to indicate something is happening.
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Failed to start sign in with Google. Please try again.',
-        variant: 'destructive',
-      });
-      setIsSigningIn(false);
+        const auth = getAuth();
+        const result = await sendVerificationCode(auth, phone);
+        setConfirmationResult(result);
+        setStep('otp');
+        toast.dismiss();
+        toast.success('Verification code sent!');
+    } catch (error: any) {
+      console.error(error);
+      toast.dismiss();
+      toast.error(error.message || 'Failed to send code. Please check the number and try again.');
+    } finally {
+      setIsSendingCode(false);
+    }
+  };
+  
+  const handleVerifyCode = async ({ code }: { code: string }) => {
+    if (!confirmationResult) return;
+    setIsVerifying(true);
+    toast.loading('Verifying code...');
+    try {
+        await verifyCode(confirmationResult, code);
+        toast.dismiss();
+        toast.success('Login successful!');
+        router.push('/');
+    } catch (error: any) {
+        console.error(error);
+        toast.dismiss();
+        toast.error(error.message || 'Invalid verification code. Please try again.');
+    } finally {
+        setIsVerifying(false);
     }
   };
 
@@ -76,29 +83,61 @@ export default function LoginPage() {
         <div className="flex h-screen w-full items-center justify-center bg-background">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
-    )
+    );
   }
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-4">
       <div className="w-full max-w-sm text-center">
         <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Welcome to SoulCircle</h1>
-        <p className="text-gray-600 mb-8 md:text-lg">Sign in to continue your journey.</p>
-        <Button
-          onClick={handleSignIn}
-          className="w-full bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 shadow-sm text-base md:text-xl py-6 md:py-8"
-          disabled={isSigningIn || !firebaseReady}
-        >
-          {isSigningIn ? (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          ) : (
-            <GoogleIcon />
-          )}
-          Sign in with Google
-        </Button>
-        {!firebaseReady && (
-            <p className="text-sm md:text-base text-red-500 mt-4">Firebase is not configured. Authentication is disabled.</p>
-        )}
+        <p className="text-gray-600 mb-8 md:text-lg">
+            {step === 'phone' ? 'Enter your phone number to begin.' : 'Enter the code we sent you.'}
+        </p>
+        
+        <FormProvider {...formMethods}>
+            {step === 'phone' ? (
+                <form onSubmit={handleSubmit(handleSendCode)} className="space-y-6 text-left">
+                    <div>
+                        <Label htmlFor="phone">Phone Number</Label>
+                        <PhoneInput
+                            name="phone"
+                            control={control}
+                            rules={{ required: true }}
+                            defaultCountry="IN"
+                            className="text-black"
+                            inputComponent={Input}
+                        />
+                    </div>
+                    <Button type="submit" className="w-full" disabled={isSendingCode}>
+                        {isSendingCode ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Phone className="mr-2" />}
+                        Send Verification Code
+                    </Button>
+                </form>
+            ) : (
+                 <form onSubmit={handleSubmit(handleVerifyCode)} className="space-y-6 text-left">
+                    <div>
+                        <Label htmlFor="code">Verification Code</Label>
+                        <Input
+                            {...formMethods.register('code')}
+                            id="code"
+                            type="text"
+                            maxLength={6}
+                            placeholder="_ _ _ _ _ _"
+                            className="text-center tracking-[1em]"
+                        />
+                    </div>
+                    <Button type="submit" className="w-full" disabled={isVerifying}>
+                        {isVerifying ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <MessageSquare className="mr-2" />}
+                        Verify & Sign In
+                    </Button>
+                    <Button variant="link" onClick={() => setStep('phone')}>
+                        Use a different number
+                    </Button>
+                </form>
+            )}
+        </FormProvider>
+
+        <div id="recaptcha-container" className="mt-8 flex justify-center"></div>
       </div>
     </div>
   );
