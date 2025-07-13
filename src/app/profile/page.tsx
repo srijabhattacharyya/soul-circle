@@ -1,10 +1,11 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import { useRouter } from 'next/navigation';
+
 import { profileSchema, ProfileFormValues } from './form-schema';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -26,6 +27,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { useAuth } from '@/components/auth-provider';
+import { getUserProfile, saveUserProfile } from '@/lib/firebase/service';
+import { useToast } from '@/hooks/use-toast';
+import { Loader2 } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const countryList = ['India', 'USA', 'Canada', 'UK', 'Australia', 'Other'];
 
@@ -36,13 +42,14 @@ const SupportSystemOtherInput = ({ control }: { control: any }) => {
       <div className="flex items-center space-x-2">
         <Controller
           control={control}
-          name="supportSystemOther"
+          name="supportSystemOther.enabled"
           render={({ field }) => (
             <Checkbox
-              checked={field.value.enabled}
+              checked={field.value?.enabled ?? false}
               onCheckedChange={(checked) => {
-                field.onChange({ enabled: !!checked, value: '' });
-                setShow(!!checked);
+                const isChecked = !!checked;
+                field.onChange({ enabled: isChecked, value: '' });
+                setShow(isChecked);
               }}
             />
           )}
@@ -148,10 +155,17 @@ const OtherCheckboxInput = ({
 
 
 export default function ProfilePage() {
+  const { user } = useAuth();
+  const router = useRouter();
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
   const {
     control,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
@@ -198,12 +212,71 @@ export default function ProfilePage() {
     },
   });
 
+  useEffect(() => {
+    if (user) {
+      setIsLoading(true);
+      getUserProfile(user.uid)
+        .then((profile) => {
+          if (profile) {
+            reset(profile);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          toast({
+            title: 'Error',
+            description: 'Failed to load your profile.',
+            variant: 'destructive',
+          });
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
+  }, [user, reset, toast]);
+
   const selfHarmThoughtsValue = watch('selfHarmThoughts');
 
-  const onSubmit = (data: ProfileFormValues) => {
-    console.log(data);
-    alert('Profile submitted successfully!');
+  const onSubmit = async (data: ProfileFormValues) => {
+    if (!user) {
+        toast({ title: 'Error', description: 'You must be logged in to save your profile.', variant: 'destructive' });
+        return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await saveUserProfile(user.uid, data);
+      toast({
+        title: 'Success!',
+        description: 'Your profile has been saved successfully.',
+      });
+      router.push('/'); // Or a dashboard page
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: 'Error',
+        description: 'There was a problem saving your profile. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  if (isLoading) {
+    return (
+        <div className="min-h-screen w-full bg-gradient-to-br from-indigo-100 to-cyan-100 p-4 sm:p-8 flex items-center justify-center">
+            <div className="bg-white rounded-xl shadow-2xl p-8 sm:p-10 max-w-3xl w-full space-y-4">
+                <Skeleton className="h-10 w-1/3" />
+                <Skeleton className="h-8 w-1/2" />
+                <Skeleton className="h-16 w-full" />
+                <Skeleton className="h-12 w-full mt-8" />
+                <Skeleton className="h-12 w-full" />
+                <Skeleton className="h-12 w-full" />
+            </div>
+        </div>
+    )
+  }
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-indigo-100 to-cyan-100 p-4 sm:p-8 flex items-center justify-center">
@@ -221,7 +294,7 @@ export default function ProfilePage() {
         </p>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-          <Accordion type="single" collapsible className="w-full">
+          <Accordion type="single" collapsible className="w-full" defaultValue="item-1">
             {/* Section 1: Basic Information */}
             <AccordionItem value="item-1">
               <AccordionTrigger className="text-black font-semibold text-xl py-4 border-b border-gray-200">
@@ -252,7 +325,7 @@ export default function ProfilePage() {
                     name="gender"
                     control={control}
                     render={({ field }) => (
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} value={field.value}>
                         <SelectTrigger><SelectValue placeholder="Select gender" /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="Male">Male</SelectItem>
@@ -279,7 +352,7 @@ export default function ProfilePage() {
                     name="country"
                     control={control}
                     render={({ field }) => (
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} value={field.value}>
                         <SelectTrigger><SelectValue placeholder="Select country" /></SelectTrigger>
                         <SelectContent>
                           {countryList.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
@@ -307,7 +380,7 @@ export default function ProfilePage() {
                     name="income"
                     control={control}
                     render={({ field }) => (
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} value={field.value}>
                         <SelectTrigger><SelectValue placeholder="Select income bracket" /></SelectTrigger>
                         <SelectContent>
                             <SelectItem value="<25000">Below ₹25,000</SelectItem>
@@ -369,7 +442,7 @@ export default function ProfilePage() {
                 <div>
                   <Label className='text-black'>Duration of Symptoms</Label>
                   <Controller name="symptomsDuration" control={control} render={({ field }) => (
-                      <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex flex-col space-y-1">
+                      <RadioGroup onValueChange={field.onChange} value={field.value} className="flex flex-col space-y-1">
                           {["Less than 2 weeks", "2–8 weeks", "2–6 months", "Over 6 months"].map(item => (
                               <div key={item} className="flex items-center space-x-2"><RadioGroupItem value={item} id={`duration-${item}`} /><Label htmlFor={`duration-${item}`} className='text-black'>{item}</Label></div>
                           ))}
@@ -379,7 +452,7 @@ export default function ProfilePage() {
                 <div>
                   <Label className='text-black'>Severity of Symptoms</Label>
                   <Controller name="symptomsSeverity" control={control} render={({ field }) => (
-                      <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex flex-col space-y-1">
+                      <RadioGroup onValueChange={field.onChange} value={field.value} className="flex flex-col space-y-1">
                           {["Mild", "Moderate", "Severe", "Debilitating"].map(item => (
                               <div key={item} className="flex items-center space-x-2"><RadioGroupItem value={item} id={`severity-${item}`} /><Label htmlFor={`severity-${item}`} className='text-black'>{item}</Label></div>
                           ))}
@@ -393,7 +466,7 @@ export default function ProfilePage() {
                 <div>
                   <Label className='text-black'>Have you ever tried coping techniques?</Label>
                   <Controller name="copingTechniques" control={control} render={({ field }) => (
-                      <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex space-x-4">
+                      <RadioGroup onValueChange={field.onChange} value={field.value} className="flex space-x-4">
                           <div className="flex items-center space-x-2"><RadioGroupItem value="Yes" id="coping-yes" /><Label htmlFor="coping-yes" className='text-black'>Yes</Label></div>
                           <div className="flex items-center space-x-2"><RadioGroupItem value="No" id="coping-no" /><Label htmlFor="coping-no" className='text-black'>No</Label></div>
                       </RadioGroup>
@@ -403,7 +476,7 @@ export default function ProfilePage() {
                  <div>
                   <Label className='text-black'>Previous counseling/therapy?</Label>
                   <Controller name="previousTherapy" control={control} render={({ field }) => (
-                      <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex space-x-4">
+                      <RadioGroup onValueChange={field.onChange} value={field.value} className="flex space-x-4">
                           <div className="flex items-center space-x-2"><RadioGroupItem value="Yes" id="therapy-yes" /><Label htmlFor="therapy-yes" className='text-black'>Yes</Label></div>
                           <div className="flex items-center space-x-2"><RadioGroupItem value="No" id="therapy-no" /><Label htmlFor="therapy-no" className='text-black'>No</Label></div>
                       </RadioGroup>
@@ -417,7 +490,7 @@ export default function ProfilePage() {
                 <div>
                   <Label className='text-black'>Family history of mental health issues?</Label>
                   <Controller name="familyHistory" control={control} render={({ field }) => (
-                      <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex space-x-4">
+                      <RadioGroup onValueChange={field.onChange} value={field.value} className="flex space-x-4">
                          {["Yes", "No", "Not Sure"].map(item => (
                               <div key={item} className="flex items-center space-x-2"><RadioGroupItem value={item} id={`family-${item}`} /><Label htmlFor={`family-${item}`} className='text-black'>{item}</Label></div>
                           ))}
@@ -427,7 +500,7 @@ export default function ProfilePage() {
                  <div>
                   <Label className='text-black'>Do you currently take medication?</Label>
                   <Controller name="medication" control={control} render={({ field }) => (
-                      <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex space-x-4">
+                      <RadioGroup onValueChange={field.onChange} value={field.value} className="flex space-x-4">
                           <div className="flex items-center space-x-2"><RadioGroupItem value="Yes" id="meds-yes" /><Label htmlFor="meds-yes" className='text-black'>Yes</Label></div>
                           <div className="flex items-center space-x-2"><RadioGroupItem value="No" id="meds-no" /><Label htmlFor="meds-no" className='text-black'>No</Label></div>
                       </RadioGroup>
@@ -448,7 +521,7 @@ export default function ProfilePage() {
                 <div>
                   <Label className='text-black'>Substance use</Label>
                   <Controller name="substanceUse" control={control} render={({ field }) => (
-                      <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex space-x-4">
+                      <RadioGroup onValueChange={field.onChange} value={field.value} className="flex space-x-4">
                           {["No", "Occasionally", "Regularly"].map(item => (
                               <div key={item} className="flex items-center space-x-2"><RadioGroupItem value={item} id={`substance-${item}`} /><Label htmlFor={`substance-${item}`} className='text-black'>{item}</Label></div>
                           ))}
@@ -467,7 +540,7 @@ export default function ProfilePage() {
                 <div>
                   <Label className='text-black'>Willingness to try journaling, breathing, or guided tools</Label>
                   <Controller name="willingness" control={control} render={({ field }) => (
-                      <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex space-x-4">
+                      <RadioGroup onValueChange={field.onChange} value={field.value} className="flex space-x-4">
                           {["Yes", "Maybe", "Not sure"].map(item => (
                               <div key={item} className="flex items-center space-x-2"><RadioGroupItem value={item} id={`willingness-${item}`} /><Label htmlFor={`willingness-${item}`} className='text-black'>{item}</Label></div>
                           ))}
@@ -482,7 +555,7 @@ export default function ProfilePage() {
                       render={({ field }) => (
                         <>
                           <Slider
-                            defaultValue={field.value}
+                            value={field.value}
                             onValueChange={field.onChange}
                             max={10}
                             min={1}
@@ -508,7 +581,7 @@ export default function ProfilePage() {
                  <div>
                     <Label className='text-black'>Have you ever had thoughts of self-harm or suicide?*</Label>
                     <Controller name="selfHarmThoughts" control={control} render={({ field }) => (
-                        <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex flex-col space-y-1">
+                        <RadioGroup onValueChange={field.onChange} value={field.value} className="flex flex-col space-y-1">
                             {["No", "Yes in the past", "Yes currently"].map(item => (
                                 <div key={item} className="flex items-center space-x-2"><RadioGroupItem value={item} id={`selfharm-${item}`} /><Label htmlFor={`selfharm-${item}`} className='text-black'>{item}</Label></div>
                             ))}
@@ -552,8 +625,8 @@ export default function ProfilePage() {
           </div>
 
           <div className="flex justify-end">
-            <Button type="submit" className="bg-indigo-700 hover:bg-indigo-800 text-white font-bold py-3 px-6 rounded-lg">
-              Save Profile
+            <Button type="submit" className="bg-indigo-700 hover:bg-indigo-800 text-white font-bold py-3 px-6 rounded-lg" disabled={isSubmitting}>
+              {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Save Profile'}
             </Button>
           </div>
         </form>
@@ -561,5 +634,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-
-    

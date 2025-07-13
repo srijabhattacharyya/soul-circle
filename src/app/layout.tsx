@@ -4,6 +4,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { AppHeader } from '@/components/app-header';
 import { cn } from '@/lib/utils';
 import { Inter } from 'next/font/google';
+import { AuthProvider } from '@/components/auth-provider';
 
 export const metadata: Metadata = {
   title: 'SoulCircle',
@@ -28,9 +29,11 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <AppHeader />
-        <main>{children}</main>
-        <Toaster />
+        <AuthProvider>
+          <AppHeader />
+          <main>{children}</main>
+          <Toaster />
+        </AuthProvider>
       </body>
     </html>
   );
