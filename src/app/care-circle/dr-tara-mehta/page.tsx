@@ -41,7 +41,7 @@ export default function DrTaraPage() {
       counsellorName="Dr. Tara Mehta"
       roomName="CareConnect"
       tagline="Where support and connection meet."
-      avatarSrc="https://placehold.co/60x60/CCFBF1/0F766E?text=TM"
+      avatarSrc="https://placehold.co/60x60/CCFBF1/0F766E.png?text=TM"
       theme={taraTheme}
       headerIcon={<TaraIcon />}
       placeholderText="You’re chatting with Dr. Tara Mehta. This space is private and judgment-free."

@@ -41,7 +41,7 @@ export default function DrAnanyaPage() {
       counsellorName="Dr. Ananya Banerjee"
       roomName="The Listening Room"
       tagline="Because being heard is the first step to healing."
-      avatarSrc="https://placehold.co/60x60/FEE2E2/991B1B?text=AB"
+      avatarSrc="https://placehold.co/60x60/FEE2E2/991B1B.png?text=AB"
       theme={ananyaTheme}
       headerIcon={<AnanyaIcon />}
       placeholderText="You’re chatting with Dr. Ananya Banerjee. This space is private and judgment-free."

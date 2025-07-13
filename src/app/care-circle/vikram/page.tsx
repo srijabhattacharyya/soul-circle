@@ -36,7 +36,7 @@ export default function VikramPage() {
       counsellorName="Vikram"
       roomName="OpenDialogue"
       tagline="Honest & non-judgmental."
-      avatarSrc="https://placehold.co/60x60/DBEAFE/1E40AF?text=V"
+      avatarSrc="https://placehold.co/60x60/DBEAFE/1E40AF.png?text=V"
       theme={vikramTheme}
       headerIcon={<VikramIcon />}
       placeholderText="You’re chatting with Vikram. This space is private and judgment-free."

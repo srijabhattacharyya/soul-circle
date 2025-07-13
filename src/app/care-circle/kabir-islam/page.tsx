@@ -36,7 +36,7 @@ export default function KabirPage() {
       counsellorName="Kabir Islam"
       roomName="TalkNest"
       tagline="A cozy place to unburden."
-      avatarSrc="https://placehold.co/60x60/D1FAE5/065F46?text=KI"
+      avatarSrc="https://placehold.co/60x60/D1FAE5/065F46.png?text=KI"
       theme={kabirTheme}
       headerIcon={<KabirIcon />}
       placeholderText="You’re chatting with Kabir Islam. This space is private and judgment-free."
