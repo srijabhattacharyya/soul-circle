@@ -2,11 +2,41 @@
 
 import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs, Timestamp, addDoc, deleteDoc, writeBatch, updateDoc, arrayUnion } from 'firebase/firestore';
 import { db, auth } from './config';
-import { deleteUser } from 'firebase/auth';
+import { deleteUser, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 import type { ProfileFormValues } from '@/app/profile/form-schema';
 import type { InnerWeatherFormValues } from '@/app/inner-weather/form-schema';
 import type { JournalFormValues } from '@/app/mind-haven/form-schema';
 import type { ChatMessage } from '@/components/chat-room';
+
+// AUTHENTICATION
+export async function signInWithGoogle() {
+  if (!auth) throw new Error("Firebase Auth is not initialized.");
+  const provider = new GoogleAuthProvider();
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+
+    // Check if user profile already exists
+    const userProfile = await getUserProfile(user.uid);
+    if (!userProfile) {
+      // Create a basic profile for new users
+      const newUserProfile: Partial<ProfileFormValues> = {
+        name: user.displayName || '',
+        age: 25, // Default age, user should update
+        gender: 'Prefer not to say',
+        counsellingReason: [],
+        counsellingGoals: [],
+        selfHarmThoughts: 'No',
+        consent: true,
+      };
+      await saveUserProfile(user.uid, newUserProfile);
+    }
+    return user;
+  } catch (error) {
+    console.error("Error signing in with Google:", error);
+    throw new Error("Google Sign-In failed.");
+  }
+}
 
 // USER PROFILE
 export async function getUserProfile(userId: string) {
