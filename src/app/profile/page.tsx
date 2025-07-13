@@ -284,13 +284,13 @@ export default function ProfilePage() {
     <div className="min-h-screen w-full bg-gradient-to-br from-indigo-100 to-cyan-100 p-4 sm:p-8 flex items-center justify-center">
       <div className="bg-white rounded-xl shadow-2xl p-8 sm:p-10 max-w-3xl w-full">
         <h1 className="text-black font-bold text-4xl mb-2">
-          SoulCircle
+          Profile
         </h1>
         <h2 className="text-black font-semibold text-3xl mb-4">
           Tell us about Yourself
         </h2>
         <p className="text-black text-lg mb-8">
-          Your profile helps SoulCircle personalise your wellness journey. By
+          Your profile helps us personalise your wellness journey. By
           sharing a few details—we can tailor your counselling experience, mood
           insights, and self-help tools to better support you.
         </p>
