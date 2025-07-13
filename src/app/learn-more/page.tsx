@@ -64,7 +64,7 @@ export default function LearnMorePage() {
 
         <section className="w-full pb-12 md:pb-24 lg:pb-32">
           <div className="container px-4 md:px-6 space-y-12 learn-more-page">
-            <div className="space-y-4">
+            <div className="max-w-3xl mx-auto space-y-4">
               <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
                 ⚠️ Important Disclaimer
               </h2>
@@ -84,7 +84,7 @@ export default function LearnMorePage() {
               </p>
             </div>
 
-            <div className="space-y-4">
+            <div className="max-w-3xl mx-auto space-y-4">
               <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
                 🔐 Data Privacy & Security
               </h2>
@@ -104,7 +104,7 @@ export default function LearnMorePage() {
               </p>
             </div>
 
-            <div className="space-y-4">
+            <div className="max-w-3xl mx-auto space-y-4">
               <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
                 🛠️ Tech Stack Used
               </h2>
@@ -131,7 +131,7 @@ export default function LearnMorePage() {
               </ul>
             </div>
 
-            <div className="space-y-4">
+            <div className="max-w-3xl mx-auto space-y-4">
               <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
                 🧠 AI & Future Learning
               </h2>
@@ -152,7 +152,7 @@ export default function LearnMorePage() {
               </p>
             </div>
 
-            <div className="space-y-4">
+            <div className="max-w-3xl mx-auto space-y-4">
               <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
                 🙏 Gratitude & Closing Note
               </h2>
