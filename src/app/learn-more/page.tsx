@@ -9,50 +9,48 @@ export default function LearnMorePage() {
       <main className="flex-1">
         <section className="w-full pt-24 md:pt-32 lg:pt-40 pb-6 md:pb-8 lg:pb-0">
           <div className="container px-4 md:px-6 learn-more-page">
-            <div className="grid gap-12 items-start">
-              <div className="flex flex-col items-center justify-center space-y-4">
-                <Image
-                  src="https://placehold.co/200x150.png"
-                  alt="Founder's Photo"
-                  width={200}
-                  height={150}
-                  className="rounded-lg object-cover"
-                  data-ai-hint="portrait founder"
-                />
-                <div className="pt-4 text-center">
-                  <p className="text-4xl font-bold text-foreground">
-                    By Srija Bhattacharyya
-                  </p>
-                  <p className="text-2xl text-foreground/90">
-                    3rd Year Student, B.Tech CSE
-                  </p>
-                  <p className="text-xl text-foreground/80">
-                    Kalinga Institute of Industrial Technology (KIIT),
-                    Bhubaneswar
-                  </p>
-                </div>
+            <div className="flex flex-col items-center justify-center space-y-4">
+              <Image
+                src="https://placehold.co/400x300.png"
+                alt="Founder's Photo"
+                width={400}
+                height={300}
+                className="rounded-lg object-cover"
+                data-ai-hint="portrait founder"
+              />
+              <div className="pt-4 text-center">
+                <p className="text-4xl font-bold text-foreground">
+                  By Srija Bhattacharyya
+                </p>
+                <p className="text-2xl text-foreground/90">
+                  3rd Year Student, B.Tech CSE
+                </p>
+                <p className="text-xl text-foreground/80">
+                  Kalinga Institute of Industrial Technology (KIIT),
+                  Bhubaneswar
+                </p>
               </div>
             </div>
             <div className="max-w-3xl mx-auto space-y-4 mt-8">
-                <p>
-                  During my years of hostel life, I have had countless
-                  late-night conversations with friends battling emotional
-                  stress, anxiety, and depression—often in silence. Many of
-                  them, including myself, have felt the pressing need to talk
-                  to someone who could simply listen, offer thoughtful advice,
-                  or help navigate a tough moment—especially during exam time
-                  or periods of academic pressure.
-                </p>
-                <p>
-                  In our hectic schedules, reaching out to a professional
-                  counsellor isn’t always possible. This realization gave
-                  birth to SoulCircle—an AI-powered mental wellness companion
-                  that offers a non-judgmental, empathetic space to talk,
-                  reflect, and feel heard—anytime, anywhere. The AI
-                  counsellors in SoulCircle are available 24x7 to support
-                  users through conversation, journaling, self-help tools, and
-                  mood tracking.
-                </p>
+              <p>
+                During my years of hostel life, I have had countless
+                late-night conversations with friends battling emotional
+                stress, anxiety, and depression—often in silence. Many of
+                them, including myself, have felt the pressing need to talk
+                to someone who could simply listen, offer thoughtful advice,
+                or help navigate a tough moment—especially during exam time
+                or periods of academic pressure.
+              </p>
+              <p>
+                In our hectic schedules, reaching out to a professional
+                counsellor isn’t always possible. This realization gave
+                birth to SoulCircle—an AI-powered mental wellness companion
+                that offers a non-judgmental, empathetic space to talk,
+                reflect, and feel heard—anytime, anywhere. The AI
+                counsellors in SoulCircle are available 24x7 to support
+                users through conversation, journaling, self-help tools, and
+                mood tracking.
+              </p>
             </div>
           </div>
         </section>
