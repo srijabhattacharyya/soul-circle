@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Home, Info, User, CloudSun, Zap, Settings, Scale, BookHeart, LogOut, Menu } from 'lucide-react';
 import { useAuth } from './auth-provider';
-import { auth } from '@/lib/firebase/config';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import {
   DropdownMenu,
@@ -18,12 +17,7 @@ import { useState, useEffect } from 'react';
 
 const NavLinks = () => {
   const { user } = useAuth();
-  const handleLogout = () => {
-    if (auth) {
-      auth.signOut();
-    }
-  };
-
+  
   return (
     <>
       <Link href="/" className={buttonVariants({ variant: 'ghost' })}>
@@ -73,9 +67,11 @@ const NavLinks = () => {
                 <Settings className="mr-2 h-4 w-4" />Settings
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={handleLogout}>
-              <LogOut className="mr-2 h-4 w-4" />
-              Logout
+            <DropdownMenuItem asChild>
+               <Link href="/logout">
+                <LogOut className="mr-2 h-4 w-4" />
+                Logout
+              </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -87,13 +83,7 @@ const NavLinks = () => {
 const MobileNav = () => {
     const { user } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
-     const handleLogout = () => {
-        if (auth) {
-            auth.signOut();
-        }
-        setIsOpen(false);
-    };
-
+    
     const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
         <Link href={href} onClick={() => setIsOpen(false)} className="flex items-center p-2 hover:bg-accent rounded-md">
             {children}
@@ -122,9 +112,9 @@ const MobileNav = () => {
                                 <NavLink href="/mind-haven"><BookHeart className="mr-2 h-5 w-5" />Mind Haven</NavLink>
                                 <NavLink href="/soothe-studio"><Zap className="mr-2 h-5 w-5" />Soothe Studio</NavLink>
                                 <NavLink href="/settings"><Settings className="mr-2 h-5 w-5" />Settings</NavLink>
-                                <Button variant="ghost" size="lg" onClick={handleLogout} className="flex items-center justify-start p-2 text-lg">
+                                <NavLink href="/logout">
                                   <LogOut className="mr-2 h-5 w-5" />Logout
-                                </Button>
+                                </NavLink>
                             </>
                         )}
                     </nav>
@@ -153,7 +143,9 @@ export function AppHeader() {
           <nav className="hidden md:flex items-center gap-1">
             <NavLinks />
           </nav>
-          <MobileNav />
+          <div className="md:hidden">
+            <MobileNav />
+          </div>
         </>
       )}
     </header>
