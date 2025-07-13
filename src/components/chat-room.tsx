@@ -63,6 +63,7 @@ export function ChatRoom({
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isSending, setIsSending] = useState(false);
+  const [isPersonaLoading, setIsPersonaLoading] = useState(true);
   const [persona, setPersona] = useState<string | null>(null);
   const chatHistoryRef = useRef<HTMLDivElement>(null);
 
@@ -78,11 +79,17 @@ export function ChatRoom({
             description: 'Chat features are disabled. Using a generic assistant.',
             variant: 'destructive',
           });
-          if(isMounted) setPersona(GENERIC_PERSONA);
+          if (isMounted) {
+            setPersona(GENERIC_PERSONA);
+            setIsPersonaLoading(false);
+          }
+        } else {
+            setIsPersonaLoading(true);
         }
         return;
       }
       
+      setIsPersonaLoading(true);
       try {
         const fetchedPersona = await getCounsellorPersona(counsellorId);
         if (isMounted) {
@@ -107,6 +114,10 @@ export function ChatRoom({
             variant: 'destructive',
           });
           setPersona(GENERIC_PERSONA);
+        }
+      } finally {
+        if (isMounted) {
+            setIsPersonaLoading(false);
         }
       }
     };
@@ -199,7 +210,7 @@ export function ChatRoom({
     }
   };
 
-  const isButtonDisabled = isSending || !input.trim() || !persona;
+  const isButtonDisabled = isSending || !input.trim() || isPersonaLoading;
 
   return (
     <div className={cn('min-h-screen w-full p-4 sm:p-6 flex items-center justify-center bg-gradient-to-br', theme.backgroundGradient)}>
@@ -222,7 +233,15 @@ export function ChatRoom({
         </header>
         
         <div ref={chatHistoryRef} className="flex-1 overflow-y-auto p-6 space-y-6 bg-gray-50">
-          {messages.length === 0 && !isSending && (
+          {isPersonaLoading && (
+              <div className="flex justify-center items-center h-full">
+                <div className="text-center text-gray-500 italic py-8 flex items-center gap-2">
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    Connecting to {counsellorName}...
+                </div>
+              </div>
+          )}
+          {!isPersonaLoading && messages.length === 0 && (
             <div className="text-center text-gray-500 italic py-8">{placeholderText}</div>
           )}
           {messages.map((msg, index) => (
@@ -260,13 +279,13 @@ export function ChatRoom({
             onKeyDown={(e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
-                    handleSendMessage(e);
+                    if (!isButtonDisabled) handleSendMessage(e);
                 }
             }}
             placeholder="Type your message here..."
             className={cn('flex-1 border-gray-300 p-2 resize-none bg-white text-black', theme.inputRing)}
             rows={1}
-            disabled={isSending}
+            disabled={isPersonaLoading || isSending}
           />
           <Button type="submit" className={cn('ml-4 p-3 rounded-lg shadow-md transition', theme.sendButton)} disabled={isButtonDisabled}>
             {isSending ? <Loader2 className="h-6 w-6 animate-spin" /> : <Send className="h-6 w-6" />}
