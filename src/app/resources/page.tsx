@@ -117,12 +117,12 @@ export default function ResourceLibraryPage() {
                 <Card key={index} className="flex flex-col">
                   <CardHeader>
                     <div className="flex justify-between items-start">
-                      <CardTitle className="text-lg text-gray-800">{resource.title}</CardTitle>
+                      <CardTitle className="text-lg text-card-foreground">{resource.title}</CardTitle>
                       <Badge variant="outline">{resource.type}</Badge>
                     </div>
                   </CardHeader>
                   <CardContent className="flex-grow">
-                    <CardDescription className="text-gray-600 mb-4">{resource.description}</CardDescription>
+                    <CardDescription className="text-card-foreground/80 mb-4">{resource.description}</CardDescription>
                   </CardContent>
                   <div className="p-6 pt-0">
                     <Button asChild className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
