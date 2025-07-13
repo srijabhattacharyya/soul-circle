@@ -29,7 +29,7 @@ export default function LearnMorePage() {
           defaultValue="item-1"
         >
           <AccordionItem value="item-1">
-            <AccordionTrigger className="text-lg font-semibold hover:bg-gray-50 p-4 rounded-t-lg">
+            <AccordionTrigger className="text-lg font-semibold text-gray-800 hover:bg-gray-50 p-4 rounded-t-lg">
               <div className="flex items-center gap-3">
                 <Lock className="h-5 w-5 text-indigo-600" />
                 Privacy Policy
@@ -84,7 +84,7 @@ export default function LearnMorePage() {
           </AccordionItem>
 
           <AccordionItem value="item-2">
-            <AccordionTrigger className="text-lg font-semibold hover:bg-gray-50 p-4">
+            <AccordionTrigger className="text-lg font-semibold text-gray-800 hover:bg-gray-50 p-4">
               <div className="flex items-center gap-3">
                 <Scale className="h-5 w-5 text-indigo-600" />
                 Terms of Use
@@ -124,7 +124,7 @@ export default function LearnMorePage() {
           </AccordionItem>
 
           <AccordionItem value="item-3">
-            <AccordionTrigger className="text-lg font-semibold hover:bg-gray-50 p-4 rounded-b-lg">
+            <AccordionTrigger className="text-lg font-semibold text-gray-800 hover:bg-gray-50 p-4 rounded-b-lg">
               <div className="flex items-center gap-3">
                 <TriangleAlert className="h-5 w-5 text-amber-600" />
                 Disclaimer
