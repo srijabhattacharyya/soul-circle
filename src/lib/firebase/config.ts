@@ -12,31 +12,22 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// Check if all required environment variables are present
-const firebaseConfigIsValid =
-  firebaseConfig.apiKey &&
-  firebaseConfig.authDomain &&
-  firebaseConfig.projectId;
-
 let app: FirebaseApp;
 let auth: Auth;
 let db: Firestore;
 
-if (!firebaseConfigIsValid) {
-  console.error("Firebase configuration is invalid. Please check your environment variables.");
-  // We'll create dummy instances to prevent the app from crashing on import
-  // but functionality will be disabled.
-  app = {} as FirebaseApp;
-  auth = {} as Auth;
-  db = {} as Firestore;
-} else {
-  if (getApps().length === 0) {
-    app = initializeApp(firebaseConfig);
-  } else {
-    app = getApp();
-  }
-  auth = getAuth(app);
-  db = getFirestore(app);
+try {
+    app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    db = getFirestore(app);
+} catch (error) {
+    console.error("Firebase initialization failed:", error);
+    // In a non-dev environment, you might want to handle this more gracefully.
+    // For now, we'll assign dummy objects to prevent app crashes on import.
+    app = {} as FirebaseApp;
+    auth = {} as Auth;
+    db = {} as Firestore;
 }
+
 
 export { app, auth, db };
