@@ -208,13 +208,13 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-indigo-100 to-cyan-100 p-4 sm:p-8 flex items-center justify-center">
       <div className="bg-white rounded-xl shadow-2xl p-8 sm:p-10 max-w-3xl w-full">
-        <h1 className="text-indigo-700 font-bold text-4xl mb-2">
+        <h1 className="text-black font-bold text-4xl mb-2">
           SoulCircle
         </h1>
-        <h2 className="text-gray-800 font-semibold text-3xl mb-4">
+        <h2 className="text-black font-semibold text-3xl mb-4">
           Tell us about Yourself
         </h2>
-        <p className="text-gray-600 text-lg mb-8">
+        <p className="text-black text-lg mb-8">
           Your profile helps SoulCircle personalise your wellness journey. By
           sharing a few details—we can tailor your counselling experience, mood
           insights, and self-help tools to better support you.
@@ -224,7 +224,7 @@ export default function ProfilePage() {
           <Accordion type="single" collapsible className="w-full">
             {/* Section 1: Basic Information */}
             <AccordionItem value="item-1">
-              <AccordionTrigger className="text-indigo-700 font-semibold text-xl py-4 border-b border-gray-200">
+              <AccordionTrigger className="text-black font-semibold text-xl py-4 border-b border-gray-200">
                 Basic Information
               </AccordionTrigger>
               <AccordionContent className="pt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -293,7 +293,7 @@ export default function ProfilePage() {
 
             {/* Section 2: Personal & Social Background */}
             <AccordionItem value="item-2">
-              <AccordionTrigger className="text-indigo-700 font-semibold text-xl py-4 border-b border-gray-200">
+              <AccordionTrigger className="text-black font-semibold text-xl py-4 border-b border-gray-200">
                 Personal & Social Background
               </AccordionTrigger>
               <AccordionContent className="pt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -355,7 +355,7 @@ export default function ProfilePage() {
             
             {/* Section 3: Counselling Needs */}
             <AccordionItem value="item-3">
-              <AccordionTrigger className="text-indigo-700 font-semibold text-xl py-4 border-b border-gray-200">Counselling Needs</AccordionTrigger>
+              <AccordionTrigger className="text-black font-semibold text-xl py-4 border-b border-gray-200">Counselling Needs</AccordionTrigger>
               <AccordionContent className="pt-4 grid grid-cols-1 gap-6">
                 <div>
                     <Label>Main Reason for Seeking Counselling*</Label>
@@ -439,7 +439,7 @@ export default function ProfilePage() {
 
             {/* Section 4: Lifestyle & Behaviour */}
             <AccordionItem value="item-4">
-              <AccordionTrigger className="text-indigo-700 font-semibold text-xl py-4 border-b border-gray-200">Lifestyle & Behaviour</AccordionTrigger>
+              <AccordionTrigger className="text-black font-semibold text-xl py-4 border-b border-gray-200">Lifestyle & Behaviour</AccordionTrigger>
               <AccordionContent className="pt-4 grid grid-cols-1 gap-6">
                 <div>
                   <Label htmlFor="dailyRoutine">Describe your daily routine</Label>
@@ -498,7 +498,7 @@ export default function ProfilePage() {
 
             {/* Section 5: Counselling Goals & Safety */}
             <AccordionItem value="item-5">
-              <AccordionTrigger className="text-indigo-700 font-semibold text-xl py-4 border-b border-gray-200">Counselling Goals & Safety</AccordionTrigger>
+              <AccordionTrigger className="text-black font-semibold text-xl py-4 border-b border-gray-200">Counselling Goals & Safety</AccordionTrigger>
               <AccordionContent className="pt-4 grid grid-cols-1 gap-6">
                  <div>
                     <Label>What do you hope to achieve through counseling?*</Label>
