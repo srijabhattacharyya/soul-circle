@@ -16,10 +16,12 @@ export default function LearnMorePage() {
                   className="rounded-lg object-cover"
                   data-ai-hint="portrait founder"
                 />
-                <div className="pt-4 text-muted-foreground text-sm text-center">
-                  <p className="font-semibold">By Srija Bhattacharyya</p>
-                  <p>3rd Year Student, B.Tech CSE</p>
-                  <p>
+                <div className="pt-4 text-center">
+                  <p className="text-lg font-bold">By Srija Bhattacharyya</p>
+                  <p className="text-base text-muted-foreground">
+                    3rd Year Student, B.Tech CSE
+                  </p>
+                  <p className="text-base text-muted-foreground">
                     Kalinga Institute of Industrial Technology (KIIT),
                     Bhubaneswar
                   </p>
