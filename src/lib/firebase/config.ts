@@ -12,7 +12,7 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// Check if the essential environment variable is present.
+// This check is crucial. It verifies if the environment variable is loaded.
 export const isConfigValid = !!firebaseConfig.apiKey;
 
 let app: FirebaseApp;
