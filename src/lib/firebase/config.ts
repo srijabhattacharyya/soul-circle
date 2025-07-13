@@ -1,10 +1,8 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp, getApps, type FirebaseApp } from 'firebase/app';
+
+import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
 import { getAuth, type Auth } from 'firebase/auth';
 import { getFirestore, type Firestore } from 'firebase/firestore';
 
-// TODO: Add your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -14,21 +12,31 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// Initialize Firebase
+// Check if all required environment variables are present
+const firebaseConfigIsValid =
+  firebaseConfig.apiKey &&
+  firebaseConfig.authDomain &&
+  firebaseConfig.projectId;
+
 let app: FirebaseApp;
-let auth: Auth | null = null;
-let db: Firestore | null = null;
+let auth: Auth;
+let db: Firestore;
 
-if (firebaseConfig.apiKey && firebaseConfig.projectId) {
-    if (getApps().length === 0) {
-      app = initializeApp(firebaseConfig);
-    } else {
-      app = getApps()[0];
-    }
-
-    auth = getAuth(app);
-    db = getFirestore(app);
+if (!firebaseConfigIsValid) {
+  console.error("Firebase configuration is invalid. Please check your environment variables.");
+  // We'll create dummy instances to prevent the app from crashing on import
+  // but functionality will be disabled.
+  app = {} as FirebaseApp;
+  auth = {} as Auth;
+  db = {} as Firestore;
+} else {
+  if (getApps().length === 0) {
+    app = initializeApp(firebaseConfig);
+  } else {
+    app = getApp();
+  }
+  auth = getAuth(app);
+  db = getFirestore(app);
 }
-
 
 export { app, auth, db };
