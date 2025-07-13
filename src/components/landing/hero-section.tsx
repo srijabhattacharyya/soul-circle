@@ -20,7 +20,7 @@ export function HeroSection({ data }: { data: HeroSectionData }) {
           <div className="flex flex-col justify-center space-y-4 text-center">
             <div className="flex justify-center">
               <Image
-                src="/images/logo.png"
+                src="https://placehold.co/128x128.png"
                 alt="SoulCircle Logo"
                 width={128}
                 height={128}
