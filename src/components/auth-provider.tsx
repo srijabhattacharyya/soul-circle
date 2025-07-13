@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Allow access to the root path (landing page) for everyone.
     if (pathname === '/') return;
 
-    const isPublic = publicPaths.includes(pathname);
+    const isPublic = publicPaths.some(path => pathname.startsWith(path));
     
     if (!user && !isPublic) {
       router.push('/login');
@@ -68,7 +68,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   
   // If we are not loading, and trying to access a protected route without a user,
   // show a loader while we redirect to /login.
-  const isPublic = publicPaths.includes(pathname) || pathname === '/';
+  const isPublic = publicPaths.some(path => pathname.startsWith(path)) || pathname === '/';
   if (!user && !isPublic) {
       return (
         <div className="flex h-screen w-full items-center justify-center bg-background">
