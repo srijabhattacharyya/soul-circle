@@ -29,7 +29,10 @@ import {
     LogOut,
     ChevronDown,
     HeartHandshake,
-    Database
+    Database,
+    LineChart,
+    Notebook,
+    Star
 } from 'lucide-react';
 
 const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
@@ -44,13 +47,13 @@ const NavLink = ({ href, children }: { href: string; children: React.ReactNode }
     )
 }
 
-const NavSubMenu = ({ title, icon, children }: { title: string; icon: React.ReactNode, children: React.ReactNode }) => {
+const NavSubMenu = ({ title, icon, children, paths }: { title: string; icon: React.ReactNode, children: React.ReactNode, paths: string[] }) => {
     const pathname = usePathname();
-    const isCareCircleActive = pathname.startsWith('/care-circle');
+    const isActive = paths.some(path => pathname.startsWith(path));
     
     return (
         <SidebarMenuItem>
-            <SidebarMenuButton isActive={isCareCircleActive}>
+            <SidebarMenuButton isActive={isActive}>
                 {icon}
                 <span>{title}</span>
                 <ChevronDown className="ml-auto size-4" />
@@ -88,30 +91,46 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
-            <NavLink href="/"><Home /><span>Home</span></NavLink>
-            <NavLink href="/about"><Info /><span>About</span></NavLink>
-            <NavLink href="/legal"><Scale /><span>Legal</span></NavLink>
-            <NavLink href="/resources"><BookHeart /><span>Resources</span></NavLink>
-            <NavLink href="/care-circle"><HeartHandshake /><span>Care Circle</span></NavLink>
-
-            <>
-                <hr className="my-2 border-border"/>
-                <NavSubMenu title="My Circle" icon={<User />}>
-                    <NavSubLink href="/profile"><User /><span>Profile</span></NavSubLink>
+            {user ? (
+              <>
+                <NavLink href="/"><Home /><span>Dashboard</span></NavLink>
+                <NavSubMenu title="My Tools" icon={<User />} paths={['/care-circle', '/inner-weather', '/mind-haven', '/soothe-studio']}>
+                    <NavSubLink href="/care-circle"><HeartHandshake /><span>Care Circle</span></NavSubLink>
                     <NavSubLink href="/inner-weather"><CloudSun /><span>Inner Weather</span></NavSubLink>
                     <NavSubLink href="/mind-haven"><BookHeart /><span>Mind Haven</span></NavSubLink>
                     <NavSubLink href="/soothe-studio"><Zap /><span>Soothe Studio</span></NavSubLink>
                 </NavSubMenu>
-                
+                <NavSubMenu title="My History" icon={<LineChart />} paths={['/mood-history', '/journal-history', '/saved-items']}>
+                    <NavSubLink href="/mood-history"><LineChart /><span>Mood History</span></NavSubLink>
+                    <NavSubLink href="/journal-history"><Notebook /><span>Journal History</span></NavSubLink>
+                    <NavSubLink href="/saved-items"><Star /><span>Saved Items</span></NavSubLink>
+                </NavSubMenu>
                  <hr className="my-2 border-border"/>
+                 <NavLink href="/profile"><User /><span>My Profile</span></NavLink>
                  <NavLink href="/settings"><Settings /><span>Settings</span></NavLink>
-                 <NavLink href="/seed-data"><Database /><span>Seed Data</span></NavLink>
-            </>
+              </>
+            ) : (
+                 <>
+                    <NavLink href="/"><Home /><span>Home</span></NavLink>
+                    <NavLink href="/learn-more"><Info /><span>About</span></NavLink>
+                    <NavLink href="/legal"><Scale /><span>Legal & Privacy</span></NavLink>
+                    <NavLink href="/care-circle"><HeartHandshake /><span>Meet the Counsellors</span></NavLink>
+                </>
+            )}
+
+            {process.env.NODE_ENV === 'development' && (
+                <>
+                    <hr className="my-2 border-border"/>
+                    <NavLink href="/seed-data"><Database /><span>Seed Data</span></NavLink>
+                </>
+            )}
         </SidebarMenu>
       </SidebarContent>
-      <SidebarFooter>
-         <NavLink href="/logout"><LogOut /><span>Logout</span></NavLink>
-      </SidebarFooter>
+       {user && (
+          <SidebarFooter>
+            <NavLink href="/logout"><LogOut /><span>Logout</span></NavLink>
+          </SidebarFooter>
+        )}
     </>
   );
 }
