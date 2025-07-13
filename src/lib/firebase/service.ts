@@ -269,7 +269,7 @@ export async function deleteUserAccountAndData(userId: string) {
         const collectionsToDelete = ['moodTracker', 'journals', 'savedAffirmations', 'userGoals', 'chats'];
         
         for (const coll of collectionsToDelete) {
-            const userDocsQuery = query(collection(db, coll), where('userId', '==', userId));
+            const userDocsQuery = query(collection(db, coll), where('uid', '==', userId));
             const querySnapshot = await getDocs(userDocsQuery);
             const batch = writeBatch(db);
             querySnapshot.forEach((doc) => {
@@ -319,7 +319,7 @@ export async function saveMessage(userId: string, counsellorId: string, message:
         // Use setDoc with merge: true as a fallback if the document doesn't exist.
         await setDoc(docRef, { 
             messages: arrayUnion(messageToSave),
-            userId,
+            uid: userId,
             counsellorId,
         }, { merge: true });
 
