@@ -12,20 +12,28 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
+// Check if all required environment variables are present.
+const isConfigValid = Object.values(firebaseConfig).every(Boolean);
+
 let app: FirebaseApp;
 let auth: Auth;
 let db: Firestore;
 
-const isConfigValid = Object.values(firebaseConfig).every(Boolean);
-
 if (isConfigValid) {
+    // If config is valid, initialize Firebase.
     app = getApps().length ? getApp() : initializeApp(firebaseConfig);
     auth = getAuth(app);
     db = getFirestore(app);
 } else {
+    // If config is invalid, log an error and set services to null.
+    // This allows the app to run in a development/offline mode without crashing.
     if (typeof window !== 'undefined') {
-        console.error("Firebase configuration is invalid or missing. Please check your environment variables.");
+        console.error("Firebase configuration is invalid or missing. Running in offline mode.");
     }
+    // Assign null to prevent runtime errors when these are imported elsewhere.
+    app = null as any;
+    auth = null as any;
+    db = null as any;
 }
 
 export { app, auth, db, isConfigValid };
