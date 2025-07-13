@@ -100,21 +100,23 @@ export default function LearnMorePage() {
               <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
                 🛠️ Tech Stack Used
               </h2>
-              <ul className="list-disc list-inside text-lg leading-relaxed text-foreground space-y-1">
-                <li>Frontend: Next.js 14+, Tailwind CSS</li>
-                <li>
+              <ul className="list-disc list-inside space-y-1">
+                <li className="text-lg leading-relaxed text-justify">
+                  Frontend: Next.js 15+, Tailwind CSS
+                </li>
+                <li className="text-lg leading-relaxed text-justify">
                   Backend: Firebase (Authentication, Firestore, Cloud
                   Functions)
                 </li>
-                <li>
+                <li className="text-lg leading-relaxed text-justify">
                   AI Integration: Gemini API for persona-based counseling
                   conversations
                 </li>
-                <li>
+                <li className="text-lg leading-relaxed text-justify">
                   Storage: Firebase Storage (for media uploads and journal
                   data)
                 </li>
-                <li>
+                <li className="text-lg leading-relaxed text-justify">
                   Analytics: Firebase Analytics or PostHog (to improve user
                   experience)
                 </li>
