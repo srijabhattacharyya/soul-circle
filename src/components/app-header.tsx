@@ -36,7 +36,7 @@ export function AppHeader() {
           )}
         >
           <BookOpen className="mr-2 h-4 w-4" />
-          Learn More
+          Policies
         </Link>
         <Link
           href="/about"
