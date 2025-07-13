@@ -96,3 +96,39 @@ export async function saveJournalEntry(userId: string, data: JournalFormValues) 
         throw new Error('Failed to save journal entry.');
     }
 }
+
+export async function saveAffirmation(userId: string, affirmation: string) {
+    if (!db) throw new Error("Firestore is not initialized.");
+    try {
+        await addDoc(collection(db, 'savedAffirmations'), {
+            uid: userId,
+            affirmation,
+            savedAt: serverTimestamp(),
+        });
+    } catch(error) {
+        console.error('Error saving affirmation:', error);
+        throw new Error('Failed to save affirmation.');
+    }
+}
+
+type GoalData = {
+    mainGoal: string;
+    subGoals: string[];
+    timeFocus: string;
+    moodFocus: string;
+    completed: boolean;
+};
+
+export async function saveUserGoal(userId: string, goalData: GoalData) {
+    if (!db) throw new Error("Firestore is not initialized.");
+    try {
+        await addDoc(collection(db, 'userGoals'), {
+            uid: userId,
+            ...goalData,
+            createdAt: serverTimestamp(),
+        });
+    } catch(error) {
+        console.error('Error saving user goal:', error);
+        throw new Error('Failed to save user goal.');
+    }
+}
