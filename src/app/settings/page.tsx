@@ -17,7 +17,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
 import {
   Accordion,
   AccordionContent,
@@ -51,7 +50,7 @@ export default function SettingsPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [deleteConfirmationChecked, setDeleteConfirmationChecked] = useState(false);
+  const [deleteConfirmationInput, setDeleteConfirmationInput] = useState('');
   
   const {
     control,
@@ -265,14 +264,20 @@ export default function SettingsPage() {
                 <p className="font-bold">Warning</p>
                 <p>Deleting your account is permanent and cannot be undone. All your data, including profile information, journal entries, mood logs, and chat history, will be permanently removed.</p>
               </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="delete-confirm" checked={deleteConfirmationChecked} onCheckedChange={(checked) => setDeleteConfirmationChecked(!!checked)} />
-                <Label htmlFor="delete-confirm" className="text-sm font-medium leading-none text-black">I understand that deleting my account is permanent and all my data will be lost.</Label>
+              <div className="space-y-2">
+                <Label htmlFor="delete-confirm" className="text-sm font-medium leading-none text-black">To confirm, please type "DELETE" in the box below.</Label>
+                 <Input 
+                    id="delete-confirm"
+                    value={deleteConfirmationInput}
+                    onChange={(e) => setDeleteConfirmationInput(e.target.value)}
+                    placeholder='DELETE'
+                    className="text-black bg-white"
+                 />
               </div>
               
                 <AlertDialog>
                     <AlertDialogTrigger asChild>
-                        <Button variant="destructive" className="mt-4" disabled={!deleteConfirmationChecked || isDeleting}>
+                        <Button variant="destructive" className="mt-4" disabled={deleteConfirmationInput !== 'DELETE' || isDeleting}>
                             {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Delete Account'}
                         </Button>
                     </AlertDialogTrigger>
