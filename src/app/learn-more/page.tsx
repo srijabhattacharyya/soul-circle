@@ -12,10 +12,10 @@ export default function LearnMorePage() {
             <div className="grid gap-12 lg:grid-cols-2 lg:gap-24 items-start">
               <div className="flex flex-col items-center justify-center space-y-4">
                 <Image
-                  src="https://placehold.co/400x300.png"
+                  src="https://placehold.co/200x150.png"
                   alt="Founder's Photo"
-                  width={400}
-                  height={300}
+                  width={200}
+                  height={150}
                   className="rounded-lg object-cover"
                   data-ai-hint="portrait founder"
                 />
