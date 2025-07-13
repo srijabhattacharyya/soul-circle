@@ -14,60 +14,74 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator
 } from '@/components/ui/dropdown-menu';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
+const NavLinks = () => {
+  const { user } = useAuth();
+  const handleLogout = () => {
+    if (auth) {
+      auth.signOut();
+    }
+  };
 
-const DesktopNav = () => {
-    const { user } = useAuth();
-    const handleLogout = () => {
-        if (auth) {
-            auth.signOut();
-        }
-    };
-
-    return (
-        <nav className="hidden md:flex items-center gap-1">
-            <Link href="/" className={buttonVariants({ variant: "ghost" })}><Home className="mr-2 h-4 w-4" />Home</Link>
-            <Link href="/about" className={buttonVariants({ variant: "ghost" })}><Info className="mr-2 h-4 w-4" />About</Link>
-            <Link href="/legal" className={buttonVariants({ variant: "ghost" })}><Scale className="mr-2 h-4 w-4" />Legal</Link>
-            <Link href="/resources" className={buttonVariants({ variant: "ghost" })}><BookHeart className="mr-2 h-4 w-4" />Resources</Link>
-
-            {user && (
-                <>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost">
-                                <User className="mr-2 h-4 w-4" />
-                                My Circle
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                            <DropdownMenuItem asChild>
-                                <Link href="/profile"><User className="mr-2 h-4 w-4" />Profile</Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem asChild>
-                                <Link href="/inner-weather"><CloudSun className="mr-2 h-4 w-4" />Inner Weather</Link>
-                            </DropdownMenuItem>
-                             <DropdownMenuItem asChild>
-                                <Link href="/mind-haven"><BookHeart className="mr-2 h-4 w-4" />Mind Haven</Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem asChild>
-                                <Link href="/soothe-studio"><Zap className="mr-2 h-4 w-4" />Soothe Studio</Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem asChild>
-                                <Link href="/settings"><Settings className="mr-2 h-4 w-4" />Settings</Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={handleLogout}>
-                                <LogOut className="mr-2 h-4 w-4" />
-                                Logout
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                </>
-            )}
-        </nav>
-    );
+  return (
+    <>
+      <Link href="/" className={buttonVariants({ variant: 'ghost' })}>
+        <Home className="mr-2 h-4 w-4" />Home
+      </Link>
+      <Link href="/about" className={buttonVariants({ variant: 'ghost' })}>
+        <Info className="mr-2 h-4 w-4" />About
+      </Link>
+      <Link href="/legal" className={buttonVariants({ variant: 'ghost' })}>
+        <Scale className="mr-2 h-4 w-4" />Legal
+      </Link>
+      <Link href="/resources" className={buttonVariants({ variant: 'ghost' })}>
+        <BookHeart className="mr-2 h-4 w-4" />Resources
+      </Link>
+      {user && (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost">
+              <User className="mr-2 h-4 w-4" />
+              My Circle
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem asChild>
+              <Link href="/profile">
+                <User className="mr-2 h-4 w-4" />Profile
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/inner-weather">
+                <CloudSun className="mr-2 h-4 w-4" />Inner Weather
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/mind-haven">
+                <BookHeart className="mr-2 h-4 w-4" />Mind Haven
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/soothe-studio">
+                <Zap className="mr-2 h-4 w-4" />Soothe Studio
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <Link href="/settings">
+                <Settings className="mr-2 h-4 w-4" />Settings
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
+              <LogOut className="mr-2 h-4 w-4" />
+              Logout
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
+    </>
+  );
 };
 
 const MobileNav = () => {
@@ -81,7 +95,7 @@ const MobileNav = () => {
     };
 
     const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
-        <Link href={href} onClick={() => setIsOpen(false)} className={buttonVariants({ variant: "ghost", size: "lg" })}>
+        <Link href={href} onClick={() => setIsOpen(false)} className="flex items-center p-2 hover:bg-accent rounded-md">
             {children}
         </Link>
     );
@@ -95,19 +109,22 @@ const MobileNav = () => {
                     </Button>
                 </SheetTrigger>
                 <SheetContent side="left">
-                    <nav className="grid gap-4 mt-8">
-                        <NavLink href="/">Home</NavLink>
-                        <NavLink href="/about">About</NavLink>
-                        <NavLink href="/legal">Legal</NavLink>
-                        <NavLink href="/resources">Resources</NavLink>
+                    <nav className="grid gap-2 mt-8 text-lg">
+                        <NavLink href="/"><Home className="mr-2 h-5 w-5" />Home</NavLink>
+                        <NavLink href="/about"><Info className="mr-2 h-5 w-5" />About</NavLink>
+                        <NavLink href="/legal"><Scale className="mr-2 h-5 w-5" />Legal</NavLink>
+                        <NavLink href="/resources"><BookHeart className="mr-2 h-5 w-5" />Resources</NavLink>
                         {user && (
                             <>
-                                <NavLink href="/profile">Profile</NavLink>
-                                <NavLink href="/inner-weather">Inner Weather</NavLink>
-                                <NavLink href="/mind-haven">Mind Haven</NavLink>
-                                <NavLink href="/soothe-studio">Soothe Studio</NavLink>
-                                <NavLink href="/settings">Settings</NavLink>
-                                <Button variant="ghost" size="lg" onClick={handleLogout}>Logout</Button>
+                                <hr className="my-2"/>
+                                <NavLink href="/profile"><User className="mr-2 h-5 w-5" />Profile</NavLink>
+                                <NavLink href="/inner-weather"><CloudSun className="mr-2 h-5 w-5" />Inner Weather</NavLink>
+                                <NavLink href="/mind-haven"><BookHeart className="mr-2 h-5 w-5" />Mind Haven</NavLink>
+                                <NavLink href="/soothe-studio"><Zap className="mr-2 h-5 w-5" />Soothe Studio</NavLink>
+                                <NavLink href="/settings"><Settings className="mr-2 h-5 w-5" />Settings</NavLink>
+                                <Button variant="ghost" size="lg" onClick={handleLogout} className="flex items-center justify-start p-2 text-lg">
+                                  <LogOut className="mr-2 h-5 w-5" />Logout
+                                </Button>
                             </>
                         )}
                     </nav>
@@ -119,15 +136,26 @@ const MobileNav = () => {
 
 
 export function AppHeader() {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
     <header className="px-4 lg:px-6 h-16 flex items-center justify-between bg-background text-foreground fixed top-0 left-0 right-0 z-50 border-b">
-      <Link href="/" className="flex items-center gap-2" prefetch={false}>
-          <span className="font-bold text-lg">SoulCircle</span>
+      <Link href="/" className="flex items-center gap-2 font-bold text-lg" prefetch={false}>
+          SoulCircle
       </Link>
       
-      <DesktopNav />
-      <MobileNav />
-
+      {isClient && (
+        <>
+          <nav className="hidden md:flex items-center gap-1">
+            <NavLinks />
+          </nav>
+          <MobileNav />
+        </>
+      )}
     </header>
   );
 }
