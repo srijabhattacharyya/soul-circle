@@ -15,70 +15,68 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useState, useEffect } from 'react';
 
-const NavLinks = () => {
-  const { user } = useAuth();
-  
-  return (
-    <>
-      <Link href="/" className={buttonVariants({ variant: 'ghost' })}>
-        <Home className="mr-2 h-4 w-4" />Home
-      </Link>
-      <Link href="/about" className={buttonVariants({ variant: 'ghost' })}>
-        <Info className="mr-2 h-4 w-4" />About
-      </Link>
-      <Link href="/legal" className={buttonVariants({ variant: 'ghost' })}>
-        <Scale className="mr-2 h-4 w-4" />Legal
-      </Link>
-      <Link href="/resources" className={buttonVariants({ variant: 'ghost' })}>
-        <BookHeart className="mr-2 h-4 w-4" />Resources
-      </Link>
-      {user && (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost">
-              <User className="mr-2 h-4 w-4" />
-              My Circle
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem asChild>
-              <Link href="/profile">
-                <User className="mr-2 h-4 w-4" />Profile
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href="/inner-weather">
-                <CloudSun className="mr-2 h-4 w-4" />Inner Weather
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href="/mind-haven">
-                <BookHeart className="mr-2 h-4 w-4" />Mind Haven
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href="/soothe-studio">
-                <Zap className="mr-2 h-4 w-4" />Soothe Studio
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href="/settings">
-                <Settings className="mr-2 h-4 w-4" />Settings
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-               <Link href="/logout">
-                <LogOut className="mr-2 h-4 w-4" />
-                Logout
-              </Link>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )}
-    </>
-  );
-};
+const DesktopNav = () => {
+    const { user } = useAuth();
+    return (
+        <nav className="hidden md:flex items-center gap-1">
+            <Link href="/" className={buttonVariants({ variant: 'ghost' })}>
+                <Home className="mr-2 h-4 w-4" />Home
+            </Link>
+            <Link href="/about" className={buttonVariants({ variant: 'ghost' })}>
+                <Info className="mr-2 h-4 w-4" />About
+            </Link>
+            <Link href="/legal" className={buttonVariants({ variant: 'ghost' })}>
+                <Scale className="mr-2 h-4 w-4" />Legal
+            </Link>
+            <Link href="/resources" className={buttonVariants({ variant: 'ghost' })}>
+                <BookHeart className="mr-2 h-4 w-4" />Resources
+            </Link>
+            {user && (
+                <>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost">
+                                <User className="mr-2 h-4 w-4" />
+                                My Circle
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuItem asChild>
+                                <Link href="/profile">
+                                    <User className="mr-2 h-4 w-4" />Profile
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                                <Link href="/inner-weather">
+                                    <CloudSun className="mr-2 h-4 w-4" />Inner Weather
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                                <Link href="/mind-haven">
+                                    <BookHeart className="mr-2 h-4 w-4" />Mind Haven
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                                <Link href="/soothe-studio">
+                                    <Zap className="mr-2 h-4 w-4" />Soothe Studio
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem asChild>
+                                <Link href="/settings">
+                                    <Settings className="mr-2 h-4 w-4" />Settings
+                                </Link>
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                    <Link href="/logout" className={buttonVariants({ variant: 'ghost' })}>
+                        <LogOut className="mr-2 h-4 w-4" />Logout
+                    </Link>
+                </>
+            )}
+        </nav>
+    );
+}
 
 const MobileNav = () => {
     const { user } = useAuth();
@@ -140,12 +138,8 @@ export function AppHeader() {
       
       {isClient && (
         <>
-          <nav className="hidden md:flex items-center gap-1">
-            <NavLinks />
-          </nav>
-          <div className="md:hidden">
-            <MobileNav />
-          </div>
+          <DesktopNav />
+          <MobileNav />
         </>
       )}
     </header>
