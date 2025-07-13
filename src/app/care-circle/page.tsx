@@ -27,7 +27,7 @@ const counsellors = [
     name: 'Kabir Islam',
     specialty: 'Stress & Anxiety Management, Career Pressure',
     description: "Hey, I’m Kabir. Let’s be practical—your mind is powerful, and so are you. I’ll help you cut through confusion and take control, one clear step at a time.",
-    imageUrl: 'https://placehold.co/400x300.png',
+    imageUrl: '/images/kabir-islam.png',
     link: '/care-circle/kabir-islam',
     age: 40,
     gender: 'Male',
