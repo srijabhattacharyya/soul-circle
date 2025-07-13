@@ -15,25 +15,7 @@ export async function signUpWithEmail(email: string, password: string) {
     if (!auth) throw new Error("Firebase is not configured.");
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-        const nameFromEmail = email.split('@')[0];
-
-        // Set the user's display name
-        await updateProfile(user, { displayName: nameFromEmail });
-
-        // Create a default profile for the new user
-        const defaultProfile: Partial<ProfileFormValues> = {
-            name: nameFromEmail,
-            age: undefined,
-            gender: 'Prefer not to say',
-            counsellingReason: [],
-            counsellingGoals: [],
-            selfHarmThoughts: 'No',
-            consent: false,
-        };
-        await saveUserProfile(user.uid, defaultProfile);
-        
-        return user;
+        return userCredential.user;
     } catch (error: any) {
         if (error.code === 'auth/email-already-in-use') {
             throw new Error('This email address is already in use.');
