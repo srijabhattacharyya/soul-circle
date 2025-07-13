@@ -5,11 +5,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 import { Lock, Scale, TriangleAlert } from 'lucide-react';
 
 export default function LearnFurtherPage() {
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-purple-50 to-blue-50 p-4 sm:p-8 flex items-center justify-center pt-24">
+    <div className="min-h-screen w-full bg-gradient-to-br from-purple-50 to-blue-50 p-4 sm:p-8 flex items-center justify-center pt-24 pb-12">
       <div className="bg-white rounded-xl shadow-2xl p-6 md:p-10 max-w-3xl w-full">
         <header className="text-center mb-8">
           <h1 className="text-indigo-700 font-bold text-4xl mb-2">SoulCircle</h1>
@@ -160,6 +162,11 @@ export default function LearnFurtherPage() {
             </AccordionContent>
           </AccordionItem>
         </Accordion>
+        <div className="flex justify-center pt-8">
+            <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90 transition-colors h-11 px-8">
+                <Link href="#">Get Started</Link>
+            </Button>
+        </div>
       </div>
     </div>
   );
