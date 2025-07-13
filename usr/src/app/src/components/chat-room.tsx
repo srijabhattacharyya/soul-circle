@@ -44,6 +44,8 @@ type ChatRoomProps = {
   loadingMessage: string;
 };
 
+const GENERIC_PERSONA = "You are a friendly and supportive AI assistant. Your goal is to listen, be empathetic, and help the user talk through their feelings. You are not a licensed therapist, but a caring companion.";
+
 export function ChatRoom({
   counsellorId,
   counsellorName,
@@ -55,90 +57,93 @@ export function ChatRoom({
   placeholderText,
   loadingMessage,
 }: ChatRoomProps) {
-  const { user } = useAuth();
+  const { user, firebaseReady } = useAuth();
   const { toast } = useToast();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSending, setIsSending] = useState(false);
   const [persona, setPersona] = useState<string | null>(null);
   const chatHistoryRef = useRef<HTMLDivElement>(null);
 
+  // Effect to fetch the counsellor's persona
   useEffect(() => {
-    // This effect handles fetching the AI persona and setting up the real-time chat listener.
-    // It runs when the component mounts or when dependencies like `user` or `counsellorId` change.
-
-    if (!isConfigValid) {
-        // If Firebase isn't configured, we are in offline mode.
+    if (!firebaseReady || !counsellorId || !user) {
+      if (!firebaseReady) {
         toast({
-            title: 'Offline Mode',
-            description: 'Chat features are disabled. Please check your Firebase configuration.',
-            variant: 'destructive',
+          title: 'Offline Mode',
+          description: 'Chat features are disabled. Please check your Firebase configuration.',
+          variant: 'destructive',
         });
-        return;
+      }
+      return;
     }
 
-    if (!user) {
-        // We need a logged-in user to proceed.
-        return;
-    }
-    
-    // 1. Fetch the AI counsellor's persona.
-    // The send button will be disabled until this is successfully fetched.
-    let isMounted = true; // To prevent state updates on unmounted component
-    getCounsellorPersona(counsellorId)
-    .then(p => {
+    let isMounted = true;
+    const fetchPersona = async () => {
+      try {
+        const p = await getCounsellorPersona(counsellorId);
         if (isMounted) {
-            if (p) {
-                setPersona(p);
-            } else {
-                 toast({
-                    title: 'Error',
-                    description: 'Could not load counsellor details. The chat may not function correctly.',
-                    variant: 'destructive',
-                });
-            }
-        }
-    })
-    .catch(() => {
-        if (isMounted) {
+          if (p) {
+            setPersona(p);
+          } else {
             toast({
-                title: 'Error',
-                description: 'Failed to fetch counsellor details.',
-                variant: 'destructive',
+              title: 'Counsellor Not Found',
+              description: 'Using a generic assistant as the persona could not be loaded.',
+              variant: 'destructive',
             });
+            setPersona(GENERIC_PERSONA); // Use fallback persona
+          }
         }
-    });
+      } catch (error) {
+        if (isMounted) {
+          toast({
+            title: 'Error',
+            description: 'Failed to fetch counsellor details. Using a generic assistant.',
+            variant: 'destructive',
+          });
+          setPersona(GENERIC_PERSONA); // Use fallback on error
+        }
+      }
+    };
+        
+    fetchPersona();
+        
+    return () => { isMounted = false; };
+  }, [counsellorId, firebaseReady, user, toast]);
 
-    // 2. Subscribe to real-time updates for the chat history.
+
+  // Effect for real-time chat updates
+  useEffect(() => {
+    if (!user || !firebaseReady) return;
+
     const chatId = `${user.uid}_${counsellorId}`;
     const docRef = doc(db, 'chats', chatId);
     
     const unsubscribe = onSnapshot(docRef, (docSnap) => {
-        if (docSnap.exists()) {
-            setMessages(docSnap.data().messages || []);
-        } else {
-            setMessages([]);
-        }
+    if (docSnap.exists()) {
+        const data = docSnap.data();
+        const sortedMessages = (data.messages || []).sort((a: ChatMessage, b: ChatMessage) => {
+            const timeA = a.timestamp?.toMillis() || 0;
+            const timeB = b.timestamp?.toMillis() || 0;
+            return timeA - timeB;
+        });
+        setMessages(sortedMessages);
+    } else {
+        setMessages([]);
+    }
     }, (error) => {
-        console.error("Error fetching chat history:", error);
         toast({
-            title: 'Error',
-            description: 'Could not load chat history.',
-            variant: 'destructive',
+        title: 'Error',
+        description: 'Could not load chat history.',
+        variant: 'destructive',
         });
     });
 
-    // 3. Cleanup function: This is crucial. It runs when the component unmounts
-    //    or when dependencies change, preventing memory leaks.
-    return () => {
-        isMounted = false;
-        unsubscribe();
-    };
+    return () => unsubscribe();
+  }, [user, counsellorId, firebaseReady, toast]);
 
-  }, [user, counsellorId, toast]);
 
   useEffect(() => {
-    // This effect handles auto-scrolling to the latest message.
     chatHistoryRef.current?.scrollTo({
       top: chatHistoryRef.current.scrollHeight,
       behavior: 'smooth',
@@ -147,21 +152,16 @@ export function ChatRoom({
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isLoading || !input.trim() || !user || !persona || !isConfigValid) return;
+    if (isSending || !input.trim() || !user || !persona || !firebaseReady) return;
 
     const userMessage: ChatMessage = { role: 'user', content: input };
     const currentInput = input;
     setInput('');
-    setIsLoading(true);
-
-    // Optimistically update UI with the user's message
-    setMessages((prev) => [...prev, userMessage]);
+    setIsSending(true);
     
     try {
-      // Save user message to Firestore first.
       await saveMessage(user.uid, counsellorId, userMessage);
     
-      // Get AI response
       const historyForAI = [...messages, userMessage].slice(-10).map(({ role, content }) => ({ role, content }));
       const aiResult = await chatWithCounsellor({
         persona,
@@ -170,26 +170,22 @@ export function ChatRoom({
       });
       
       const counsellorMessage: ChatMessage = { role: 'model', content: aiResult.response };
-      
-      // Save counsellor message to Firestore. This will trigger the onSnapshot listener to update the UI.
       await saveMessage(user.uid, counsellorId, counsellorMessage);
 
     } catch (error) {
-      console.error(error);
-      toast({
+       toast({
         title: 'Error',
         description: 'The AI could not respond. Please try again.',
         variant: 'destructive',
       });
        const errorMessage: ChatMessage = { role: 'model', content: "I'm having trouble connecting right now. Please try again in a moment." };
        await saveMessage(user.uid, counsellorId, errorMessage);
-
     } finally {
-      // This `finally` block ensures that loading is always set to false,
-      // even if there was an error, preventing the UI from getting stuck.
-      setIsLoading(false);
+      setIsSending(false);
     }
   };
+
+  const isButtonDisabled = isSending || !input.trim() || !firebaseReady || !persona;
 
   return (
     <div className={cn('min-h-screen w-full p-4 sm:p-6 flex items-center justify-center bg-gradient-to-br', theme.backgroundGradient)}>
@@ -212,7 +208,7 @@ export function ChatRoom({
         </header>
         
         <div ref={chatHistoryRef} className="flex-1 overflow-y-auto p-6 space-y-6 bg-gray-50">
-          {messages.length === 0 && !isLoading && (
+          {messages.length === 0 && !isSending && (
             <div className="text-center text-gray-500 italic py-8">{placeholderText}</div>
           )}
           {messages.map((msg, index) => (
@@ -233,7 +229,7 @@ export function ChatRoom({
               </div>
             </div>
           ))}
-           {isLoading && (
+           {isSending && (
              <div className="flex justify-start">
                 <div className={cn('p-3 rounded-lg max-w-[75%] shadow-sm flex items-center space-x-2', theme.counsellorMessage)}>
                     <Loader2 className="h-5 w-5 animate-spin" />
@@ -256,10 +252,10 @@ export function ChatRoom({
             placeholder="Type your message here..."
             className={cn('flex-1 border-gray-300 p-2 resize-none bg-white text-black', theme.inputRing)}
             rows={1}
-            disabled={isLoading || !isConfigValid}
+            disabled={isSending || !firebaseReady}
           />
-          <Button type="submit" className={cn('ml-4 p-3 rounded-lg shadow-md transition', theme.sendButton)} disabled={isLoading || !input.trim() || !isConfigValid || !persona}>
-            {isLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : <Send className="h-6 w-6" />}
+          <Button type="submit" className={cn('ml-4 p-3 rounded-lg shadow-md transition', theme.sendButton)} disabled={isButtonDisabled}>
+            {isSending ? <Loader2 className="h-6 w-6 animate-spin" /> : <Send className="h-6 w-6" />}
           </Button>
         </form>
          <div className="text-center py-2 bg-white rounded-b-xl">
