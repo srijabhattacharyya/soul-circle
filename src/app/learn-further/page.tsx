@@ -164,7 +164,7 @@ export default function LearnFurtherPage() {
         </Accordion>
         <div className="flex justify-center pt-8">
             <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90 transition-colors h-11 px-8">
-                <Link href="#">Get Started</Link>
+                <Link href="/login">Get Started</Link>
             </Button>
         </div>
       </div>

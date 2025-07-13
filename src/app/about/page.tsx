@@ -169,7 +169,7 @@ export default function AboutPage() {
               </p>
               <div className="flex justify-center pt-4">
                 <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 transition-colors h-11 px-8">
-                  <Link href="#">Get Started</Link>
+                  <Link href="/login">Get Started</Link>
                 </Button>
               </div>
             </div>

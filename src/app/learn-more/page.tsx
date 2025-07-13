@@ -169,7 +169,7 @@ export default function AboutPage() {
               </p>
               <div className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-4">
                 <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90 transition-colors h-11 px-8">
-                  <Link href="#">Get Started</Link>
+                  <Link href="/login">Get Started</Link>
                 </Button>
                 <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 transition-colors h-11 px-8">
                   <Link href="/learn-further">Learn More</Link>
