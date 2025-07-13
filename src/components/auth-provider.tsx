@@ -14,36 +14,29 @@ const AuthContext = createContext<AuthContextType>({ user: null, loading: true }
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Set to false to prevent loading screen
 
   useEffect(() => {
-    // auth will be undefined if the config is invalid
-    if (!auth) {
-        // Firebase is not configured, so we can't do anything.
-        // We'll proceed without authentication for now to allow development.
-        console.warn("Firebase Auth is not initialized. User authentication will be disabled.");
-        setLoading(false);
-        return;
-    }
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser(user);
-        setLoading(false);
-      } else {
-        // For demonstration, sign in user anonymously. 
-        // In a real app, you'd likely redirect to a login page.
-        signInAnonymously(auth).catch((error) => {
-            console.error("Anonymous sign-in failed", error);
-            setLoading(false);
-        });
-      }
-    }, (error) => {
-        // Handle potential errors during listener setup
-        console.error("Auth state listener error:", error);
-        setLoading(false);
-    });
-
-    return () => unsubscribe();
+    // Simulate a logged-in user for development purposes
+    const mockUser: User = {
+      uid: 'dev-user-123',
+      email: 'dev@soulcircle.com',
+      displayName: 'Dev User',
+      photoURL: '',
+      emailVerified: true,
+      isAnonymous: false,
+      metadata: {},
+      providerData: [],
+      providerId: 'firebase',
+      tenantId: null,
+      delete: async () => {},
+      getIdToken: async () => '',
+      getIdTokenResult: async () => ({} as any),
+      reload: async () => {},
+      toJSON: () => ({}),
+    };
+    setUser(mockUser);
+    setLoading(false);
   }, []);
 
   return (
