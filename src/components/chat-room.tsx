@@ -225,7 +225,7 @@ export function ChatRoom({
             placeholder="Type your message here..."
             className={cn('flex-1 border-gray-300 p-2 resize-none bg-white text-black', theme.inputRing)}
             rows={1}
-            disabled={isLoading || !isConfigValid || !persona}
+            disabled={isLoading || !isConfigValid}
           />
           <Button type="submit" className={cn('ml-4 p-3 rounded-lg shadow-md transition', theme.sendButton)} disabled={isLoading || !input.trim() || !isConfigValid || !persona}>
             {isLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : <Send className="h-6 w-6" />}
