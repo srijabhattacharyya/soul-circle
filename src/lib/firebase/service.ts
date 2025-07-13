@@ -2,19 +2,34 @@
 'use server';
 
 import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs, Timestamp, addDoc, deleteDoc, writeBatch, updateDoc, arrayUnion } from 'firebase/firestore';
-import { db, auth } from './config';
-import { deleteUser, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { db, auth as globalAuth, isConfigValid } from './config';
+import { getAuth, GoogleAuthProvider, signInWithPopup, type User } from 'firebase/auth';
 import type { ProfileFormValues } from '@/app/profile/form-schema';
 import type { InnerWeatherFormValues } from '@/app/inner-weather/form-schema';
 import type { JournalFormValues } from '@/app/mind-haven/form-schema';
 import type { ChatMessage } from '@/components/chat-room';
+import { getApp, getApps, initializeApp } from 'firebase/app';
 
 // AUTHENTICATION
 export async function signInWithGoogle() {
-  if (!auth) throw new Error("Firebase Auth is not initialized.");
+  // This is a troubleshooting step. We are re-initializing auth here to be certain the config is loaded.
+  if (!isConfigValid) throw new Error("Firebase is not configured.");
+
+  const firebaseConfig = {
+    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  };
+
+  const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  // End of troubleshooting step.
+
   const provider = new GoogleAuthProvider();
   
-  // Set custom parameters to specify the auth domain, which can resolve stubborn sign-in issues.
   provider.setCustomParameters({
     'auth_domain': process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || ''
   });
@@ -39,9 +54,9 @@ export async function signInWithGoogle() {
       await saveUserProfile(user.uid, newUserProfile);
     }
     return user;
-  } catch (error) {
-    console.error("Error signing in with Google:", error);
-    throw new Error("Google Sign-In failed.");
+  } catch (error: any) {
+    console.error("Error signing in with Google:", error.code, error.message);
+    throw new Error(`Google Sign-In failed: ${error.message}`);
   }
 }
 
@@ -197,6 +212,7 @@ export async function saveUserFeedback(feedbackData: UserFeedback) {
 
 // ACCOUNT DELETION
 export async function deleteUserAccountAndData(userId: string) {
+    const auth = getAuth();
     if (!db || !auth) throw new Error("Firebase is not initialized.");
 
     const currentUser = auth.currentUser;
@@ -219,7 +235,7 @@ export async function deleteUserAccountAndData(userId: string) {
 
         await deleteDoc(doc(db, 'userProfiles', userId));
         
-        await deleteUser(currentUser);
+        await currentUser.delete();
         
     } catch (error) {
         console.error("Error deleting user account:", error);

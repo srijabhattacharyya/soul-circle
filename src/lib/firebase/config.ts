@@ -13,7 +13,7 @@ const firebaseConfig = {
 };
 
 // Check if all required environment variables are present for a valid configuration.
-const isConfigValid = Object.values(firebaseConfig).every(Boolean);
+export const isConfigValid = Object.values(firebaseConfig).every(Boolean);
 
 let app: FirebaseApp;
 let auth: Auth;
@@ -28,7 +28,7 @@ if (isConfigValid) {
     // If the config is invalid, log a warning and assign null to services.
     // This allows the app to run in a development/offline mode without crashing.
     if (typeof window !== 'undefined') {
-        console.warn("Firebase configuration is invalid or missing. App is running in offline mode with mock data.");
+        console.warn("Firebase configuration is invalid or missing. App is running in offline mode.");
     }
     // Assign null to prevent runtime errors when these modules are imported elsewhere.
     app = null as any;
@@ -36,4 +36,4 @@ if (isConfigValid) {
     db = null as any;
 }
 
-export { app, auth, db, isConfigValid };
+export { app, auth, db };

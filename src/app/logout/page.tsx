@@ -3,8 +3,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { auth, db } from '@/lib/firebase/config';
-import { signOut } from 'firebase/auth';
+import { getAuth, signOut } from 'firebase/auth';
 import { useAuth } from '@/components/auth-provider';
 import { saveUserFeedback } from '@/lib/firebase/service';
 import { Loader2, Star, Heart, Sun, Notebook } from 'lucide-react';
@@ -13,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+import { isConfigValid } from '@/lib/firebase/config';
 
 const affirmations = [
     "You made space for your feelings today. That's a win.",
@@ -67,7 +67,8 @@ export default function LogoutPage() {
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
-        if (auth) {
+        if (isConfigValid) {
+            const auth = getAuth();
             await signOut(auth);
         }
         toast({
