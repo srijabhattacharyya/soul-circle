@@ -9,6 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
+import { auth } from '@/lib/firebase/config'; // Import auth to check initialization
 
 const GoogleIcon = () => (
     <svg className="mr-2 h-4 w-4" viewBox="0 0 48 48">
@@ -24,6 +25,14 @@ export default function LoginPage() {
   const { user, loading } = useAuth();
   const { toast } = useToast();
   const [isSigningIn, setIsSigningIn] = useState(false);
+  const [firebaseReady, setFirebaseReady] = useState(false);
+
+  useEffect(() => {
+    // Check if Firebase is ready
+    if (auth) {
+      setFirebaseReady(true);
+    }
+  }, []);
 
   useEffect(() => {
     if (!loading && user) {
@@ -32,6 +41,10 @@ export default function LoginPage() {
   }, [user, loading, router]);
   
   const handleSignIn = async () => {
+    if (!firebaseReady) {
+        toast({ title: 'Error', description: 'Authentication service is not ready.', variant: 'destructive' });
+        return;
+    }
     setIsSigningIn(true);
     try {
       await signInWithGoogle();
@@ -48,7 +61,7 @@ export default function LoginPage() {
     }
   };
 
-  if (loading || user) {
+  if (loading || user || !firebaseReady) {
     return (
         <div className="flex h-screen w-full items-center justify-center bg-background">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
