@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -90,6 +91,7 @@ export function AppSidebar() {
             <NavLink href="/about"><Info /><span>About</span></NavLink>
             <NavLink href="/legal"><Scale /><span>Legal</span></NavLink>
             <NavLink href="/resources"><BookHeart /><span>Resources</span></NavLink>
+            <NavLink href="/care-circle"><HeartHandshake /><span>Care Circle</span></NavLink>
 
             <>
                 <hr className="my-2 border-border"/>
@@ -98,15 +100,6 @@ export function AppSidebar() {
                     <NavSubLink href="/inner-weather"><CloudSun /><span>Inner Weather</span></NavSubLink>
                     <NavSubLink href="/mind-haven"><BookHeart /><span>Mind Haven</span></NavSubLink>
                     <NavSubLink href="/soothe-studio"><Zap /><span>Soothe Studio</span></NavSubLink>
-                </NavSubMenu>
-                
-                <NavSubMenu title="Care Circle" icon={<HeartHandshake />}>
-                    <NavSubLink href="/care-circle/dr-ananya-banerjee">Dr. A. Banerjee</NavSubLink>
-                    <NavSubLink href="/care-circle/kabir-islam">Kabir Islam</NavSubLink>
-                    <NavSubLink href="/care-circle/rishi-bhattacharyya">R. Bhattacharyya</NavSubLink>
-                    <NavSubLink href="/care-circle/zoya">Zoya</NavSubLink>
-                    <NavSubLink href="/care-circle/vikram">Vikram</NavSubLink>
-                    <NavSubLink href="/care-circle/dr-tara-mehta">Dr. T. Mehta</NavSubLink>
                 </NavSubMenu>
                 
                  <hr className="my-2 border-border"/>
