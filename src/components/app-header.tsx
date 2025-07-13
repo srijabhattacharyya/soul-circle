@@ -39,6 +39,17 @@ export function AppHeader() {
           Learn More
         </Link>
         <Link
+          href="/learn-further"
+          prefetch={false}
+          className={cn(
+            buttonVariants({ variant: 'ghost' }),
+            'hover:bg-soft-teal/90 hover:text-teal-900'
+          )}
+        >
+          <BookOpen className="mr-2 h-4 w-4" />
+          Learn Further
+        </Link>
+        <Link
           href="/about"
           prefetch={false}
           className={cn(
