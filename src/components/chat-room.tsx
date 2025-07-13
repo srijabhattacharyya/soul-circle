@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useRef, type ReactNode } from 'react';
@@ -61,9 +62,24 @@ export function ChatRoom({
   const [isLoading, setIsLoading] = useState(false);
   const [persona, setPersona] = useState<string | null>(null);
   const chatHistoryRef = useRef<HTMLDivElement>(null);
+  const [firebaseActive, setFirebaseActive] = useState(false);
 
   useEffect(() => {
-    if (user) {
+    // Check if db is initialized before trying to use it.
+    if (db) {
+        setFirebaseActive(true);
+    } else {
+        setFirebaseActive(false);
+        toast({
+            title: 'Connection Error',
+            description: 'Cannot connect to the chat service. Please try again later.',
+            variant: 'destructive',
+        });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (user && firebaseActive) {
       // Fetch counsellor persona
       getCounsellorPersona(counsellorId)
         .then(setPersona)
@@ -76,15 +92,6 @@ export function ChatRoom({
         });
 
       // Subscribe to chat history
-      if (!db) {
-          toast({
-            title: 'Error',
-            description: 'Firestore is not initialized.',
-            variant: 'destructive',
-          });
-          return;
-      }
-
       const chatId = `${user.uid}_${counsellorId}`;
       const docRef = doc(db, 'chats', chatId);
       
@@ -94,11 +101,18 @@ export function ChatRoom({
         } else {
           setMessages([]);
         }
+      }, (error) => {
+          console.error("Error fetching chat history:", error);
+          toast({
+            title: 'Error',
+            description: 'Could not load chat history.',
+            variant: 'destructive',
+          });
       });
 
       return () => unsubscribe();
     }
-  }, [user, counsellorId, toast]);
+  }, [user, counsellorId, toast, firebaseActive]);
 
   useEffect(() => {
     // Auto-scroll to bottom
@@ -110,7 +124,7 @@ export function ChatRoom({
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || !user || !persona) return;
+    if (!input.trim() || !user || !persona || !firebaseActive) return;
 
     const userMessage: ChatMessage = { role: 'user', content: input };
     setInput('');
@@ -216,9 +230,9 @@ export function ChatRoom({
             placeholder="Type your message here..."
             className={cn('flex-1 border-gray-300 p-2 resize-none', theme.inputRing)}
             rows={1}
-            disabled={isLoading}
+            disabled={isLoading || !firebaseActive}
           />
-          <Button type="submit" className={cn('ml-4 p-3 rounded-lg shadow-md transition', theme.sendButton)} disabled={isLoading || !input.trim()}>
+          <Button type="submit" className={cn('ml-4 p-3 rounded-lg shadow-md transition', theme.sendButton)} disabled={isLoading || !input.trim() || !firebaseActive}>
             {isLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : <Send className="h-6 w-6" />}
           </Button>
         </form>

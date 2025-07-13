@@ -12,25 +12,19 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-const firebaseConfigIsValid =
-  firebaseConfig.apiKey &&
-  firebaseConfig.authDomain &&
-  firebaseConfig.projectId;
-
 let app: FirebaseApp;
 let auth: Auth;
 let db: Firestore;
 
-if (firebaseConfigIsValid) {
-  try {
+try {
     app = getApps().length ? getApp() : initializeApp(firebaseConfig);
     auth = getAuth(app);
     db = getFirestore(app);
-  } catch (error) {
-    console.error('Firebase initialization failed:', error);
-  }
-} else {
-  console.error("Firebase configuration is invalid or missing. Please check your environment variables.");
+} catch (error) {
+    console.error("Firebase initialization failed:", error);
+    // In a real app, you might want to handle this more gracefully.
+    // For development, we'll let it fail loudly.
 }
+
 
 export { app, auth, db };
