@@ -5,6 +5,9 @@ import { AppHeader } from '@/components/app-header';
 import { cn } from '@/lib/utils';
 import { Inter } from 'next/font/google';
 import { AuthProvider } from '@/components/auth-provider';
+import { Sidebar, SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
+import { AppSidebar } from '@/components/app-sidebar';
+
 
 export const metadata: Metadata = {
   title: 'SoulCircle',
@@ -30,9 +33,16 @@ export default function RootLayout({
         )}
       >
         <AuthProvider>
-          <AppHeader />
-          <main>{children}</main>
-          <Toaster />
+            <SidebarProvider>
+                <Sidebar>
+                    <AppSidebar />
+                </Sidebar>
+                 <SidebarInset>
+                    <AppHeader />
+                    <main>{children}</main>
+                    <Toaster />
+                </SidebarInset>
+            </SidebarProvider>
         </AuthProvider>
       </body>
     </html>
