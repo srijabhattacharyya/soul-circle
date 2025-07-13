@@ -174,3 +174,5 @@ export async function deleteUserAccountAndData(userId: string) {
         throw error;
     }
 }
+
+    
