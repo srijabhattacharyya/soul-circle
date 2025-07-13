@@ -1,10 +1,11 @@
 
 'use server';
 
-import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs, Timestamp } from 'firebase/firestore';
+import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs, Timestamp, addDoc } from 'firebase/firestore';
 import { db } from './config';
 import type { ProfileFormValues } from '@/app/profile/form-schema';
 import type { InnerWeatherFormValues } from '@/app/inner-weather/form-schema';
+import type { JournalFormValues } from '@/app/mind-haven/form-schema';
 
 export async function getUserProfile(userId: string) {
   if (!db) throw new Error("Firestore is not initialized.");
@@ -79,4 +80,19 @@ export async function saveMoodEntry(userId: string, data: InnerWeatherFormValues
     console.error('Error saving mood entry:', error);
     throw new Error('Failed to save mood entry.');
   }
+}
+
+export async function saveJournalEntry(userId: string, data: JournalFormValues) {
+    if (!db) throw new Error("Firestore is not initialized.");
+    try {
+        const dataToSave = {
+            ...data,
+            uid: userId,
+            timestamp: serverTimestamp(),
+        };
+        await addDoc(collection(db, 'journals'), dataToSave);
+    } catch (error) {
+        console.error('Error saving journal entry:', error);
+        throw new Error('Failed to save journal entry.');
+    }
 }
