@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { journalSchema, type JournalFormValues } from './form-schema';
@@ -55,6 +55,11 @@ export default function MindHavenPage() {
     }
     setShowPrompt(!showPrompt);
   };
+
+  useEffect(() => {
+    const randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+    setCurrentPrompt(randomPrompt);
+  }, []);
 
   const onSubmit = async (data: JournalFormValues) => {
     if (!user) {
