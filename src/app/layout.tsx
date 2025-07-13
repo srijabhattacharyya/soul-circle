@@ -3,16 +3,15 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { AppHeader } from '@/components/app-header';
 import { cn } from '@/lib/utils';
-import { PT_Sans } from 'next/font/google';
+import { Inter } from 'next/font/google';
 
 export const metadata: Metadata = {
   title: 'SoulCircle',
   description: 'Because your story deserves a listening circle.',
 };
 
-const fontSans = PT_Sans({
+const fontSans = Inter({
   subsets: ['latin'],
-  weight: ['400', '700'],
   variable: '--font-sans',
 });
 
