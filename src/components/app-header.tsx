@@ -2,9 +2,8 @@
 'use client';
 
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Home, Info, User, CloudSun, Zap, Settings, Scale, BookHeart, LogOut, Menu } from 'lucide-react';
-import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useAuth } from './auth-provider';
 import { auth } from '@/lib/firebase/config';
@@ -16,7 +15,6 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator
 } from '@/components/ui/dropdown-menu';
-import { useIsMobile } from '@/hooks/use-mobile';
 
 
 const DesktopNav = () => {
@@ -89,7 +87,7 @@ const MobileNav = () => {
                     </Button>
                 </SheetTrigger>
                 <SheetContent side="left">
-                    <nav className="flex flex-col gap-4 mt-8">
+                    <nav className="grid gap-4 mt-8">
                         <Link href="/" className={buttonVariants({ variant: "ghost", size: "lg" })}>Home</Link>
                         <Link href="/about" className={buttonVariants({ variant: "ghost", size: "lg" })}>About</Link>
                         <Link href="/legal" className={buttonVariants({ variant: "ghost", size: "lg" })}>Legal</Link>
@@ -113,15 +111,14 @@ const MobileNav = () => {
 
 
 export function AppHeader() {
-  const isMobile = useIsMobile();
-
   return (
     <header className="px-4 lg:px-6 h-16 flex items-center justify-between bg-background text-foreground fixed top-0 left-0 right-0 z-50 border-b">
       <Link href="/" className="flex items-center gap-2" prefetch={false}>
           <span className="font-bold text-lg">SoulCircle</span>
       </Link>
       
-      {isMobile === undefined ? null : isMobile ? <MobileNav /> : <DesktopNav />}
+      <DesktopNav />
+      <MobileNav />
 
     </header>
   );
