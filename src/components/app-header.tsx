@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Home, BookOpen, Info, User, CloudSun, Feather, Zap, Settings } from 'lucide-react';
+import { Home, BookOpen, Info, User, CloudSun, Feather, Zap, Settings, Scale } from 'lucide-react';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -48,6 +48,17 @@ export function AppHeader() {
         >
           <Info className="mr-2 h-4 w-4" />
           About
+        </Link>
+        <Link
+          href="/legal"
+          prefetch={false}
+          className={cn(
+            buttonVariants({ variant: 'ghost' }),
+            'hover:bg-soft-teal/90 hover:text-teal-900'
+          )}
+        >
+          <Scale className="mr-2 h-4 w-4" />
+          Legal
         </Link>
         <Link
           href="/profile"
