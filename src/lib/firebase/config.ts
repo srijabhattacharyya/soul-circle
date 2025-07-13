@@ -15,20 +15,19 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-let app: FirebaseApp | undefined;
-let auth: Auth | undefined;
-let db: Firestore | undefined;
+let app: FirebaseApp;
+let auth: Auth | null = null;
+let db: Firestore | null = null;
 
-if (firebaseConfig.apiKey) {
-    if (!getApps().length) {
+if (firebaseConfig.apiKey && firebaseConfig.projectId) {
+    if (getApps().length === 0) {
       app = initializeApp(firebaseConfig);
     } else {
       app = getApps()[0];
     }
+
     auth = getAuth(app);
     db = getFirestore(app);
-} else {
-    console.warn("Firebase configuration is missing. Firebase features will be disabled.");
 }
 
 
