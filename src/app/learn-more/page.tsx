@@ -6,8 +6,8 @@ export default function LearnMorePage() {
   return (
     <div className="flex flex-col min-h-dvh bg-secondary text-foreground">
       <main className="flex-1">
-        <section className="w-full pt-24 md:pt-32 lg:pt-40 pb-12 md:pb-16 lg:pb-8">
-          <div className="container px-4 md:px-6">
+        <section className="w-full pt-24 md:pt-32 lg:pt-40 pb-6 md:pb-8 lg:pb-0">
+          <div className="container px-4 md:px-6 learn-more-page">
             <div className="grid gap-12 lg:grid-cols-2 lg:gap-24 items-start">
               <div className="flex flex-col items-center justify-center space-y-4">
                 <Image
@@ -32,7 +32,7 @@ export default function LearnMorePage() {
                 </div>
               </div>
               <div className="flex flex-col justify-center space-y-4">
-                <p className="text-lg leading-relaxed text-justify">
+                <p>
                   During my years of hostel life, I have had countless
                   late-night conversations with friends battling emotional
                   stress, anxiety, and depression—often in silence. Many of
@@ -41,7 +41,7 @@ export default function LearnMorePage() {
                   or help navigate a tough moment—especially during exam time
                   or periods of academic pressure.
                 </p>
-                <p className="text-lg leading-relaxed text-justify">
+                <p>
                   In our hectic schedules, reaching out to a professional
                   counsellor isn’t always possible. This realization gave
                   birth to SoulCircle—an AI-powered mental wellness companion
@@ -57,12 +57,12 @@ export default function LearnMorePage() {
         </section>
 
         <section className="w-full pb-12 md:pb-24 lg:pb-32">
-          <div className="container px-4 md:px-6 space-y-12">
+          <div className="container px-4 md:px-6 space-y-12 learn-more-page">
             <div className="space-y-4">
               <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
                 ⚠️ Important Disclaimer
               </h2>
-              <p className="text-xl leading-relaxed text-justify">
+              <p>
                 SoulCircle is a supportive tool for emotional well-being and is
                 not a crisis support service or a substitute for professional
                 therapy, medical treatment, or psychiatric care. The AI
@@ -70,7 +70,7 @@ export default function LearnMorePage() {
                 therapists. The guidance provided is for informational and
                 emotional support purposes only.
               </p>
-              <p className="text-xl leading-relaxed text-justify font-semibold">
+              <p className="font-semibold">
                 If you are in a mental health crisis or have thoughts of
                 self-harm or harming others, please contact a qualified mental
                 health professional or reach out to your local emergency
@@ -82,7 +82,7 @@ export default function LearnMorePage() {
               <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
                 🔐 Data Privacy & Security
               </h2>
-              <p className="text-xl leading-relaxed text-justify">
+              <p>
                 We deeply value your trust and are committed to protecting your
                 personal information. SoulCircle uses Firebase Authentication
                 and Firestore to securely store user data with industry-standard
@@ -92,7 +92,7 @@ export default function LearnMorePage() {
                 explicitly choose to share them. We do not sell, trade, or
                 misuse your data.
               </p>
-              <p className="text-xl leading-relaxed text-justify">
+              <p>
                 You are always in control—you may delete your data or revoke
                 permissions at any time.
               </p>
@@ -102,23 +102,23 @@ export default function LearnMorePage() {
               <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
                 🛠️ Tech Stack Used
               </h2>
-              <ul className="list-disc list-inside space-y-1 text-lg">
-                <li className="leading-relaxed text-justify">
+              <ul className="list-disc list-inside space-y-1">
+                <li>
                   Frontend: Next.js 15+, Tailwind CSS
                 </li>
-                <li className="leading-relaxed text-justify">
+                <li>
                   Backend: Firebase (Authentication, Firestore, Cloud
                   Functions)
                 </li>
-                <li className="leading-relaxed text-justify">
+                <li>
                   AI Integration: Gemini API for persona-based counseling
                   conversations
                 </li>
-                <li className="leading-relaxed text-justify">
+                <li>
                   Storage: Firebase Storage (for media uploads and journal
                   data)
                 </li>
-                <li className="leading-relaxed text-justify">
+                <li>
                   Analytics: Firebase Analytics or PostHog (to improve user
                   experience)
                 </li>
@@ -129,7 +129,7 @@ export default function LearnMorePage() {
               <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
                 🧠 AI & Future Learning
               </h2>
-              <p className="text-lg leading-relaxed text-justify">
+              <p>
                 This version of SoulCircle is a prototype, but it lays the
                 foundation for what could evolve into a highly personalized
                 emotional wellness platform. Like all AI systems, these models
@@ -139,7 +139,7 @@ export default function LearnMorePage() {
                 counsellors will become more intuitive and emotionally
                 responsive.
               </p>
-              <p className="text-lg leading-relaxed text-justify">
+              <p>
                 All personas and counsellor photos are AI-generated, unless
                 otherwise stated. Only my personal image is real and provided
                 with consent.
@@ -150,22 +150,22 @@ export default function LearnMorePage() {
               <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
                 🙏 Gratitude & Closing Note
               </h2>
-              <p className="text-lg leading-relaxed text-justify">
+              <p>
                 I am sincerely grateful to OpenAI, Firebase Studio, and Canva
                 AI for their powerful tools and platforms, which made this
                 vision a reality. This project has been a labor of empathy,
                 curiosity, and hope—rooted in the belief that no one should
                 feel emotionally isolated.
               </p>
-              <p className="text-lg leading-relaxed text-justify">
+              <p>
                 If SoulCircle brings comfort to even one person, then every
                 moment spent building it has been worthwhile.
               </p>
             </div>
 
             <div className="text-center text-foreground space-y-4 pt-8">
-              <p className="text-lg leading-relaxed text-justify">Thank you for visiting SoulCircle.</p>
-              <p className="font-semibold text-lg leading-relaxed text-justify">
+              <p>Thank you for visiting SoulCircle.</p>
+              <p className="font-semibold">
                 Because your story deserves a listening circle. 🫶
               </p>
               <div className="flex justify-center pt-4">

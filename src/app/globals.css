@@ -66,4 +66,10 @@
   body {
     @apply bg-background text-foreground;
   }
+  .learn-more-page p, .learn-more-page li {
+    @apply text-base text-foreground/90 leading-relaxed text-justify;
+  }
+  .learn-more-page h2 {
+    @apply text-foreground;
+  }
 }
