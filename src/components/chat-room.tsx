@@ -65,11 +65,6 @@ export function ChatRoom({
 
   // Effect to fetch the counsellor's persona
   useEffect(() => {
-    console.log('[DEBUG] Persona fetch effect triggered.');
-    console.log('[DEBUG] counsellorId:', counsellorId);
-    console.log('[DEBUG] firebaseReady:', firebaseReady);
-    console.log('[DEBUG] user:', user ? `UID: ${user.uid}`: 'null');
-
     if (!firebaseReady || !counsellorId || !user) {
       if (!firebaseReady) {
           toast({
@@ -77,22 +72,18 @@ export function ChatRoom({
               description: 'Chat features are disabled. Please check your Firebase configuration.',
               variant: 'destructive',
           });
-          console.log('[DEBUG] Persona fetch skipped: Firebase not ready.');
       }
       return;
     }
 
     let isMounted = true;
     const fetchPersona = async () => {
-      console.log('[DEBUG] Attempting to fetch persona...');
       try {
         const p = await getCounsellorPersona(counsellorId);
         if (isMounted) {
           if (p) {
             setPersona(p);
-            console.log('[DEBUG] Persona fetched successfully.');
           } else {
-            console.log('[DEBUG] Persona fetch failed: No persona found for this ID.');
             toast({
               title: 'Error',
               description: 'Could not load counsellor details.',
@@ -101,7 +92,6 @@ export function ChatRoom({
           }
         }
       } catch (error) {
-        console.error('[DEBUG] Persona fetch caught an error:', error);
         if (isMounted) {
           toast({
             title: 'Error',
@@ -133,7 +123,6 @@ export function ChatRoom({
         setMessages([]);
     }
     }, (error) => {
-        console.error("Error fetching chat history:", error);
         toast({
         title: 'Error',
         description: 'Could not load chat history.',
@@ -147,7 +136,6 @@ export function ChatRoom({
 
 
   useEffect(() => {
-    // This effect handles auto-scrolling to the latest message.
     chatHistoryRef.current?.scrollTo({
       top: chatHistoryRef.current.scrollHeight,
       behavior: 'smooth',
@@ -162,15 +150,11 @@ export function ChatRoom({
     const currentInput = input;
     setInput('');
     setIsLoading(true);
-
-    // Optimistically update UI with the user's message
-    setMessages((prev) => [...prev, userMessage]);
     
     try {
-      // Save user message to Firestore first.
+      setMessages((prev) => [...prev, userMessage]);
       await saveMessage(user.uid, counsellorId, userMessage);
     
-      // Get AI response
       const historyForAI = [...messages, userMessage].slice(-10).map(({ role, content }) => ({ role, content }));
       const aiResult = await chatWithCounsellor({
         persona,
@@ -179,12 +163,9 @@ export function ChatRoom({
       });
       
       const counsellorMessage: ChatMessage = { role: 'model', content: aiResult.response };
-      
-      // Save counsellor message to Firestore. This will trigger the onSnapshot listener to update the UI.
       await saveMessage(user.uid, counsellorId, counsellorMessage);
 
     } catch (error) {
-      console.error(error);
       toast({
         title: 'Error',
         description: 'The AI could not respond. Please try again.',
@@ -192,7 +173,6 @@ export function ChatRoom({
       });
        const errorMessage: ChatMessage = { role: 'model', content: "I'm having trouble connecting right now. Please try again in a moment." };
        await saveMessage(user.uid, counsellorId, errorMessage);
-
     } finally {
       setIsLoading(false);
     }
