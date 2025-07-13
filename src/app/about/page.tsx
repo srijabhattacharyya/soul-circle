@@ -11,10 +11,10 @@ export default function AboutPage() {
           <div className="container px-4 md:px-6 learn-more-page">
             <div className="flex flex-col items-center justify-center space-y-4">
               <Image
-                src="https://placehold.co/400x300.png"
+                src="https://placehold.co/600x450.png"
                 alt="Founder's Photo"
-                width={400}
-                height={300}
+                width={600}
+                height={450}
                 className="rounded-lg object-cover"
                 data-ai-hint="portrait founder"
               />
