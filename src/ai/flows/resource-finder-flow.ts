@@ -13,6 +13,7 @@ import { z } from 'zod';
 
 const ResourceFinderInputSchema = z.object({
   concern: z.string().describe('The mental health topic or concern (e.g., "Anxiety", "Exam pressure").'),
+  existingTitles: z.array(z.string()).optional().describe('A list of resource titles that have already been provided to the user, to avoid duplication.'),
 });
 export type ResourceFinderInput = z.infer<typeof ResourceFinderInputSchema>;
 
@@ -44,6 +45,13 @@ const prompt = ai.definePrompt({
   Ensure the links are from reputable sources (e.g., government health organizations, respected non-profits, academic institutions, well-known mental health startups).
 
   Concern: {{{concern}}}
+
+  {{#if existingTitles}}
+  Please find new resources that are not in the following list:
+  {{#each existingTitles}}
+  - {{{this}}}
+  {{/each}}
+  {{/if}}
   `,
 });
 

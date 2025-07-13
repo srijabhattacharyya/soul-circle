@@ -33,6 +33,7 @@ export default function ResourceLibraryPage() {
   const [selectedConcern, setSelectedConcern] = useState<string>('');
   const [resources, setResources] = useState<ResourceFinderOutput['resources']>([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
   const { toast } = useToast();
 
   const handleFindResources = async () => {
@@ -61,6 +62,27 @@ export default function ResourceLibraryPage() {
       setIsSearching(false);
     }
   };
+
+  const handleFindMoreResources = async () => {
+    if (!selectedConcern) return;
+
+    setIsFetchingMore(true);
+    try {
+        const existingTitles = resources.map(r => r.title);
+        const result = await findResources({ concern: selectedConcern, existingTitles });
+        setResources(prev => [...prev, ...result.resources]);
+
+    } catch (error) {
+        console.error('Error fetching more resources:', error);
+        toast({
+            title: 'Error',
+            description: 'Could not fetch more resources. Please try again.',
+            variant: 'destructive',
+        });
+    } finally {
+        setIsFetchingMore(false);
+    }
+  }
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-purple-50 to-blue-50 p-4 sm:p-8 flex justify-center pt-24">
@@ -114,7 +136,7 @@ export default function ResourceLibraryPage() {
           {resources.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {resources.map((resource, index) => (
-                <Card key={index} className="flex flex-col">
+                <Card key={index} className="flex flex-col bg-background text-foreground">
                   <CardHeader>
                     <div className="flex justify-between items-start">
                       <CardTitle className="text-lg text-card-foreground">{resource.title}</CardTitle>
@@ -133,6 +155,14 @@ export default function ResourceLibraryPage() {
                   </div>
                 </Card>
               ))}
+            </div>
+          )}
+
+          {resources.length > 0 && !isSearching && (
+            <div className="text-center mt-8">
+                <Button onClick={handleFindMoreResources} disabled={isFetchingMore}>
+                    {isFetchingMore ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Want More'}
+                </Button>
             </div>
           )}
         </main>
