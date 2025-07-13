@@ -1,7 +1,7 @@
 
 'use server';
 
-import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs, Timestamp, addDoc, deleteDoc, writeBatch, updateDoc, arrayUnion } from 'firebase/firestore';
+import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs, Timestamp, addDoc, deleteDoc, writeBatch, updateDoc, arrayUnion, orderBy } from 'firebase/firestore';
 import { db, auth as globalAuth, isConfigValid } from './config';
 import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, type User } from 'firebase/auth';
 import type { ProfileFormValues } from '@/app/profile/form-schema';
@@ -82,6 +82,12 @@ export async function saveUserProfile(userId: string, data: Partial<ProfileFormV
 }
 
 // MOOD TRACKER
+export interface MoodEntry extends InnerWeatherFormValues {
+    id: string;
+    uid: string;
+    date: Timestamp;
+}
+
 export async function hasMoodEntryForToday(userId: string): Promise<boolean> {
   if (!db) return false;
   const today = new Date();
@@ -122,7 +128,30 @@ export async function saveMoodEntry(userId: string, data: InnerWeatherFormValues
   }
 }
 
+export async function getMoodHistory(userId: string): Promise<MoodEntry[]> {
+    if (!db) return [];
+    try {
+        const q = query(
+            collection(db, 'moodTracker'),
+            where('uid', '==', userId),
+            orderBy('date', 'desc')
+        );
+        const querySnapshot = await getDocs(q);
+        return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as MoodEntry));
+    } catch (error) {
+        console.error('Error getting mood history:', error);
+        throw new Error('Failed to get mood history.');
+    }
+}
+
+
 // JOURNAL
+export interface JournalEntry extends JournalFormValues {
+    id: string;
+    uid: string;
+    timestamp: Timestamp;
+}
+
 export async function saveJournalEntry(userId: string, data: JournalFormValues) {
     if (!db) throw new Error("Firestore is not initialized.");
     try {
@@ -138,7 +167,42 @@ export async function saveJournalEntry(userId: string, data: JournalFormValues) 
     }
 }
 
-// SOOTHE STUDIO
+export async function getJournalHistory(userId: string): Promise<JournalEntry[]> {
+    if (!db) return [];
+    try {
+        const q = query(
+            collection(db, 'journals'),
+            where('uid', '==', userId),
+            orderBy('timestamp', 'desc')
+        );
+        const querySnapshot = await getDocs(q);
+        return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as JournalEntry));
+    } catch (error) {
+        console.error('Error getting journal history:', error);
+        throw new Error('Failed to get journal history.');
+    }
+}
+
+
+// SOOTHE STUDIO (SAVED ITEMS)
+export interface SavedAffirmation {
+    id: string;
+    uid: string;
+    affirmation: string;
+    savedAt: Timestamp;
+}
+
+export interface SavedGoal {
+    id: string;
+    uid: string;
+    mainGoal: string;
+    subGoals: string[];
+    timeFocus: string;
+    moodFocus: string;
+    completed: boolean;
+    createdAt: Timestamp;
+}
+
 export async function saveAffirmation(userId: string, affirmation: string) {
     if (!db) throw new Error("Firestore is not initialized.");
     try {
@@ -153,15 +217,18 @@ export async function saveAffirmation(userId: string, affirmation: string) {
     }
 }
 
-type GoalData = {
-    mainGoal: string;
-    subGoals: string[];
-    timeFocus: string;
-    moodFocus: string;
-    completed: boolean;
-};
+export async function deleteSavedAffirmation(affirmationId: string) {
+    if (!db) throw new Error("Firestore is not initialized.");
+    try {
+        await deleteDoc(doc(db, 'savedAffirmations', affirmationId));
+    } catch (error) {
+        console.error('Error deleting affirmation:', error);
+        throw new Error('Failed to delete affirmation.');
+    }
+}
 
-export async function saveUserGoal(userId: string, goalData: GoalData) {
+
+export async function saveUserGoal(userId: string, goalData: Omit<SavedGoal, 'id' | 'uid' | 'createdAt'>) {
     if (!db) throw new Error("Firestore is not initialized.");
     try {
         await addDoc(collection(db, 'userGoals'), {
@@ -174,6 +241,27 @@ export async function saveUserGoal(userId: string, goalData: GoalData) {
         throw new Error('Failed to save user goal.');
     }
 }
+
+export async function getSavedAffirmations(userId: string): Promise<SavedAffirmation[]> {
+    if (!db) return [];
+    const q = query(collection(db, 'savedAffirmations'), where('uid', '==', userId), orderBy('savedAt', 'desc'));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SavedAffirmation));
+}
+
+export async function getSavedGoals(userId: string): Promise<SavedGoal[]> {
+    if (!db) return [];
+    const q = query(collection(db, 'userGoals'), where('uid', '==', userId), orderBy('createdAt', 'desc'));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SavedGoal));
+}
+
+export async function toggleGoalCompletion(goalId: string, completed: boolean) {
+    if (!db) throw new Error("Firestore is not initialized.");
+    const docRef = doc(db, 'userGoals', goalId);
+    await updateDoc(docRef, { completed });
+}
+
 
 // FEEDBACK
 type UserFeedback = {

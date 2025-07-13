@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useAuth } from '@/components/auth-provider';
@@ -41,7 +40,7 @@ const features = [
 const quickAccess = [
     { title: "View Mood History", icon: <BarChart className="mr-2 h-4 w-4" />, link: "/mood-history"},
     { title: "My Journal Entries", icon: <Notebook className="mr-2 h-4 w-4" />, link: "/journal-history"},
-    { title: "Saved Affirmations", icon: <Star className="mr-2 h-4 w-4" />, link: "/saved-items"},
+    { title: "Saved Items", icon: <Star className="mr-2 h-4 w-4" />, link: "/saved-items"},
 ]
 
 export function Dashboard() {
