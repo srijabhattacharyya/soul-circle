@@ -25,7 +25,7 @@ const ResourceSchema = z.object({
 });
 
 const ResourceFinderOutputSchema = z.object({
-  resources: z.array(ResourceSchema).min(3).max(5).describe('A list of 3 to 5 relevant resources.'),
+  resources: z.array(ResourceSchema).length(3).describe('A list of exactly 3 relevant resources.'),
 });
 export type ResourceFinderOutput = z.infer<typeof ResourceFinderOutputSchema>;
 
@@ -40,7 +40,7 @@ const prompt = ai.definePrompt({
   input: { schema: ResourceFinderInputSchema },
   output: { schema: ResourceFinderOutputSchema },
   prompt: `You are an expert in compiling mental health and wellness resources. 
-  Your task is to find 3 to 5 highly relevant and trusted external resources for the given concern.
+  Your task is to find exactly 3 highly relevant and trusted external resources for the given concern.
   Provide a diverse set of resource types if possible (e.g., articles, videos, tools, apps, or official helplines).
   Ensure the links are from reputable sources (e.g., government health organizations, respected non-profits, academic institutions, well-known mental health startups).
 
