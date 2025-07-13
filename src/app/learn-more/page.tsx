@@ -57,7 +57,7 @@ export default function LearnMorePage() {
 
         <section className="w-full pb-12 md:pb-24 lg:pb-32">
           <div className="container px-4 md:px-6 space-y-12 learn-more-page">
-            <div className="max-w-3xl mx-auto space-y-4">
+            <div className="max-w-3xl mx-auto space-y-4 mt-8">
               <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
                 ⚠️ Important Disclaimer
               </h2>
