@@ -47,7 +47,7 @@ const counsellors = [
     name: 'Zoya',
     specialty: 'Mood Tracking, Journaling',
     description: "Hey, it’s Zoya! Think of me like your chill buddy who checks in on your vibes and shares little pick-me-ups. Let’s talk it out, laugh a bit, and grow together.",
-    imageUrl: 'https://placehold.co/400x300.png',
+    imageUrl: '/images/zoya.png',
     link: '/care-circle/zoya',
     age: 30,
     gender: 'Female',
