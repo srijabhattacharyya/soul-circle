@@ -45,7 +45,7 @@ export default function LoginPage() {
 
   const onSubmit = async (data: LoginFormValues) => {
     if (!isConfigValid || !auth) {
-        toast({ title: "Offline Mode", description: "Cannot sign in while in offline mode.", variant: 'destructive' });
+        toast({ title: "Offline Mode", description: "Cannot sign in while in offline mode. Please check your Firebase configuration.", variant: 'destructive' });
         return;
     }
     setIsSubmitting(true);
@@ -75,6 +75,9 @@ export default function LoginPage() {
         case AuthErrorCodes.WEAK_PASSWORD:
           description = 'The password is too weak. Please use at least 6 characters.';
           break;
+        case 'auth/invalid-api-key':
+             description = 'The provided API Key is not valid. Please check your Firebase configuration.';
+             break;
         default:
           description = error.message;
           break;
@@ -109,7 +112,7 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 text-left">
           <div>
-            <Label htmlFor="email" className="text-black text-base">Email / Username</Label>
+            <Label htmlFor="email" className="text-black text-base">Email</Label>
             <Input
               id="email"
               type="email"
