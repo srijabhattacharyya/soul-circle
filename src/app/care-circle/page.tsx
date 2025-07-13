@@ -57,7 +57,7 @@ const counsellors = [
     name: 'Vikram',
     specialty: 'Motivation, Confidence, Breakup Recovery',
     description: "Yo! Vikram here. Let’s kick doubt out and bring your power back. Whether it’s heartbreak, burnout, or chaos—we’ll face it with grit and a grin.",
-    imageUrl: 'https://placehold.co/400x300.png',
+    imageUrl: '/images/vikram.png',
     link: '/care-circle/vikram',
     age: 35,
     gender: 'Male',
