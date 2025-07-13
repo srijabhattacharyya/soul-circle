@@ -131,7 +131,7 @@ export function AppHeader() {
   }, []);
 
   return (
-    <header className="px-4 lg:px-6 h-16 flex items-center justify-between bg-background text-foreground fixed top-0 left-0 right-0 z-50 border-b">
+    <header className="px-4 lg:px-6 h-16 flex items-center justify-between bg-white text-black fixed top-0 left-0 right-0 z-50 border-b border-gray-200">
       <Link href="/" className="flex items-center gap-2 font-bold text-lg" prefetch={false}>
           SoulCircle
       </Link>
