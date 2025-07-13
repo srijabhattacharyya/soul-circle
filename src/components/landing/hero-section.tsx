@@ -32,7 +32,7 @@ export function HeroSection({ data }: { data: HeroSectionData }) {
             <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl xl:text-6xl/none">
               {data.catch_line}
             </h1>
-            <p className="max-w-[700px] text-primary-foreground/90 mx-auto sm:text-xl">
+            <p className="max-w-[700px] text-primary-foreground/90 mx-auto text-base leading-relaxed sm:text-lg">
               {data.tagline}
             </p>
             <div className="w-full max-w-sm mx-auto flex flex-col sm:flex-row gap-2">

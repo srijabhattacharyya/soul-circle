@@ -49,7 +49,7 @@ export function HowItHelpsSection({ data }: { data: HowItHelpsData }) {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="flex-grow">
-                    <p className="text-muted-foreground text-sm">
+                    <p className="text-muted-foreground text-sm leading-relaxed">
                       {box.content}
                     </p>
                   </CardContent>
