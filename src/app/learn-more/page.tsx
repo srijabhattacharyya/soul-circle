@@ -5,7 +5,7 @@ export default function LearnMorePage() {
   return (
     <div className="flex flex-col min-h-dvh bg-secondary text-foreground">
       <main className="flex-1">
-        <section className="w-full pt-12 md:pt-24 lg:pt-32 pb-8 md:pb-12 lg:pb-16">
+        <section className="w-full pt-12 md:pt-24 lg:pt-32 pb-8 md:pb-12">
           <div className="container px-4 md:px-6">
             <div className="grid gap-12 lg:grid-cols-2 lg:gap-24 items-start">
               <div className="flex flex-col items-center justify-center space-y-4">
@@ -59,7 +59,7 @@ export default function LearnMorePage() {
               <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
                 ⚠️ Important Disclaimer
               </h2>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground text-lg">
                 SoulCircle is a supportive tool for emotional well-being and is
                 not a crisis support service or a substitute for professional
                 therapy, medical treatment, or psychiatric care. The AI
@@ -67,7 +67,7 @@ export default function LearnMorePage() {
                 therapists. The guidance provided is for informational and
                 emotional support purposes only.
               </p>
-              <p className="text-muted-foreground font-semibold">
+              <p className="text-muted-foreground font-semibold text-lg">
                 If you are in a mental health crisis or have thoughts of
                 self-harm or harming others, please contact a qualified mental
                 health professional or reach out to your local emergency
