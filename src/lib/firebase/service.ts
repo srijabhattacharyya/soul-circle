@@ -1,8 +1,9 @@
 
 'use server';
 
-import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs, Timestamp, addDoc } from 'firebase/firestore';
-import { db } from './config';
+import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs, Timestamp, addDoc, deleteDoc, writeBatch } from 'firebase/firestore';
+import { db, auth } from './config';
+import { deleteUser } from 'firebase/auth';
 import type { ProfileFormValues } from '@/app/profile/form-schema';
 import type { InnerWeatherFormValues } from '@/app/inner-weather/form-schema';
 import type { JournalFormValues } from '@/app/mind-haven/form-schema';
@@ -24,7 +25,7 @@ export async function getUserProfile(userId: string) {
   }
 }
 
-export async function saveUserProfile(userId: string, data: ProfileFormValues) {
+export async function saveUserProfile(userId: string, data: Partial<ProfileFormValues>) {
   if (!db) throw new Error("Firestore is not initialized.");
   try {
     const docRef = doc(db, 'userProfiles', userId);
@@ -130,5 +131,46 @@ export async function saveUserGoal(userId: string, goalData: GoalData) {
     } catch(error) {
         console.error('Error saving user goal:', error);
         throw new Error('Failed to save user goal.');
+    }
+}
+
+// NOTE: In a production app, this should be handled by a Cloud Function 
+// triggered by user deletion from Firebase Auth to ensure atomicity and security.
+// Performing this on the client-side is for demonstration purposes.
+export async function deleteUserAccountAndData(userId: string) {
+    if (!db || !auth) throw new Error("Firebase is not initialized.");
+
+    const currentUser = auth.currentUser;
+    if (!currentUser || currentUser.uid !== userId) {
+        throw new Error("User not authenticated or mismatched ID.");
+    }
+    
+    try {
+        // 1. Delete Firestore Data
+        const collectionsToDelete = ['moodTracker', 'journals', 'savedAffirmations', 'userGoals'];
+        
+        for (const coll of collectionsToDelete) {
+            const userDocsQuery = query(collection(db, coll), where('uid', '==', userId));
+            const querySnapshot = await getDocs(userDocsQuery);
+            const batch = writeBatch(db);
+            querySnapshot.forEach((doc) => {
+                batch.delete(doc.ref);
+            });
+            await batch.commit();
+        }
+
+        // Delete the main user profile document
+        await deleteDoc(doc(db, 'userProfiles', userId));
+        
+        // 2. Delete User from Authentication
+        // This is a sensitive operation and requires recent sign-in.
+        // The UI should handle re-authentication before calling this function.
+        await deleteUser(currentUser);
+        
+    } catch (error) {
+        console.error("Error deleting user account:", error);
+        // The error might be 'auth/requires-recent-login'.
+        // The UI should catch this and prompt the user to re-authenticate.
+        throw error;
     }
 }
