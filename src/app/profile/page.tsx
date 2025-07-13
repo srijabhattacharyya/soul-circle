@@ -61,7 +61,7 @@ const SupportSystemOtherInput = ({ control }: { control: any }) => {
           control={control}
           name="supportSystemOther.value"
           render={({ field }) => (
-            <Input {...field} placeholder="Please describe" />
+            <Input {...field} placeholder="Please describe" className="bg-white text-black" />
           )}
         />
       )}
@@ -91,7 +91,7 @@ const ConditionalInput = ({
       <Controller
         control={control}
         name={inputName}
-        render={({ field }) => <Input {...field} placeholder={placeholder} />}
+        render={({ field }) => <Input {...field} placeholder={placeholder} className="bg-white text-black" />}
       />
     </div>
   ) : null;
@@ -146,7 +146,7 @@ const OtherCheckboxInput = ({
         <Controller
           control={control}
           name={inputName}
-          render={({ field }) => <Input {...field} placeholder="Please specify" />}
+          render={({ field }) => <Input {...field} placeholder="Please specify" className="bg-white text-black" />}
         />
       )}
     </div>
@@ -305,20 +305,20 @@ export default function ProfilePage() {
               <AccordionContent className="pt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <Label htmlFor="name" className='text-black'>Name*</Label>
-                  <Controller name="name" control={control} render={({ field }) => <Input {...field} id="name" className="text-black" />} />
+                  <Controller name="name" control={control} render={({ field }) => <Input {...field} id="name" className="bg-white text-black" />} />
                   {errors.name && (<p className="text-red-600 text-sm mt-1">{errors.name.message}</p>)}
                 </div>
                 <div>
                   <Label htmlFor="middleName" className='text-black'>Middle Name</Label>
-                  <Controller name="middleName" control={control} render={({ field }) => <Input {...field} id="middleName" className="text-black" />} />
+                  <Controller name="middleName" control={control} render={({ field }) => <Input {...field} id="middleName" className="bg-white text-black" />} />
                 </div>
                 <div>
                   <Label htmlFor="surname" className='text-black'>Surname</Label>
-                  <Controller name="surname" control={control} render={({ field }) => <Input {...field} id="surname" className="text-black" />} />
+                  <Controller name="surname" control={control} render={({ field }) => <Input {...field} id="surname" className="bg-white text-black" />} />
                 </div>
                 <div>
                   <Label htmlFor="age" className='text-black'>Age*</Label>
-                  <Controller name="age" control={control} render={({ field }) => <Input {...field} id="age" type="number" min="12" onChange={e => field.onChange(parseInt(e.target.value, 10))} className="text-black" />} />
+                  <Controller name="age" control={control} render={({ field }) => <Input {...field} id="age" type="number" min="12" onChange={e => field.onChange(parseInt(e.target.value, 10))} className="bg-white text-black" />} />
                   {errors.age && <p className="text-red-600 text-sm mt-1">{errors.age.message}</p>}
                 </div>
                 <div>
@@ -328,7 +328,7 @@ export default function ProfilePage() {
                     control={control}
                     render={({ field }) => (
                       <Select onValueChange={field.onChange} value={field.value}>
-                        <SelectTrigger className="text-black"><SelectValue placeholder="Select gender" /></SelectTrigger>
+                        <SelectTrigger className="text-black bg-white"><SelectValue placeholder="Select gender" /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="Male">Male</SelectItem>
                           <SelectItem value="Female">Female</SelectItem>
@@ -342,11 +342,11 @@ export default function ProfilePage() {
                 </div>
                 <div>
                   <Label htmlFor="city" className='text-black'>City</Label>
-                  <Controller name="city" control={control} render={({ field }) => <Input {...field} id="city" className="text-black" />} />
+                  <Controller name="city" control={control} render={({ field }) => <Input {...field} id="city" className="bg-white text-black" />} />
                 </div>
                 <div>
                   <Label htmlFor="state" className='text-black'>State</Label>
-                  <Controller name="state" control={control} render={({ field }) => <Input {...field} id="state" className="text-black" />} />
+                  <Controller name="state" control={control} render={({ field }) => <Input {...field} id="state" className="bg-white text-black" />} />
                 </div>
                 <div>
                   <Label className='text-black'>Country</Label>
@@ -355,7 +355,7 @@ export default function ProfilePage() {
                     control={control}
                     render={({ field }) => (
                       <Select onValueChange={field.onChange} value={field.value}>
-                        <SelectTrigger className="text-black"><SelectValue placeholder="Select country" /></SelectTrigger>
+                        <SelectTrigger className="text-black bg-white"><SelectValue placeholder="Select country" /></SelectTrigger>
                         <SelectContent>
                           {countryList.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
                         </SelectContent>
@@ -374,7 +374,7 @@ export default function ProfilePage() {
               <AccordionContent className="pt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <Label htmlFor="occupation" className='text-black'>Occupation/Job Role</Label>
-                  <Controller name="occupation" control={control} render={({ field }) => <Input {...field} id="occupation" className="text-black" />} />
+                  <Controller name="occupation" control={control} render={({ field }) => <Input {...field} id="occupation" className="bg-white text-black" />} />
                 </div>
                 <div>
                   <Label className='text-black'>Family Monthly Income Bracket</Label>
@@ -383,7 +383,7 @@ export default function ProfilePage() {
                     control={control}
                     render={({ field }) => (
                       <Select onValueChange={field.onChange} value={field.value}>
-                        <SelectTrigger className="text-black"><SelectValue placeholder="Select income bracket" /></SelectTrigger>
+                        <SelectTrigger className="text-black bg-white"><SelectValue placeholder="Select income bracket" /></SelectTrigger>
                         <SelectContent>
                             <SelectItem value="<25000">Below ₹25,000</SelectItem>
                             <SelectItem value="25000-50000">₹25,000 - ₹50,000</SelectItem>
@@ -397,7 +397,7 @@ export default function ProfilePage() {
                 </div>
                 <div className="md:col-span-2">
                   <Label htmlFor="lifeSituation" className='text-black'>Current Life Situation</Label>
-                  <Controller name="lifeSituation" control={control} render={({ field }) => <Textarea {...field} id="lifeSituation" placeholder="e.g., living alone/with family, employment status, recent life changes" className="text-black bg-white" />} />
+                  <Controller name="lifeSituation" control={control} render={({ field }) => <Textarea {...field} id="lifeSituation" placeholder="e.g., living alone/with family, employment status, recent life changes" className="bg-white text-black" />} />
                 </div>
                 <div className="md:col-span-2">
                   <Label className='text-black'>Support System</Label>
@@ -463,7 +463,7 @@ export default function ProfilePage() {
                 </div>
                 <div>
                     <Label htmlFor="knownTriggers" className='text-black'>Known Triggers</Label>
-                    <Controller name="knownTriggers" control={control} render={({ field }) => <Textarea {...field} id="knownTriggers" className="text-black bg-white"/>} />
+                    <Controller name="knownTriggers" control={control} render={({ field }) => <Textarea {...field} id="knownTriggers" className="bg-white text-black"/>} />
                 </div>
                 <div>
                   <Label className='text-black'>Have you ever tried coping techniques?</Label>
@@ -518,7 +518,7 @@ export default function ProfilePage() {
               <AccordionContent className="pt-4 grid grid-cols-1 gap-6">
                 <div>
                   <Label htmlFor="dailyRoutine" className='text-black'>Describe your daily routine</Label>
-                  <Controller name="dailyRoutine" control={control} render={({ field }) => <Textarea {...field} id="dailyRoutine" placeholder="Include sleep, meals, work, self-care, etc." className="text-black bg-white" />} />
+                  <Controller name="dailyRoutine" control={control} render={({ field }) => <Textarea {...field} id="dailyRoutine" placeholder="Include sleep, meals, work, self-care, etc." className="bg-white text-black" />} />
                 </div>
                 <div>
                   <Label className='text-black'>Substance use</Label>
@@ -531,7 +531,7 @@ export default function ProfilePage() {
                   )} />
                   {watch('substanceUse') && watch('substanceUse') !== 'No' && (
                     <div className='mt-2'>
-                       <Controller name="substanceUseDescription" control={control} render={({ field }) => <Input {...field} placeholder="Describe substance use" className="text-black" />} />
+                       <Controller name="substanceUseDescription" control={control} render={({ field }) => <Input {...field} placeholder="Describe substance use" className="bg-white text-black" />} />
                     </div>
                   )}
                 </div>
@@ -598,7 +598,7 @@ export default function ProfilePage() {
                 </div>
                 <div>
                   <Label htmlFor="therapyConcerns" className='text-black'>Any fears or concerns about therapy?</Label>
-                  <Controller name="therapyConcerns" control={control} render={({ field }) => <Textarea {...field} id="therapyConcerns" className="text-black bg-white" />} />
+                  <Controller name="therapyConcerns" control={control} render={({ field }) => <Textarea {...field} id="therapyConcerns" className="bg-white text-black" />} />
                 </div>
               </AccordionContent>
             </AccordionItem>

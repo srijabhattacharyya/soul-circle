@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
@@ -256,7 +257,7 @@ export default function SootheStudioPage() {
                         fetchAffirmations(newCat);
                     }}
                 >
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full text-black bg-white">
                         <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
                     <SelectContent>
@@ -303,13 +304,13 @@ export default function SootheStudioPage() {
             <div className="space-y-6 max-w-lg mx-auto">
                 <div>
                     <Label htmlFor="main-goal" className="font-semibold text-lg text-black">What is one goal you want to focus on?</Label>
-                    <Input id="main-goal" value={mainGoal} onChange={(e) => setMainGoal(e.target.value)} placeholder="e.g., Practice one mindful moment" />
+                    <Input id="main-goal" value={mainGoal} onChange={(e) => setMainGoal(e.target.value)} placeholder="e.g., Practice one mindful moment" className="bg-white text-black" />
                 </div>
                 <div>
                     <Label className="font-semibold text-lg text-black">Break it down (optional)</Label>
                     <div className="space-y-2">
                         {subGoals.map((goal, i) => (
-                           <Input key={i} value={goal} onChange={(e) => handleSubGoalChange(i, e.target.value)} placeholder={`Sub-goal ${i+1}`} />
+                           <Input key={i} value={goal} onChange={(e) => handleSubGoalChange(i, e.target.value)} placeholder={`Sub-goal ${i+1}`} className="bg-white text-black" />
                         ))}
                     </div>
                 </div>

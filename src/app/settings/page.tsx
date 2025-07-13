@@ -182,20 +182,20 @@ export default function SettingsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <Label htmlFor="name" className='text-black'>Name*</Label>
-                        <Controller name="name" control={control} render={({ field }) => <Input {...field} id="name" className="text-black bg-white" />} />
+                        <Controller name="name" control={control} render={({ field }) => <Input {...field} id="name" className="bg-white text-black" />} />
                         {errors.name && (<p className="text-red-600 text-sm mt-1">{errors.name.message}</p>)}
                     </div>
                      <div>
                         <Label htmlFor="middleName" className='text-black'>Middle Name</Label>
-                        <Controller name="middleName" control={control} render={({ field }) => <Input {...field} id="middleName" className="text-black bg-white" />} />
+                        <Controller name="middleName" control={control} render={({ field }) => <Input {...field} id="middleName" className="bg-white text-black" />} />
                     </div>
                     <div>
                         <Label htmlFor="surname" className='text-black'>Surname</Label>
-                        <Controller name="surname" control={control} render={({ field }) => <Input {...field} id="surname" className="text-black bg-white" />} />
+                        <Controller name="surname" control={control} render={({ field }) => <Input {...field} id="surname" className="bg-white text-black" />} />
                     </div>
                     <div>
                         <Label htmlFor="age" className='text-black'>Age*</Label>
-                        <Controller name="age" control={control} render={({ field }) => <Input {...field} id="age" type="number" min="12" onChange={e => field.onChange(parseInt(e.target.value, 10))} className="text-black bg-white" />} />
+                        <Controller name="age" control={control} render={({ field }) => <Input {...field} id="age" type="number" min="12" onChange={e => field.onChange(parseInt(e.target.value, 10))} className="bg-white text-black" />} />
                         {errors.age && <p className="text-red-600 text-sm mt-1">{errors.age.message}</p>}
                     </div>
                      <div>
@@ -219,11 +219,11 @@ export default function SettingsPage() {
                     </div>
                     <div>
                         <Label htmlFor="city" className='text-black'>City</Label>
-                        <Controller name="city" control={control} render={({ field }) => <Input {...field} id="city" className="text-black bg-white" />} />
+                        <Controller name="city" control={control} render={({ field }) => <Input {...field} id="city" className="bg-white text-black" />} />
                     </div>
                     <div>
                         <Label htmlFor="state" className='text-black'>State</Label>
-                        <Controller name="state" control={control} render={({ field }) => <Input {...field} id="state" className="text-black bg-white" />} />
+                        <Controller name="state" control={control} render={({ field }) => <Input {...field} id="state" className="bg-white text-black" />} />
                     </div>
                     <div>
                         <Label className='text-black'>Country</Label>
@@ -271,7 +271,7 @@ export default function SettingsPage() {
                     value={deleteConfirmationInput}
                     onChange={(e) => setDeleteConfirmationInput(e.target.value)}
                     placeholder='DELETE'
-                    className="text-black bg-white"
+                    className="bg-white text-black"
                  />
               </div>
               

@@ -140,7 +140,7 @@ export default function MindHavenPage() {
                   control={control}
                   render={({ field }) => (
                     <Select onValueChange={field.onChange} value={field.value}>
-                        <SelectTrigger id="moodTag" className="p-2 rounded-lg border border-gray-300 bg-white focus:ring-indigo-500 focus:border-indigo-500 w-full sm:w-auto">
+                        <SelectTrigger id="moodTag" className="p-2 rounded-lg border border-gray-300 bg-white focus:ring-indigo-500 focus:border-indigo-500 w-full sm:w-auto text-black">
                             <SelectValue placeholder="Select a mood" />
                         </SelectTrigger>
                         <SelectContent>

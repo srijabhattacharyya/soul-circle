@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -118,7 +119,7 @@ export default function ResourceLibraryPage() {
             value={userQuery}
             onChange={(e) => setUserQuery(e.target.value)}
             placeholder="Optional: Describe your specific need for more tailored results. e.g., 'I feel anxious before meetings at work.'"
-            className="text-black bg-white"
+            className="bg-white text-black"
           />
         </div>
 

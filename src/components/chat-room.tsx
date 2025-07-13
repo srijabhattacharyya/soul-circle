@@ -228,7 +228,7 @@ export function ChatRoom({
                 }
             }}
             placeholder="Type your message here..."
-            className={cn('flex-1 border-gray-300 p-2 resize-none', theme.inputRing)}
+            className={cn('flex-1 border-gray-300 p-2 resize-none bg-white text-black', theme.inputRing)}
             rows={1}
             disabled={isLoading || !firebaseActive}
           />
