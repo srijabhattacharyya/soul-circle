@@ -67,7 +67,7 @@ const counsellors = [
     name: 'Dr. Tara Mehta',
     specialty: 'Cognitive Behavioral Support, Decision Clarity',
     description: "Hi, I’m Dr. Tara. Let’s unpack your thoughts together with care and logic. I’m here to help you make sense of what you’re feeling, and where it’s leading.",
-    imageUrl: 'https://placehold.co/400x300.png',
+    imageUrl: '/images/tara-mehta.png',
     link: '/care-circle/dr-tara-mehta',
     age: 45,
     gender: 'Female',
