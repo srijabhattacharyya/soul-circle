@@ -357,7 +357,7 @@ export default function SootheStudioPage() {
   );
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-purple-50 to-blue-50 p-4 sm:p-8 flex items-center justify-center">
+    <div className="min-h-screen w-full bg-gradient-to-br from-purple-50 to-blue-50 p-4 sm:p-8 flex items-center justify-center pt-24">
         <style>{`
             @keyframes inhale {
                 from { transform: scale(1); }
