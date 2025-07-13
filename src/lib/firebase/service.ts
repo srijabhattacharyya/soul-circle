@@ -3,7 +3,7 @@
 
 import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs, Timestamp, addDoc, deleteDoc, writeBatch, updateDoc, arrayUnion } from 'firebase/firestore';
 import { db, auth as globalAuth, isConfigValid } from './config';
-import { getAuth, GoogleAuthProvider, signInWithPopup, type User } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, type User } from 'firebase/auth';
 import type { ProfileFormValues } from '@/app/profile/form-schema';
 import type { InnerWeatherFormValues } from '@/app/inner-weather/form-schema';
 import type { JournalFormValues } from '@/app/mind-haven/form-schema';
@@ -12,53 +12,39 @@ import { getApp, getApps, initializeApp } from 'firebase/app';
 
 // AUTHENTICATION
 export async function signInWithGoogle() {
-  // This is a troubleshooting step. We are re-initializing auth here to be certain the config is loaded.
   if (!isConfigValid) throw new Error("Firebase is not configured.");
-
-  const firebaseConfig = {
-    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-  };
-
-  const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  // End of troubleshooting step.
-
+  const auth = getAuth();
   const provider = new GoogleAuthProvider();
-  
-  provider.setCustomParameters({
-    'auth_domain': process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || ''
-  });
+  await signInWithRedirect(auth, provider);
+}
 
+export async function handleRedirectResult(auth: any) {
   try {
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
-
-    // Check if user profile already exists
-    const userProfile = await getUserProfile(user.uid);
-    if (!userProfile) {
-      // Create a basic profile for new users
-      const newUserProfile: Partial<ProfileFormValues> = {
-        name: user.displayName || 'New User',
-        age: undefined, 
-        gender: 'Prefer not to say',
-        counsellingReason: [],
-        counsellingGoals: [],
-        selfHarmThoughts: 'No',
-        consent: false,
-      };
-      await saveUserProfile(user.uid, newUserProfile);
+    const result = await getRedirectResult(auth);
+    if (result) {
+      const user = result.user;
+      const userProfile = await getUserProfile(user.uid);
+      if (!userProfile) {
+        const newUserProfile: Partial<ProfileFormValues> = {
+          name: user.displayName || 'New User',
+          age: undefined, 
+          gender: 'Prefer not to say',
+          counsellingReason: [],
+          counsellingGoals: [],
+          selfHarmThoughts: 'No',
+          consent: false,
+        };
+        await saveUserProfile(user.uid, newUserProfile);
+      }
+      return user;
     }
-    return user;
+    return null;
   } catch (error: any) {
-    console.error("Error signing in with Google:", error.code, error.message);
+    console.error("Error handling redirect result:", error.code, error.message);
     throw new Error(`Google Sign-In failed: ${error.message}`);
   }
 }
+
 
 // USER PROFILE
 export async function getUserProfile(userId: string) {

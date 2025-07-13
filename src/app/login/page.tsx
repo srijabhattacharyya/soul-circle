@@ -4,10 +4,11 @@
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/auth-provider';
 import { Button } from '@/components/ui/button';
-import { signInWithGoogle } from '@/lib/firebase/service';
+import { signInWithGoogle, handleRedirectResult } from '@/lib/firebase/service';
 import { useToast } from '@/hooks/use-toast';
 import { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
+import { getAuth } from 'firebase/auth';
 
 const GoogleIcon = () => (
     <svg className="mr-2 h-7 w-7 md:h-12 md:w-12" viewBox="0 0 48 48">
@@ -23,6 +24,26 @@ export default function LoginPage() {
   const { user, loading, firebaseReady } = useAuth();
   const { toast } = useToast();
   const [isSigningIn, setIsSigningIn] = useState(false);
+  
+  useEffect(() => {
+    if (!loading && firebaseReady) {
+      const auth = getAuth();
+      handleRedirectResult(auth)
+        .then((user) => {
+          if (user) {
+            toast({ title: 'Success!', description: 'You have logged in successfully.' });
+            router.push('/');
+          }
+        })
+        .catch((error) => {
+          toast({
+            title: 'Error',
+            description: 'Failed to sign in with Google. Please try again.',
+            variant: 'destructive',
+          });
+        });
+    }
+  }, [loading, firebaseReady, router, toast]);
 
   useEffect(() => {
     if (!loading && user) {
@@ -38,16 +59,15 @@ export default function LoginPage() {
     setIsSigningIn(true);
     try {
       await signInWithGoogle();
-      toast({ title: 'Success!', description: 'You have logged in successfully.' });
-      router.push('/');
+      // The user will be redirected, so we don't need to do anything else here.
+      // We'll show a loader to indicate something is happening.
     } catch (error) {
       toast({
         title: 'Error',
-        description: 'Failed to sign in with Google. Please try again.',
+        description: 'Failed to start sign in with Google. Please try again.',
         variant: 'destructive',
       });
-    } finally {
-        setIsSigningIn(false);
+      setIsSigningIn(false);
     }
   };
 
