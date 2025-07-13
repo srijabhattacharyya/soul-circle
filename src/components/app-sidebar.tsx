@@ -28,7 +28,8 @@ import {
     Settings,
     LogOut,
     ChevronDown,
-    HeartHandshake
+    HeartHandshake,
+    Database
 } from 'lucide-react';
 
 const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
@@ -104,6 +105,7 @@ export function AppSidebar() {
                 
                  <hr className="my-2 border-border"/>
                  <NavLink href="/settings"><Settings /><span>Settings</span></NavLink>
+                 <NavLink href="/seed-data"><Database /><span>Seed Data</span></NavLink>
             </>
         </SidebarMenu>
       </SidebarContent>
