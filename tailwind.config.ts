@@ -21,6 +21,8 @@ export default {
         sans: ['var(--font-sans)', ...fontFamily.sans],
       },
       colors: {
+        'soft-teal': '#E0F2F1',
+        'teal-900': '#004D40',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
