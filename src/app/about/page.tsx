@@ -8,13 +8,13 @@ export default function AboutPage() {
       <main className="flex-1">
         <section className="w-full pt-24 md:pt-32 lg:pt-40 pb-6 md:pb-8 lg:pb-0">
           <div className="container px-4 md:px-6">
-            <div className="grid gap-12 lg:grid-cols-2 lg:gap-24 items-start">
+            <div className="grid gap-12 items-start">
               <div className="flex flex-col items-center justify-center space-y-4">
                 <Image
-                  src="https://placehold.co/400x300.png"
+                  src="https://placehold.co/200x150.png"
                   alt="Founder's Photo"
-                  width={400}
-                  height={300}
+                  width={200}
+                  height={150}
                   className="rounded-lg object-cover"
                   data-ai-hint="portrait founder"
                 />
@@ -22,16 +22,16 @@ export default function AboutPage() {
                   <p className="text-4xl font-bold text-foreground">
                     By Srija Bhattacharyya
                   </p>
-                  <p className="text-xl text-muted-foreground">
+                  <p className="text-2xl text-foreground/90">
                     3rd Year Student, B.Tech CSE
                   </p>
-                  <p className="text-lg text-muted-foreground">
+                  <p className="text-xl text-foreground/80">
                     Kalinga Institute of Industrial Technology (KIIT),
                     Bhubaneswar
                   </p>
                 </div>
               </div>
-              <div className="flex flex-col justify-center space-y-4">
+              <div className="max-w-3xl mx-auto space-y-4 mt-8">
                 <p>
                   During my years of hostel life, I have had countless
                   late-night conversations with friends battling emotional
@@ -58,7 +58,7 @@ export default function AboutPage() {
 
         <section className="w-full pb-12 md:pb-24 lg:pb-32">
           <div className="container px-4 md:px-6 space-y-12">
-            <div className="space-y-4">
+            <div className="max-w-3xl mx-auto space-y-4">
               <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
                 ⚠️ Important Disclaimer
               </h2>
@@ -78,7 +78,7 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="space-y-4">
+            <div className="max-w-3xl mx-auto space-y-4">
               <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
                 🔐 Data Privacy & Security
               </h2>
@@ -98,7 +98,7 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="space-y-4">
+            <div className="max-w-3xl mx-auto space-y-4">
               <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
                 🛠️ Tech Stack Used
               </h2>
@@ -125,7 +125,7 @@ export default function AboutPage() {
               </ul>
             </div>
 
-            <div className="space-y-4">
+            <div className="max-w-3xl mx-auto space-y-4">
               <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
                 🧠 AI & Future Learning
               </h2>
@@ -146,7 +146,7 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="space-y-4">
+            <div className="max-w-3xl mx-auto space-y-4">
               <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
                 🙏 Gratitude & Closing Note
               </h2>
