@@ -73,7 +73,7 @@ const OtherCheckboxInput = ({
         <Controller
           control={control}
           name={inputName}
-          render={({ field }) => <Textarea {...field} placeholder="Please specify" className="text-black mt-2" />}
+          render={({ field }) => <Textarea {...field} placeholder="Please specify" className="text-black mt-2 bg-white" />}
         />
       )}
     </div>
@@ -256,7 +256,7 @@ export default function InnerWeatherPage() {
           {/* Free Note */}
           <div>
               <Label htmlFor="personalNote" className="font-semibold text-black">Would you like to note anything else about today?</Label>
-              <Controller name="personalNote" control={control} render={({ field }) => <Textarea {...field} id="personalNote" className="text-black mt-2" />} />
+              <Controller name="personalNote" control={control} render={({ field }) => <Textarea {...field} id="personalNote" className="text-black mt-2 bg-white" />} />
           </div>
 
           <div className="pt-4">
