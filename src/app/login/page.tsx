@@ -80,7 +80,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-4">
-      <div className="w-full max-w-sm text-center">
+      <div className="w-full max-w-md text-center">
         <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
           {isLoginView ? 'Welcome Back' : 'Create Your Account'}
         </h1>
@@ -88,30 +88,30 @@ export default function LoginPage() {
           {isLoginView ? 'Sign in to continue your journey.' : 'Join SoulCircle to get started.'}
         </p>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 text-left">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 text-left">
           <div>
-            <Label htmlFor="email" className="text-black">Email</Label>
+            <Label htmlFor="email" className="text-black text-base">Email</Label>
             <Input
               id="email"
               type="email"
               {...register('email')}
               placeholder="you@example.com"
-              className="bg-white text-black placeholder:text-gray-500"
+              className="bg-white text-black placeholder:text-gray-500 h-12 text-base"
             />
             {errors.email && <p className="text-red-600 text-sm mt-1">{errors.email.message}</p>}
           </div>
           <div>
-            <Label htmlFor="password"  className="text-black">Password</Label>
+            <Label htmlFor="password"  className="text-black text-base">Password</Label>
             <Input
               id="password"
               type="password"
               {...register('password')}
               placeholder="••••••••"
-              className="bg-white text-black placeholder:text-gray-500"
+              className="bg-white text-black placeholder:text-gray-500 h-12 text-base"
             />
             {errors.password && <p className="text-red-600 text-sm mt-1">{errors.password.message}</p>}
           </div>
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
+          <Button type="submit" className="w-full h-12 text-lg" disabled={isSubmitting}>
             {isSubmitting ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : isLoginView ? (
