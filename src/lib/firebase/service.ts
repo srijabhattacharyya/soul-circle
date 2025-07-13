@@ -1,13 +1,14 @@
-
 'use server';
 
-import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs, Timestamp, addDoc, deleteDoc, writeBatch } from 'firebase/firestore';
+import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs, Timestamp, addDoc, deleteDoc, writeBatch, updateDoc, arrayUnion } from 'firebase/firestore';
 import { db, auth } from './config';
 import { deleteUser } from 'firebase/auth';
 import type { ProfileFormValues } from '@/app/profile/form-schema';
 import type { InnerWeatherFormValues } from '@/app/inner-weather/form-schema';
 import type { JournalFormValues } from '@/app/mind-haven/form-schema';
+import type { ChatMessage } from '@/components/chat-room';
 
+// USER PROFILE
 export async function getUserProfile(userId: string) {
   if (!db) throw new Error("Firestore is not initialized.");
   try {
@@ -42,6 +43,7 @@ export async function saveUserProfile(userId: string, data: Partial<ProfileFormV
   }
 }
 
+// MOOD TRACKER
 export async function hasMoodEntryForToday(userId: string): Promise<boolean> {
   if (!db) throw new Error("Firestore is not initialized.");
   const today = new Date();
@@ -58,7 +60,6 @@ export async function hasMoodEntryForToday(userId: string): Promise<boolean> {
   const querySnapshot = await getDocs(q);
   return !querySnapshot.empty;
 }
-
 
 export async function saveMoodEntry(userId: string, data: InnerWeatherFormValues) {
   if (!db) throw new Error("Firestore is not initialized.");
@@ -83,6 +84,7 @@ export async function saveMoodEntry(userId: string, data: InnerWeatherFormValues
   }
 }
 
+// JOURNAL
 export async function saveJournalEntry(userId: string, data: JournalFormValues) {
     if (!db) throw new Error("Firestore is not initialized.");
     try {
@@ -98,6 +100,7 @@ export async function saveJournalEntry(userId: string, data: JournalFormValues) 
     }
 }
 
+// SOOTHE STUDIO
 export async function saveAffirmation(userId: string, affirmation: string) {
     if (!db) throw new Error("Firestore is not initialized.");
     try {
@@ -134,6 +137,7 @@ export async function saveUserGoal(userId: string, goalData: GoalData) {
     }
 }
 
+// FEEDBACK
 type UserFeedback = {
   uid: string;
   rating: number;
@@ -154,9 +158,7 @@ export async function saveUserFeedback(feedbackData: UserFeedback) {
 }
 
 
-// NOTE: In a production app, this should be handled by a Cloud Function 
-// triggered by user deletion from Firebase Auth to ensure atomicity and security.
-// Performing this on the client-side is for demonstration purposes.
+// ACCOUNT DELETION
 export async function deleteUserAccountAndData(userId: string) {
     if (!db || !auth) throw new Error("Firebase is not initialized.");
 
@@ -166,7 +168,6 @@ export async function deleteUserAccountAndData(userId: string) {
     }
     
     try {
-        // 1. Delete Firestore Data
         const collectionsToDelete = ['moodTracker', 'journals', 'savedAffirmations', 'userGoals'];
         
         for (const coll of collectionsToDelete) {
@@ -179,18 +180,58 @@ export async function deleteUserAccountAndData(userId: string) {
             await batch.commit();
         }
 
-        // Delete the main user profile document
         await deleteDoc(doc(db, 'userProfiles', userId));
         
-        // 2. Delete User from Authentication
-        // This is a sensitive operation and requires recent sign-in.
-        // The UI should handle re-authentication before calling this function.
         await deleteUser(currentUser);
         
     } catch (error) {
         console.error("Error deleting user account:", error);
-        // The error might be 'auth/requires-recent-login'.
-        // The UI should catch this and prompt the user to re-authenticate.
         throw error;
+    }
+}
+
+// CARE CIRCLE / CHAT
+export async function getCounsellorPersona(counsellorId: string): Promise<string | null> {
+  if (!db) throw new Error("Firestore is not initialized.");
+  try {
+    const docRef = doc(db, 'counsellors', counsellorId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return docSnap.data().aiPersonaPrompt || null;
+    }
+    return null;
+  } catch (error) {
+    console.error('Error fetching counsellor persona:', error);
+    throw new Error('Failed to fetch counsellor persona.');
+  }
+}
+
+export async function saveMessage(userId: string, counsellorId: string, message: ChatMessage) {
+    if (!db) throw new Error("Firestore is not initialized.");
+    const chatId = `${userId}_${counsellorId}`;
+    const docRef = doc(db, 'chats', chatId);
+    const docSnap = await getDoc(docRef);
+
+    const messageToSave = {
+        ...message,
+        timestamp: serverTimestamp(),
+    };
+
+    try {
+        if (docSnap.exists()) {
+            await updateDoc(docRef, {
+                messages: arrayUnion(messageToSave)
+            });
+        } else {
+            await setDoc(docRef, { 
+                messages: [messageToSave],
+                userId,
+                counsellorId,
+                createdAt: serverTimestamp()
+            });
+        }
+    } catch (error) {
+        console.error('Error saving message:', error);
+        throw new Error('Failed to save message.');
     }
 }

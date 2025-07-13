@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -27,7 +26,8 @@ import {
     Zap,
     Settings,
     LogOut,
-    ChevronDown
+    ChevronDown,
+    HeartHandshake
 } from 'lucide-react';
 
 const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
@@ -43,9 +43,12 @@ const NavLink = ({ href, children }: { href: string; children: React.ReactNode }
 }
 
 const NavSubMenu = ({ title, icon, children }: { title: string; icon: React.ReactNode, children: React.ReactNode }) => {
+    const pathname = usePathname();
+    const isCareCircleActive = pathname.startsWith('/care-circle');
+    
     return (
         <SidebarMenuItem>
-            <SidebarMenuButton>
+            <SidebarMenuButton isActive={isCareCircleActive}>
                 {icon}
                 <span>{title}</span>
                 <ChevronDown className="ml-auto size-4" />
@@ -95,8 +98,19 @@ export function AppSidebar() {
                     <NavSubLink href="/inner-weather"><CloudSun /><span>Inner Weather</span></NavSubLink>
                     <NavSubLink href="/mind-haven"><BookHeart /><span>Mind Haven</span></NavSubLink>
                     <NavSubLink href="/soothe-studio"><Zap /><span>Soothe Studio</span></NavSubLink>
-                    <NavSubLink href="/settings"><Settings /><span>Settings</span></NavSubLink>
                 </NavSubMenu>
+                
+                <NavSubMenu title="Care Circle" icon={<HeartHandshake />}>
+                    <NavSubLink href="/care-circle/dr-ananya-banerjee">Dr. A. Banerjee</NavSubLink>
+                    <NavSubLink href="/care-circle/kabir-islam">Kabir Islam</NavSubLink>
+                    <NavSubLink href="/care-circle/rishi-bhattacharyya">R. Bhattacharyya</NavSubLink>
+                    <NavSubLink href="/care-circle/zoya">Zoya</NavSubLink>
+                    <NavSubLink href="/care-circle/vikram">Vikram</NavSubLink>
+                    <NavSubLink href="/care-circle/dr-tara-mehta">Dr. T. Mehta</NavSubLink>
+                </NavSubMenu>
+                
+                 <hr className="my-2 border-border"/>
+                 <NavLink href="/settings"><Settings /><span>Settings</span></NavLink>
             </>
         </SidebarMenu>
       </SidebarContent>
