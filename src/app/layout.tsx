@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
-import { AppHeader } from '@/components/app-header';
 import { cn } from '@/lib/utils';
 import { Inter } from 'next/font/google';
 import { AuthProvider } from '@/components/auth-provider';
@@ -38,7 +37,6 @@ export default function RootLayout({
                     <AppSidebar />
                 </Sidebar>
                  <SidebarInset>
-                    <AppHeader />
                     <main>{children}</main>
                     <Toaster />
                 </SidebarInset>
