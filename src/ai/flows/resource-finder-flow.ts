@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview An AI flow to find relevant external resources for mental wellness.
@@ -18,7 +19,7 @@ export type ResourceFinderInput = z.infer<typeof ResourceFinderInputSchema>;
 const ResourceSchema = z.object({
     title: z.string().describe('The title of the resource.'),
     description: z.string().describe('A brief, 1-2 line description of the resource.'),
-    url: z.string().url().describe('The direct URL to the resource.'),
+    url: z.string().describe('The direct URL to the resource.'),
     type: z.enum(['Article', 'Video', 'Helpline', 'App', 'Tool', 'Website']).describe('The type of the resource.'),
 });
 
