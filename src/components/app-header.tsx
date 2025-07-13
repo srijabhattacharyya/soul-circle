@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Home, BookOpen, Info, User } from 'lucide-react';
+import { Home, BookOpen, Info, User, CloudSun } from 'lucide-react';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -59,6 +59,17 @@ export function AppHeader() {
         >
           <User className="mr-2 h-4 w-4" />
           Profile
+        </Link>
+        <Link
+          href="/inner-weather"
+          prefetch={false}
+          className={cn(
+            buttonVariants({ variant: 'ghost' }),
+            'hover:bg-soft-teal/90 hover:text-teal-900'
+          )}
+        >
+          <CloudSun className="mr-2 h-4 w-4" />
+          Inner Weather
         </Link>
       </nav>
     </header>
