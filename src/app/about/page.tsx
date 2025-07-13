@@ -162,7 +162,7 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="text-center text-foreground space-y-4 pt-8">
+            <div className="max-w-3xl mx-auto text-center text-foreground space-y-4 pt-8">
               <p>Thank you for visiting SoulCircle.</p>
               <p className="font-semibold">
                 Because your story deserves a listening circle. 🫶
