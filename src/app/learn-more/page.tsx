@@ -1,166 +1,181 @@
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
-import { Lock, Scale, TriangleAlert } from 'lucide-react';
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
-export default function LearnMorePage() {
+export default function AboutPage() {
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-purple-50 to-blue-50 p-4 sm:p-8 flex items-center justify-center pt-24">
-      <div className="bg-white rounded-xl shadow-2xl p-6 md:p-10 max-w-3xl w-full">
-        <header className="text-center mb-8">
-          <h1 className="text-indigo-700 font-bold text-4xl mb-2">SoulCircle</h1>
-          <h2 className="text-gray-800 font-semibold text-3xl">
-            Legal & Information Hub
-          </h2>
-          <p className="text-gray-600 mt-2">
-            Your trust is important to us. Here you can find our policies and
-            disclaimers.
-          </p>
-        </header>
-
-        <Accordion
-          type="single"
-          collapsible
-          className="w-full"
-          defaultValue="item-1"
-        >
-          <AccordionItem value="item-1">
-            <AccordionTrigger className="text-lg font-semibold text-gray-800 hover:bg-gray-50 p-4 rounded-t-lg">
-              <div className="flex items-center gap-3">
-                <Lock className="h-5 w-5 text-indigo-600" />
-                Privacy Policy
+    <div className="flex flex-col min-h-dvh bg-secondary text-foreground">
+      <main className="flex-1">
+        <section className="w-full pt-24 md:pt-32 lg:pt-40 pb-6 md:pb-8 lg:pb-0">
+          <div className="container px-4 md:px-6 learn-more-page">
+            <div className="flex flex-col items-center justify-center space-y-4">
+              <Image
+                src="https://placehold.co/400x300.png"
+                alt="Founder's Photo"
+                width={400}
+                height={300}
+                className="rounded-lg object-cover"
+                data-ai-hint="portrait founder"
+              />
+              <div className="pt-4 text-center">
+                <p className="text-4xl font-bold text-foreground">
+                  By Srija Bhattacharyya
+                </p>
+                <p className="text-2xl text-foreground/90">
+                  3rd Year Student, B.Tech CSE
+                </p>
+                <p className="text-xl text-foreground/80">
+                  Kalinga Institute of Industrial Technology (KIIT),
+                  Bhubaneswar
+                </p>
               </div>
-            </AccordionTrigger>
-            <AccordionContent className="p-6 text-gray-700 leading-relaxed space-y-4">
+            </div>
+            <div className="max-w-3xl mx-auto space-y-4 mt-8">
               <p>
-                <strong>Last Updated: July 2024</strong>
+                During my years of hostel life, I have had countless
+                late-night conversations with friends battling emotional
+                stress, anxiety, and depression—often in silence. Many of
+                them, including myself, have felt the pressing need to talk
+                to someone who could simply listen, offer thoughtful advice,
+                or help navigate a tough moment—especially during exam time
+                or periods of academic pressure.
               </p>
               <p>
-                Your privacy is critically important to us. This Privacy Policy
-                outlines how SoulCircle collects, uses, and protects your
-                personal information.
+                In our hectic schedules, reaching out to a professional
+                counsellor isn’t always possible. This realization gave
+                birth to SoulCircle—an AI-powered mental wellness companion
+                that offers a non-judgmental, empathetic space to talk,
+                reflect, and feel heard—anytime, anywhere. The AI
+                counsellors in SoulCircle are available 24x7 to support
+                users through conversation, journaling, self-help tools, and
+                mood tracking.
               </p>
-              <h3 className="font-semibold text-md text-gray-800">
-                1. Information We Collect
-              </h3>
-              <ul className="list-disc list-inside space-y-1 pl-4">
+            </div>
+          </div>
+        </section>
+
+        <section className="w-full pb-12 md:pb-24 lg:pb-32">
+          <div className="container px-4 md:px-6 space-y-12 learn-more-page">
+            <div className="max-w-3xl mx-auto space-y-4 mt-8">
+              <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+                ⚠️ Important Disclaimer
+              </h2>
+              <p>
+                SoulCircle is a supportive tool for emotional well-being and is
+                not a crisis support service or a substitute for professional
+                therapy, medical treatment, or psychiatric care. The AI
+                counsellors are advanced language models, not licensed
+                therapists. The guidance provided is for informational and
+                emotional support purposes only.
+              </p>
+              <p className="font-semibold">
+                If you are in a mental health crisis or have thoughts of
+                self-harm or harming others, please contact a qualified mental
+                health professional or reach out to your local emergency
+                services or a crisis helpline immediately.
+              </p>
+            </div>
+
+            <div className="max-w-3xl mx-auto space-y-4">
+              <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+                🔐 Data Privacy & Security
+              </h2>
+              <p>
+                We deeply value your trust and are committed to protecting your
+                personal information. SoulCircle uses Firebase Authentication
+                and Firestore to securely store user data with industry-standard
+                encryption, secure access protocols, and role-based
+                permissions. Your conversations, journal entries, and profile
+                information are private and accessible only to you, unless you
+                explicitly choose to share them. We do not sell, trade, or
+                misuse your data.
+              </p>
+              <p>
+                You are always in control—you may delete your data or revoke
+                permissions at any time.
+              </p>
+            </div>
+
+            <div className="max-w-3xl mx-auto space-y-4">
+              <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+                🛠️ Tech Stack Used
+              </h2>
+              <ul className="list-disc list-inside space-y-1">
                 <li>
-                  <strong>Account Information:</strong> When you create an
-                  account, we collect your authentication details (UID) provided
-                  by Firebase Authentication.
+                  Frontend: Next.js 15+, Tailwind CSS
                 </li>
                 <li>
-                  <strong>Profile & Journal Data:</strong> We store the data you
-                  voluntarily provide in your profile, mood logs, and journal
-                  entries. This data is linked to your UID.
+                  Backend: Firebase (Authentication, Firestore, Cloud
+                  Functions)
                 </li>
                 <li>
-                  <strong>Usage Data:</strong> We may collect anonymous data
-                  about your interactions with the app to improve our services.
+                  AI Integration: Gemini API for persona-based counseling
+                  conversations
+                </li>
+                <li>
+                  Storage: Firebase Storage (for media uploads and journal
+                  data)
+                </li>
+                <li>
+                  Analytics: Firebase Analytics or PostHog (to improve user
+                  experience)
                 </li>
               </ul>
-              <h3 className="font-semibold text-md text-gray-800">
-                2. How We Use Your Information
-              </h3>
-              <p>
-                Your data is used to personalize your experience, provide AI-driven
-                insights, track your well-being journey, and improve the app's
-                functionality. We do not sell your personal data to third
-                parties.
-              </p>
-              <h3 className="font-semibold text-md text-gray-800">
-                3. Data Security
-              </h3>
-              <p>
-                We use Firebase, a secure platform by Google, to store your
-                data. Access is protected by Firestore Security Rules, which
-                ensure that only you can access your personal data.
-              </p>
-            </AccordionContent>
-          </AccordionItem>
+            </div>
 
-          <AccordionItem value="item-2">
-            <AccordionTrigger className="text-lg font-semibold text-gray-800 hover:bg-gray-50 p-4">
-              <div className="flex items-center gap-3">
-                <Scale className="h-5 w-5 text-indigo-600" />
-                Terms of Use
-              </div>
-            </AccordionTrigger>
-            <AccordionContent className="p-6 text-gray-700 leading-relaxed space-y-4">
+            <div className="max-w-3xl mx-auto space-y-4">
+              <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+                🧠 AI & Future Learning
+              </h2>
               <p>
-                By using the SoulCircle application, you agree to these Terms
-                of Use.
+                This version of SoulCircle is a prototype, but it lays the
+                foundation for what could evolve into a highly personalized
+                emotional wellness platform. Like all AI systems, these models
+                improve over time—especially through interaction, learning from
+                real-life use cases, and user feedback. With thoughtful use and
+                continuous training on ethical, anonymized data, the AI
+                counsellors will become more intuitive and emotionally
+                responsive.
               </p>
-              <h3 className="font-semibold text-md text-gray-800">
-                1. Non-Medical Service
-              </h3>
               <p>
-                SoulCircle is a mental wellness tool, not a medical device or
-                healthcare provider. It does not provide medical advice,
-                diagnosis, or treatment. It is not a substitute for professional
-                therapy or crisis support.
+                All personas and counsellor photos are AI-generated, unless
+                otherwise stated. Only my personal image is real and provided
+                with consent.
               </p>
-              <h3 className="font-semibold text-md text-gray-800">
-                2. User Conduct
-              </h3>
-              <p>
-                You agree to use the app responsibly and not to misuse the service
-                or its AI components. You are responsible for the content you
-                create and store.
-              </p>
-              <h3 className="font-semibold text-md text-gray-800">
-                3. Limitation of Liability
-              </h3>
-              <p>
-                SoulCircle and its creators are not liable for any actions you
-                take based on the information or guidance provided by the app.
-                Your use of the app is at your own risk.
-              </p>
-            </AccordionContent>
-          </AccordionItem>
+            </div>
 
-          <AccordionItem value="item-3">
-            <AccordionTrigger className="text-lg font-semibold text-gray-800 hover:bg-gray-50 p-4 rounded-b-lg">
-              <div className="flex items-center gap-3">
-                <TriangleAlert className="h-5 w-5 text-amber-600" />
-                Disclaimer
+            <div className="max-w-3xl mx-auto space-y-4">
+              <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+                🙏 Gratitude & Closing Note
+              </h2>
+              <p>
+                I am sincerely grateful to OpenAI, Firebase Studio, and Canva
+                AI for their powerful tools and platforms, which made this
+                vision a reality. This project has been a labor of empathy,
+                curiosity, and hope—rooted in the belief that no one should
+                feel emotionally isolated.
+              </p>
+              <p>
+                If SoulCircle brings comfort to even one person, then every
+                moment spent building it has been worthwhile.
+              </p>
+            </div>
+
+            <div className="max-w-3xl mx-auto text-center text-foreground space-y-4 pt-8">
+              <p>Thank you for visiting SoulCircle.</p>
+              <p className="font-semibold">
+                Because your story deserves a listening circle. 🫶
+              </p>
+              <div className="flex justify-center pt-4">
+                <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 transition-colors h-11 px-8">
+                  <Link href="#">Get Started</Link>
+                </Button>
               </div>
-            </AccordionTrigger>
-            <AccordionContent className="p-6">
-              <div
-                className="bg-red-50 border-l-4 border-red-400 text-red-800 p-4 rounded-md"
-                role="alert"
-              >
-                <div className="flex">
-                  <div className="py-1">
-                    <TriangleAlert className="h-6 w-6 text-red-500 mr-4" />
-                  </div>
-                  <div>
-                    <p className="font-bold">Important Medical Disclaimer</p>
-                    <p className="text-sm">
-                      SoulCircle is a supportive tool for emotional well-being and
-                      is not a crisis support service or a substitute for
-                      professional therapy, medical treatment, or psychiatric
-                      care. The AI counsellors are advanced language models, not
-                      licensed therapists. The guidance provided is for
-                      informational and emotional support purposes only.
-                    </p>
-                    <p className="mt-2 font-semibold">
-                      If you are in a mental health crisis or have thoughts of
-                      self-harm, please contact a qualified mental health
-                      professional or your local emergency services immediately.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </div>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
   );
 }
