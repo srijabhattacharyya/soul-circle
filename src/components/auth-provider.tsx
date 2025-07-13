@@ -17,22 +17,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // auth will be undefined if the config is invalid
     if (!auth) {
         // Firebase is not configured, so we can't do anything.
-        setLoading(false);
+        // We'll just show the loading state indefinitely.
+        console.warn("Firebase Auth is not initialized. User authentication will be disabled.");
+        setLoading(true);
         return;
     }
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
+        setLoading(false);
       } else {
         // For demonstration, sign in user anonymously. 
         // In a real app, you'd likely redirect to a login page.
         signInAnonymously(auth).catch((error) => {
             console.error("Anonymous sign-in failed", error);
+            setLoading(false);
         });
       }
-      setLoading(false);
+    }, (error) => {
+        // Handle potential errors during listener setup
+        console.error("Auth state listener error:", error);
+        setLoading(false);
     });
 
     return () => unsubscribe();
