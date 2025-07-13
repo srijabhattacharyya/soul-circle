@@ -62,11 +62,11 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-4">
       <div className="w-full max-w-sm text-center">
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">Welcome to SoulCircle</h1>
-        <p className="text-gray-600 mb-8">Sign in to continue your journey.</p>
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Welcome to SoulCircle</h1>
+        <p className="text-gray-600 mb-8 md:text-lg">Sign in to continue your journey.</p>
         <Button
           onClick={handleSignIn}
-          className="w-full bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 shadow-sm text-base py-6"
+          className="w-full bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 shadow-sm text-base md:text-lg py-6 md:py-7"
           disabled={isSigningIn || !firebaseReady}
         >
           {isSigningIn ? (
@@ -77,7 +77,7 @@ export default function LoginPage() {
           Sign in with Google
         </Button>
         {!firebaseReady && (
-            <p className="text-xs text-red-500 mt-4">Firebase is not configured. Authentication is disabled.</p>
+            <p className="text-sm md:text-base text-red-500 mt-4">Firebase is not configured. Authentication is disabled.</p>
         )}
       </div>
     </div>
