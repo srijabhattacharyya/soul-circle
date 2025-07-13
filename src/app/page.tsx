@@ -7,9 +7,7 @@ import { Header } from '@/components/landing/header';
 import { HeroSection } from '@/components/landing/hero-section';
 import { HowItHelpsSection } from '@/components/landing/how-it-helps-section';
 import { Dashboard } from '@/components/dashboard/page';
-import { useState, useEffect } from 'react';
 
-// Mock data for landing page, will be replaced by actual data fetching
 const MOCK_DATA = {
   hero_section: {
     logo_placeholder_text: "96x96",
@@ -53,7 +51,6 @@ const MOCK_DATA = {
 export default function Home() {
   const { user } = useAuth();
 
-  // The content fetching part was server-side, so we'll just use the mock data for the landing page.
   const content = MOCK_DATA;
 
   if (user) {

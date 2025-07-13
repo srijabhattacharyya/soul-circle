@@ -3,7 +3,7 @@
 
 import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs, Timestamp, addDoc, deleteDoc, writeBatch, updateDoc, arrayUnion, orderBy } from 'firebase/firestore';
 import { db, isConfigValid, auth } from './config';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import type { ProfileFormValues } from '@/app/profile/form-schema';
 import type { InnerWeatherFormValues } from '@/app/inner-weather/form-schema';
 import type { JournalFormValues } from '@/app/mind-haven/form-schema';
@@ -16,10 +16,14 @@ export async function signUpWithEmail(email: string, password: string) {
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
+        const nameFromEmail = email.split('@')[0];
+
+        // Set the user's display name
+        await updateProfile(user, { displayName: nameFromEmail });
 
         // Create a default profile for the new user
         const defaultProfile: Partial<ProfileFormValues> = {
-            name: 'New User',
+            name: nameFromEmail,
             age: undefined,
             gender: 'Prefer not to say',
             counsellingReason: [],
@@ -49,7 +53,7 @@ export async function signInWithEmail(email: string, password: string) {
         return userCredential.user;
     } catch (error: any) {
         if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
-            throw new Error('Invalid email or password.');
+            throw new Error('Incorrect email or password.');
         }
         console.error('Sign In Error:', error);
         throw new Error('Could not sign in. Please try again.');
@@ -88,6 +92,12 @@ export async function saveUserProfile(userId: string, data: Partial<ProfileFormV
     } else {
       await setDoc(docRef, { ...dataToSave, createdAt: serverTimestamp() });
     }
+
+    // Also update the auth user's display name if the name is being changed
+    if (data.name && auth.currentUser && auth.currentUser.uid === userId) {
+        await updateProfile(auth.currentUser, { displayName: data.name });
+    }
+
   } catch (error) {
     console.error('Error saving user profile:', error);
     throw new Error('Failed to save user profile.');

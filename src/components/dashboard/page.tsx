@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useAuth } from '@/components/auth-provider';
@@ -45,12 +46,13 @@ const quickAccess = [
 
 export function Dashboard() {
   const { user } = useAuth();
+  const userName = user?.displayName?.split(' ')[0] || user?.email?.split('@')[0] || 'friend';
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-indigo-50 via-white to-rose-50 p-4 sm:p-8 pt-24">
       <header className="max-w-5xl mx-auto mb-12">
-        <h1 className="text-4xl sm:text-5xl font-bold text-gray-800 tracking-tight">
-          Welcome back, {user?.displayName?.split(' ')[0] || 'friend'}
+        <h1 className="text-4xl sm:text-5xl font-bold text-gray-800 tracking-tight capitalize">
+          Welcome back, {userName}
         </h1>
         <p className="text-lg text-gray-600 mt-2">
           Ready to continue your journey? Here are your tools.
