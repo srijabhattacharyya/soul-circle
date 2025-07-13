@@ -12,8 +12,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Loader2, LogIn, UserPlus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { signInWithEmail, signUpWithEmail } from '@/lib/firebase/service';
-import { isConfigValid } from '@/lib/firebase/config';
+import { isConfigValid, auth } from '@/lib/firebase/config';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, AuthErrorCodes } from 'firebase/auth';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Invalid email address.' }),
@@ -44,25 +44,44 @@ export default function LoginPage() {
   }, [user, loading, router]);
 
   const onSubmit = async (data: LoginFormValues) => {
-    if (!isConfigValid) {
+    if (!isConfigValid || !auth) {
         toast({ title: "Offline Mode", description: "Cannot sign in while in offline mode.", variant: 'destructive' });
         return;
     }
     setIsSubmitting(true);
     try {
       if (isLoginView) {
-        await signInWithEmail(data.email, data.password);
+        await signInWithEmailAndPassword(auth, data.email, data.password);
         toast({ title: 'Success', description: 'Logged in successfully!' });
       } else {
-        await signUpWithEmail(data.email, data.password);
+        await createUserWithEmailAndPassword(auth, data.email, data.password);
         toast({ title: 'Success', description: 'Account created successfully! You are now logged in.' });
       }
       router.push('/');
     } catch (error: any) {
       console.error(error);
+      let description = 'An unexpected error occurred. Please try again.';
+      switch (error.code) {
+        case AuthErrorCodes.INVALID_PASSWORD:
+        case AuthErrorCodes.INVALID_credential:
+        case 'auth/wrong-password':
+        case 'auth/user-not-found':
+          description = 'Incorrect email or password.';
+          break;
+        case AuthErrorCodes.EMAIL_EXISTS:
+        case 'auth/email-already-in-use':
+          description = 'This email address is already in use by another account.';
+          break;
+        case AuthErrorCodes.WEAK_PASSWORD:
+          description = 'The password is too weak. Please use at least 6 characters.';
+          break;
+        default:
+          description = error.message;
+          break;
+      }
       toast({
         title: 'Authentication Error',
-        description: error.message || 'An unexpected error occurred.',
+        description: description,
         variant: 'destructive',
       });
     } finally {

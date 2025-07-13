@@ -3,45 +3,11 @@
 
 import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs, Timestamp, addDoc, deleteDoc, writeBatch, updateDoc, arrayUnion, orderBy } from 'firebase/firestore';
 import { db, isConfigValid, auth } from './config';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { getAuth, updateProfile } from 'firebase/auth';
 import type { ProfileFormValues } from '@/app/profile/form-schema';
 import type { InnerWeatherFormValues } from '@/app/inner-weather/form-schema';
 import type { JournalFormValues } from '@/app/mind-haven/form-schema';
 import type { ChatMessage } from '@/components/chat-room';
-
-// --- EMAIL/PASSWORD AUTHENTICATION ---
-
-export async function signUpWithEmail(email: string, password: string) {
-    if (!auth) throw new Error("Firebase is not configured.");
-    try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        return userCredential.user;
-    } catch (error: any) {
-        if (error.code === 'auth/email-already-in-use') {
-            throw new Error('This email address is already in use.');
-        }
-        if (error.code === 'auth/weak-password') {
-            throw new Error('The password is too weak.');
-        }
-        console.error('Sign Up Error:', error);
-        throw new Error('Could not create an account. Please try again.');
-    }
-}
-
-export async function signInWithEmail(email: string, password: string) {
-    if (!auth) throw new Error("Firebase is not configured.");
-    try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        return userCredential.user;
-    } catch (error: any) {
-        if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
-            throw new Error('Incorrect email or password.');
-        }
-        console.error('Sign In Error:', error);
-        throw new Error('Could not sign in. Please try again.');
-    }
-}
-
 
 // USER PROFILE
 export async function getUserProfile(userId: string) {
@@ -62,7 +28,7 @@ export async function getUserProfile(userId: string) {
 }
 
 export async function saveUserProfile(userId: string, data: Partial<ProfileFormValues>) {
-  if (!db) throw new Error("Firestore is not initialized.");
+  if (!db || !auth) throw new Error("Firestore is not initialized.");
   try {
     const docRef = doc(db, 'userProfiles', userId);
     const docSnap = await getDoc(docRef);
