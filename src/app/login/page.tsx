@@ -90,24 +90,24 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 text-left">
           <div>
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email" className="text-black">Email</Label>
             <Input
               id="email"
               type="email"
               {...register('email')}
               placeholder="you@example.com"
-              className="bg-secondary text-foreground placeholder:text-foreground/60"
+              className="bg-white text-black placeholder:text-gray-500"
             />
             {errors.email && <p className="text-red-600 text-sm mt-1">{errors.email.message}</p>}
           </div>
           <div>
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password"  className="text-black">Password</Label>
             <Input
               id="password"
               type="password"
               {...register('password')}
               placeholder="••••••••"
-              className="bg-secondary text-foreground placeholder:text-foreground/60"
+              className="bg-white text-black placeholder:text-gray-500"
             />
             {errors.password && <p className="text-red-600 text-sm mt-1">{errors.password.message}</p>}
           </div>
