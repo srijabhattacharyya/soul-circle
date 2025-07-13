@@ -20,13 +20,12 @@ export function HeroSection({ data }: { data: HeroSectionData }) {
           <div className="flex flex-col justify-center space-y-4 text-center">
             <div className="flex justify-center">
               <Image
-                src="https://placehold.co/128x128.png"
+                src="/images/logo.png"
                 alt="SoulCircle Logo"
                 width={128}
                 height={128}
                 quality={100}
                 className="h-24 w-24 md:h-32 md:w-32"
-                data-ai-hint="logo"
               />
             </div>
             <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl xl:text-6xl/none">
