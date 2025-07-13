@@ -2,83 +2,57 @@
 'use server';
 
 import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs, Timestamp, addDoc, deleteDoc, writeBatch, updateDoc, arrayUnion, orderBy } from 'firebase/firestore';
-import { db, isConfigValid } from './config';
-import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, type Auth, type ConfirmationResult } from 'firebase/auth';
+import { db, isConfigValid, auth } from './config';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import type { ProfileFormValues } from '@/app/profile/form-schema';
 import type { InnerWeatherFormValues } from '@/app/inner-weather/form-schema';
 import type { JournalFormValues } from '@/app/mind-haven/form-schema';
 import type { ChatMessage } from '@/components/chat-room';
 
-// --- PHONE AUTHENTICATION ---
+// --- EMAIL/PASSWORD AUTHENTICATION ---
 
-declare global {
-    interface Window {
-        recaptchaVerifier?: RecaptchaVerifier;
-    }
-}
-
-export async function setupRecaptcha(auth: Auth, containerId: string) {
-    if (!isConfigValid) throw new Error("Firebase is not configured.");
-    if (typeof window === 'undefined') return;
-
-    window.recaptchaVerifier = new RecaptchaVerifier(auth, containerId, {
-        'size': 'invisible',
-        'callback': (response: any) => {
-            // reCAPTCHA solved, allow signInWithPhoneNumber.
-        },
-        'expired-callback': () => {
-            // Response expired. Ask user to solve reCAPTCHA again.
-        }
-    });
-}
-
-export async function sendVerificationCode(auth: Auth, phoneNumber: string): Promise<ConfirmationResult> {
-    if (!isConfigValid) throw new Error("Firebase is not configured.");
-    if (typeof window === 'undefined') throw new Error("This function can only be called on the client.");
-    if (!window.recaptchaVerifier) throw new Error("Recaptcha verifier is not initialized.");
-
+export async function signUpWithEmail(email: string, password: string) {
+    if (!auth) throw new Error("Firebase is not configured.");
     try {
-        const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier);
-        return confirmationResult;
-    } catch (error: any) {
-        // Handle common errors
-        if (error.code === 'auth/invalid-phone-number') {
-            throw new Error('The phone number is not valid.');
-        }
-        if (error.code === 'auth/too-many-requests') {
-            throw new Error('You have sent too many requests. Please try again later.');
-        }
-        console.error('Phone Sign-In Error:', error);
-        throw new Error('Could not send verification code.');
-    }
-}
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
 
-
-export async function verifyCode(confirmationResult: ConfirmationResult, code: string) {
-    if (!isConfigValid) throw new Error("Firebase is not configured.");
-    try {
-        const result = await confirmationResult.confirm(code);
-        const user = result.user;
-        const userProfile = await getUserProfile(user.uid);
-        if (!userProfile) {
-            const newUserProfile: Partial<ProfileFormValues> = {
-                name: 'New User',
-                age: undefined,
-                gender: 'Prefer not to say',
-                counsellingReason: [],
-                counsellingGoals: [],
-                selfHarmThoughts: 'No',
-                consent: false,
-            };
-            await saveUserProfile(user.uid, newUserProfile);
-        }
+        // Create a default profile for the new user
+        const defaultProfile: Partial<ProfileFormValues> = {
+            name: 'New User',
+            age: undefined,
+            gender: 'Prefer not to say',
+            counsellingReason: [],
+            counsellingGoals: [],
+            selfHarmThoughts: 'No',
+            consent: false,
+        };
+        await saveUserProfile(user.uid, defaultProfile);
+        
         return user;
     } catch (error: any) {
-        if (error.code === 'auth/invalid-verification-code') {
-            throw new Error('The verification code is incorrect.');
+        if (error.code === 'auth/email-already-in-use') {
+            throw new Error('This email address is already in use.');
         }
-        console.error('Code Verification Error:', error);
-        throw new Error('Could not verify the code.');
+        if (error.code === 'auth/weak-password') {
+            throw new Error('The password is too weak.');
+        }
+        console.error('Sign Up Error:', error);
+        throw new Error('Could not create an account. Please try again.');
+    }
+}
+
+export async function signInWithEmail(email: string, password: string) {
+    if (!auth) throw new Error("Firebase is not configured.");
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        return userCredential.user;
+    } catch (error: any) {
+        if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+            throw new Error('Invalid email or password.');
+        }
+        console.error('Sign In Error:', error);
+        throw new Error('Could not sign in. Please try again.');
     }
 }
 
@@ -107,10 +81,12 @@ export async function saveUserProfile(userId: string, data: Partial<ProfileFormV
     const docRef = doc(db, 'userProfiles', userId);
     const docSnap = await getDoc(docRef);
 
+    const dataToSave = { ...data, updatedAt: serverTimestamp() };
+
     if (docSnap.exists()) {
-      await setDoc(docRef, { ...data, updatedAt: serverTimestamp() }, { merge: true });
+      await setDoc(docRef, dataToSave, { merge: true });
     } else {
-      await setDoc(docRef, { ...data, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
+      await setDoc(docRef, { ...dataToSave, createdAt: serverTimestamp() });
     }
   } catch (error) {
     console.error('Error saving user profile:', error);
