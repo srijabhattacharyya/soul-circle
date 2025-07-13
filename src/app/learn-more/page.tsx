@@ -5,7 +5,7 @@ export default function LearnMorePage() {
   return (
     <div className="flex flex-col min-h-dvh bg-secondary text-foreground">
       <main className="flex-1">
-        <section className="w-full pt-12 md:pt-24 lg:pt-32 pb-8 md:pb-12 lg:pb-16">
+        <section className="w-full pt-12 md:pt-24 lg:pt-32 pb-2 md:pb-4 lg:pb-8">
           <div className="container px-4 md:px-6">
             <div className="grid gap-12 lg:grid-cols-2 lg:gap-24 items-start">
               <div className="flex flex-col items-center justify-center space-y-4">
@@ -18,8 +18,8 @@ export default function LearnMorePage() {
                   data-ai-hint="portrait founder"
                 />
                 <div className="pt-4 text-center">
-                  <p className="text-xl font-bold text-primary-foreground">By Srija Bhattacharyya</p>
-                  <p className="text-lg text-muted-foreground">
+                  <p className="text-2xl font-bold text-foreground">By Srija Bhattacharyya</p>
+                  <p className="text-xl text-muted-foreground">
                     3rd Year Student, B.Tech CSE
                   </p>
                   <p className="text-lg text-muted-foreground">
@@ -59,7 +59,7 @@ export default function LearnMorePage() {
               <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
                 ⚠️ Important Disclaimer
               </h2>
-              <p className="text-muted-foreground text-xl">
+              <p className="text-foreground text-xl">
                 SoulCircle is a supportive tool for emotional well-being and is
                 not a crisis support service or a substitute for professional
                 therapy, medical treatment, or psychiatric care. The AI
@@ -67,7 +67,7 @@ export default function LearnMorePage() {
                 therapists. The guidance provided is for informational and
                 emotional support purposes only.
               </p>
-              <p className="text-muted-foreground font-semibold text-xl">
+              <p className="text-foreground font-semibold text-xl">
                 If you are in a mental health crisis or have thoughts of
                 self-harm or harming others, please contact a qualified mental
                 health professional or reach out to your local emergency
@@ -79,7 +79,7 @@ export default function LearnMorePage() {
               <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
                 🔐 Data Privacy & Security
               </h2>
-              <p className="text-muted-foreground text-lg">
+              <p className="text-foreground text-xl">
                 We deeply value your trust and are committed to protecting your
                 personal information. SoulCircle uses Firebase Authentication
                 and Firestore to securely store user data with industry-standard
@@ -89,7 +89,7 @@ export default function LearnMorePage() {
                 explicitly choose to share them. We do not sell, trade, or
                 misuse your data.
               </p>
-              <p className="text-muted-foreground text-lg">
+              <p className="text-foreground text-xl">
                 You are always in control—you may delete your data or revoke
                 permissions at any time.
               </p>
