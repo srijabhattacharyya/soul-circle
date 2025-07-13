@@ -47,7 +47,7 @@ const SupportSystemOtherInput = ({ control }: { control: any }) => {
             />
           )}
         />
-        <Label>Other</Label>
+        <Label className='text-black'>Other</Label>
       </div>
       {show && (
         <Controller
@@ -80,7 +80,7 @@ const ConditionalInput = ({
   const radioValue = useForm().watch(radioName);
   return radioValue === triggerValue ? (
     <div className="mt-2 space-y-2">
-      <Label>{label}</Label>
+      <Label className='text-black'>{label}</Label>
       <Controller
         control={control}
         name={inputName}
@@ -125,7 +125,7 @@ const OtherCheckboxInput = ({
               />
             )}
           />
-          <Label>{option}</Label>
+          <Label className='text-black'>{option}</Label>
         </div>
       ))}
       <div className="flex items-center space-x-2">
@@ -133,7 +133,7 @@ const OtherCheckboxInput = ({
           checked={showOtherInput}
           onCheckedChange={(checked) => setShowOtherInput(!!checked)}
         />
-        <Label>Other</Label>
+        <Label className='text-black'>Other</Label>
       </div>
       {showOtherInput && (
         <Controller
@@ -229,25 +229,25 @@ export default function ProfilePage() {
               </AccordionTrigger>
               <AccordionContent className="pt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <Label htmlFor="name">Name*</Label>
+                  <Label htmlFor="name" className='text-black'>Name*</Label>
                   <Controller name="name" control={control} render={({ field }) => <Input {...field} id="name" />} />
                   {errors.name && (<p className="text-red-600 text-sm mt-1">{errors.name.message}</p>)}
                 </div>
                 <div>
-                  <Label htmlFor="middleName">Middle Name</Label>
+                  <Label htmlFor="middleName" className='text-black'>Middle Name</Label>
                   <Controller name="middleName" control={control} render={({ field }) => <Input {...field} id="middleName" />} />
                 </div>
                 <div>
-                  <Label htmlFor="surname">Surname</Label>
+                  <Label htmlFor="surname" className='text-black'>Surname</Label>
                   <Controller name="surname" control={control} render={({ field }) => <Input {...field} id="surname" />} />
                 </div>
                 <div>
-                  <Label htmlFor="age">Age*</Label>
+                  <Label htmlFor="age" className='text-black'>Age*</Label>
                   <Controller name="age" control={control} render={({ field }) => <Input {...field} id="age" type="number" min="12" onChange={e => field.onChange(parseInt(e.target.value, 10))} />} />
                   {errors.age && <p className="text-red-600 text-sm mt-1">{errors.age.message}</p>}
                 </div>
                 <div>
-                  <Label>Gender Identity*</Label>
+                  <Label className='text-black'>Gender Identity*</Label>
                   <Controller
                     name="gender"
                     control={control}
@@ -266,15 +266,15 @@ export default function ProfilePage() {
                   {errors.gender && <p className="text-red-600 text-sm mt-1">{errors.gender.message}</p>}
                 </div>
                 <div>
-                  <Label htmlFor="city">City</Label>
+                  <Label htmlFor="city" className='text-black'>City</Label>
                   <Controller name="city" control={control} render={({ field }) => <Input {...field} id="city" />} />
                 </div>
                 <div>
-                  <Label htmlFor="state">State</Label>
+                  <Label htmlFor="state" className='text-black'>State</Label>
                   <Controller name="state" control={control} render={({ field }) => <Input {...field} id="state" />} />
                 </div>
                 <div>
-                  <Label>Country</Label>
+                  <Label className='text-black'>Country</Label>
                   <Controller
                     name="country"
                     control={control}
@@ -298,11 +298,11 @@ export default function ProfilePage() {
               </AccordionTrigger>
               <AccordionContent className="pt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <Label htmlFor="occupation">Occupation/Job Role</Label>
+                  <Label htmlFor="occupation" className='text-black'>Occupation/Job Role</Label>
                   <Controller name="occupation" control={control} render={({ field }) => <Input {...field} id="occupation" />} />
                 </div>
                 <div>
-                  <Label>Family Monthly Income Bracket</Label>
+                  <Label className='text-black'>Family Monthly Income Bracket</Label>
                   <Controller
                     name="income"
                     control={control}
@@ -321,11 +321,11 @@ export default function ProfilePage() {
                   />
                 </div>
                 <div className="md:col-span-2">
-                  <Label htmlFor="lifeSituation">Current Life Situation</Label>
+                  <Label htmlFor="lifeSituation" className='text-black'>Current Life Situation</Label>
                   <Controller name="lifeSituation" control={control} render={({ field }) => <Textarea {...field} id="lifeSituation" placeholder="e.g., living alone/with family, employment status, recent life changes" />} />
                 </div>
                 <div className="md:col-span-2">
-                  <Label>Support System</Label>
+                  <Label className='text-black'>Support System</Label>
                   <div className="space-y-2">
                     {['Family', 'Friends', 'Partner', 'No one'].map(item => (
                        <div key={item} className="flex items-center space-x-2">
@@ -344,7 +344,7 @@ export default function ProfilePage() {
                                 />
                             )}
                           />
-                          <Label>{item}</Label>
+                          <Label className='text-black'>{item}</Label>
                        </div>
                     ))}
                     <SupportSystemOtherInput control={control}/>
@@ -358,78 +358,78 @@ export default function ProfilePage() {
               <AccordionTrigger className="text-black font-semibold text-xl py-4 border-b border-gray-200">Counselling Needs</AccordionTrigger>
               <AccordionContent className="pt-4 grid grid-cols-1 gap-6">
                 <div>
-                    <Label>Main Reason for Seeking Counselling*</Label>
+                    <Label className='text-black'>Main Reason for Seeking Counselling*</Label>
                     <OtherCheckboxInput control={control} checkboxName="counsellingReason" inputName="counsellingReasonOther" options={["Anxiety", "Depression", "Relationship issues", "Career stress", "Loss/Grief", "Low self-esteem", "Trauma", "Loneliness"]} />
                     {errors.counsellingReason && <p className="text-red-600 text-sm mt-1">{errors.counsellingReason.message}</p>}
                 </div>
                 <div>
-                    <Label>Specific Symptoms Experienced</Label>
+                    <Label className='text-black'>Specific Symptoms Experienced</Label>
                     <OtherCheckboxInput control={control} checkboxName="symptoms" inputName="symptomsOther" options={["Sadness", "Worry", "Irritability", "Panic Attacks", "Sleep issues", "Appetite changes", "Loss of interest", "Guilt", "Fatigue", "Poor focus"]} />
                 </div>
                 <div>
-                  <Label>Duration of Symptoms</Label>
+                  <Label className='text-black'>Duration of Symptoms</Label>
                   <Controller name="symptomsDuration" control={control} render={({ field }) => (
                       <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex flex-col space-y-1">
                           {["Less than 2 weeks", "2–8 weeks", "2–6 months", "Over 6 months"].map(item => (
-                              <div key={item} className="flex items-center space-x-2"><RadioGroupItem value={item} id={`duration-${item}`} /><Label htmlFor={`duration-${item}`}>{item}</Label></div>
+                              <div key={item} className="flex items-center space-x-2"><RadioGroupItem value={item} id={`duration-${item}`} /><Label htmlFor={`duration-${item}`} className='text-black'>{item}</Label></div>
                           ))}
                       </RadioGroup>
                   )} />
                 </div>
                 <div>
-                  <Label>Severity of Symptoms</Label>
+                  <Label className='text-black'>Severity of Symptoms</Label>
                   <Controller name="symptomsSeverity" control={control} render={({ field }) => (
                       <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex flex-col space-y-1">
                           {["Mild", "Moderate", "Severe", "Debilitating"].map(item => (
-                              <div key={item} className="flex items-center space-x-2"><RadioGroupItem value={item} id={`severity-${item}`} /><Label htmlFor={`severity-${item}`}>{item}</Label></div>
+                              <div key={item} className="flex items-center space-x-2"><RadioGroupItem value={item} id={`severity-${item}`} /><Label htmlFor={`severity-${item}`} className='text-black'>{item}</Label></div>
                           ))}
                       </RadioGroup>
                   )} />
                 </div>
                 <div>
-                    <Label htmlFor="knownTriggers">Known Triggers</Label>
+                    <Label htmlFor="knownTriggers" className='text-black'>Known Triggers</Label>
                     <Controller name="knownTriggers" control={control} render={({ field }) => <Textarea {...field} id="knownTriggers"/>} />
                 </div>
                 <div>
-                  <Label>Have you ever tried coping techniques?</Label>
+                  <Label className='text-black'>Have you ever tried coping techniques?</Label>
                   <Controller name="copingTechniques" control={control} render={({ field }) => (
                       <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex space-x-4">
-                          <div className="flex items-center space-x-2"><RadioGroupItem value="Yes" id="coping-yes" /><Label htmlFor="coping-yes">Yes</Label></div>
-                          <div className="flex items-center space-x-2"><RadioGroupItem value="No" id="coping-no" /><Label htmlFor="coping-no">No</Label></div>
+                          <div className="flex items-center space-x-2"><RadioGroupItem value="Yes" id="coping-yes" /><Label htmlFor="coping-yes" className='text-black'>Yes</Label></div>
+                          <div className="flex items-center space-x-2"><RadioGroupItem value="No" id="coping-no" /><Label htmlFor="coping-no" className='text-black'>No</Label></div>
                       </RadioGroup>
                   )} />
                   <ConditionalInput control={control} radioName="copingTechniques" triggerValue="Yes" inputName="copingTechniquesDescription" label="Please describe" placeholder="e.g., breathing exercises, meditation" />
                 </div>
                  <div>
-                  <Label>Previous counseling/therapy?</Label>
+                  <Label className='text-black'>Previous counseling/therapy?</Label>
                   <Controller name="previousTherapy" control={control} render={({ field }) => (
                       <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex space-x-4">
-                          <div className="flex items-center space-x-2"><RadioGroupItem value="Yes" id="therapy-yes" /><Label htmlFor="therapy-yes">Yes</Label></div>
-                          <div className="flex items-center space-x-2"><RadioGroupItem value="No" id="therapy-no" /><Label htmlFor="therapy-no">No</Label></div>
+                          <div className="flex items-center space-x-2"><RadioGroupItem value="Yes" id="therapy-yes" /><Label htmlFor="therapy-yes" className='text-black'>Yes</Label></div>
+                          <div className="flex items-center space-x-2"><RadioGroupItem value="No" id="therapy-no" /><Label htmlFor="therapy-no" className='text-black'>No</Label></div>
                       </RadioGroup>
                   )} />
                   <ConditionalInput control={control} radioName="previousTherapy" triggerValue="Yes" inputName="previousTherapyDescription" label="When and for how long?" placeholder="e.g., 2 years ago for 3 months" />
                 </div>
                 <div>
-                  <Label>Any previous mental health diagnosis?</Label>
+                  <Label className='text-black'>Any previous mental health diagnosis?</Label>
                   <OtherCheckboxInput control={control} checkboxName="mentalHealthDiagnosis" inputName="mentalHealthDiagnosisOther" options={["None", "Anxiety", "Depression", "PTSD", "Bipolar"]} />
                 </div>
                 <div>
-                  <Label>Family history of mental health issues?</Label>
+                  <Label className='text-black'>Family history of mental health issues?</Label>
                   <Controller name="familyHistory" control={control} render={({ field }) => (
                       <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex space-x-4">
                          {["Yes", "No", "Not Sure"].map(item => (
-                              <div key={item} className="flex items-center space-x-2"><RadioGroupItem value={item} id={`family-${item}`} /><Label htmlFor={`family-${item}`}>{item}</Label></div>
+                              <div key={item} className="flex items-center space-x-2"><RadioGroupItem value={item} id={`family-${item}`} /><Label htmlFor={`family-${item}`} className='text-black'>{item}</Label></div>
                           ))}
                       </RadioGroup>
                   )} />
                 </div>
                  <div>
-                  <Label>Do you currently take medication?</Label>
+                  <Label className='text-black'>Do you currently take medication?</Label>
                   <Controller name="medication" control={control} render={({ field }) => (
                       <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex space-x-4">
-                          <div className="flex items-center space-x-2"><RadioGroupItem value="Yes" id="meds-yes" /><Label htmlFor="meds-yes">Yes</Label></div>
-                          <div className="flex items-center space-x-2"><RadioGroupItem value="No" id="meds-no" /><Label htmlFor="meds-no">No</Label></div>
+                          <div className="flex items-center space-x-2"><RadioGroupItem value="Yes" id="meds-yes" /><Label htmlFor="meds-yes" className='text-black'>Yes</Label></div>
+                          <div className="flex items-center space-x-2"><RadioGroupItem value="No" id="meds-no" /><Label htmlFor="meds-no" className='text-black'>No</Label></div>
                       </RadioGroup>
                   )} />
                   <ConditionalInput control={control} radioName="medication" triggerValue="Yes" inputName="medicationDescription" label="For what condition?" placeholder="e.g., Anxiety" />
@@ -442,15 +442,15 @@ export default function ProfilePage() {
               <AccordionTrigger className="text-black font-semibold text-xl py-4 border-b border-gray-200">Lifestyle & Behaviour</AccordionTrigger>
               <AccordionContent className="pt-4 grid grid-cols-1 gap-6">
                 <div>
-                  <Label htmlFor="dailyRoutine">Describe your daily routine</Label>
+                  <Label htmlFor="dailyRoutine" className='text-black'>Describe your daily routine</Label>
                   <Controller name="dailyRoutine" control={control} render={({ field }) => <Textarea {...field} id="dailyRoutine" placeholder="Include sleep, meals, work, self-care, etc." />} />
                 </div>
                 <div>
-                  <Label>Substance use</Label>
+                  <Label className='text-black'>Substance use</Label>
                   <Controller name="substanceUse" control={control} render={({ field }) => (
                       <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex space-x-4">
                           {["No", "Occasionally", "Regularly"].map(item => (
-                              <div key={item} className="flex items-center space-x-2"><RadioGroupItem value={item} id={`substance-${item}`} /><Label htmlFor={`substance-${item}`}>{item}</Label></div>
+                              <div key={item} className="flex items-center space-x-2"><RadioGroupItem value={item} id={`substance-${item}`} /><Label htmlFor={`substance-${item}`} className='text-black'>{item}</Label></div>
                           ))}
                       </RadioGroup>
                   )} />
@@ -461,21 +461,21 @@ export default function ProfilePage() {
                   )}
                 </div>
                 <div>
-                  <Label>Major stressors</Label>
+                  <Label className='text-black'>Major stressors</Label>
                    <OtherCheckboxInput control={control} checkboxName="majorStressors" inputName="majorStressorsOther" options={["Work", "Finances", "Relationships", "Health", "Studies"]} />
                 </div>
                 <div>
-                  <Label>Willingness to try journaling, breathing, or guided tools</Label>
+                  <Label className='text-black'>Willingness to try journaling, breathing, or guided tools</Label>
                   <Controller name="willingness" control={control} render={({ field }) => (
                       <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex space-x-4">
                           {["Yes", "Maybe", "Not sure"].map(item => (
-                              <div key={item} className="flex items-center space-x-2"><RadioGroupItem value={item} id={`willingness-${item}`} /><Label htmlFor={`willingness-${item}`}>{item}</Label></div>
+                              <div key={item} className="flex items-center space-x-2"><RadioGroupItem value={item} id={`willingness-${item}`} /><Label htmlFor={`willingness-${item}`} className='text-black'>{item}</Label></div>
                           ))}
                       </RadioGroup>
                   )} />
                 </div>
                 <div>
-                  <Label>Current mood rating (1-10)</Label>
+                  <Label className='text-black'>Current mood rating (1-10)</Label>
                    <Controller
                       name="moodRating"
                       control={control}
@@ -501,16 +501,16 @@ export default function ProfilePage() {
               <AccordionTrigger className="text-black font-semibold text-xl py-4 border-b border-gray-200">Counselling Goals & Safety</AccordionTrigger>
               <AccordionContent className="pt-4 grid grid-cols-1 gap-6">
                  <div>
-                    <Label>What do you hope to achieve through counseling?*</Label>
+                    <Label className='text-black'>What do you hope to achieve through counseling?*</Label>
                     <OtherCheckboxInput control={control} checkboxName="counsellingGoals" inputName="counsellingGoalsOther" options={["Feel emotionally stable", "Improve relationships", "Reduce anxiety", "Gain clarity", "Set goals", "Build confidence"]} />
                     {errors.counsellingGoals && <p className="text-red-600 text-sm mt-1">{errors.counsellingGoals.message}</p>}
                 </div>
                  <div>
-                    <Label>Have you ever had thoughts of self-harm or suicide?*</Label>
+                    <Label className='text-black'>Have you ever had thoughts of self-harm or suicide?*</Label>
                     <Controller name="selfHarmThoughts" control={control} render={({ field }) => (
                         <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex flex-col space-y-1">
                             {["No", "Yes in the past", "Yes currently"].map(item => (
-                                <div key={item} className="flex items-center space-x-2"><RadioGroupItem value={item} id={`selfharm-${item}`} /><Label htmlFor={`selfharm-${item}`}>{item}</Label></div>
+                                <div key={item} className="flex items-center space-x-2"><RadioGroupItem value={item} id={`selfharm-${item}`} /><Label htmlFor={`selfharm-${item}`} className='text-black'>{item}</Label></div>
                             ))}
                         </RadioGroup>
                     )} />
@@ -522,7 +522,7 @@ export default function ProfilePage() {
                     {errors.selfHarmThoughts && <p className="text-red-600 text-sm mt-1">{errors.selfHarmThoughts.message}</p>}
                 </div>
                 <div>
-                  <Label htmlFor="therapyConcerns">Any fears or concerns about therapy?</Label>
+                  <Label htmlFor="therapyConcerns" className='text-black'>Any fears or concerns about therapy?</Label>
                   <Controller name="therapyConcerns" control={control} render={({ field }) => <Textarea {...field} id="therapyConcerns" />} />
                 </div>
               </AccordionContent>
@@ -543,7 +543,7 @@ export default function ProfilePage() {
                 )}
               />
               <div className="grid gap-1.5 leading-none">
-                <label htmlFor="consent" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                <label htmlFor="consent" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-black">
                   I understand that this app provides AI-based counselling support and is not a replacement for licensed medical or psychiatric treatment. I consent to use this service for non-clinical mental health support.
                 </label>
               </div>
@@ -561,3 +561,5 @@ export default function ProfilePage() {
     </div>
   );
 }
+
+    
