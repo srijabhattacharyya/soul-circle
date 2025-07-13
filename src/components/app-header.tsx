@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Home, BookOpen } from 'lucide-react';
+import { Home, BookOpen, Info } from 'lucide-react';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -36,6 +36,17 @@ export function AppHeader() {
         >
           <BookOpen className="mr-2 h-4 w-4" />
           Learn More
+        </Link>
+        <Link
+          href="/about"
+          prefetch={false}
+          className={cn(
+            buttonVariants({ variant: 'ghost' }),
+            'hover:bg-soft-teal/90 hover:text-teal-900'
+          )}
+        >
+          <Info className="mr-2 h-4 w-4" />
+          About
         </Link>
       </nav>
     </header>
