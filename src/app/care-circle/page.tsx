@@ -104,7 +104,7 @@ export default function CareCirclePage() {
                         </CardContent>
                         <CardFooter className="p-6 bg-gray-50 flex justify-center">
                             <Button asChild className="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3">
-                                <Link href="#">Talk to me</Link>
+                                <Link href={counsellor.link}>Talk to me</Link>
                             </Button>
                         </CardFooter>
                     </Card>
