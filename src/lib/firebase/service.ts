@@ -315,21 +315,19 @@ export async function saveMessage(userId: string, counsellorId: string, message:
     };
 
     try {
-        // Use updateDoc with arrayUnion to append the new message.
-        // Use setDoc with merge: true as a fallback if the document doesn't exist.
-        await setDoc(docRef, { 
-            messages: arrayUnion(messageToSave),
-            uid: userId,
-            counsellorId,
-        }, { merge: true });
-
         const docSnap = await getDoc(docRef);
-        if (!docSnap.data()?.createdAt) {
+        if (docSnap.exists()) {
             await updateDoc(docRef, {
-                createdAt: serverTimestamp()
+                messages: arrayUnion(messageToSave)
+            });
+        } else {
+            await setDoc(docRef, {
+                uid: userId,
+                counsellorId,
+                createdAt: serverTimestamp(),
+                messages: [messageToSave]
             });
         }
-
     } catch (error) {
         console.error('Error saving message:', error);
         throw new Error('Failed to save message.');
