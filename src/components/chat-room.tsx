@@ -59,7 +59,7 @@ export function ChatRoom({
   const { toast } = useToast();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSending, setIsSending] = useState(false);
   const [persona, setPersona] = useState<string | null>(null);
   const chatHistoryRef = useRef<HTMLDivElement>(null);
 
@@ -144,15 +144,14 @@ export function ChatRoom({
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isLoading || !input.trim() || !user || !persona || !firebaseReady) return;
+    if (isSending || !input.trim() || !user || !persona || !firebaseReady) return;
 
     const userMessage: ChatMessage = { role: 'user', content: input };
     const currentInput = input;
     setInput('');
-    setIsLoading(true);
+    setIsSending(true);
     
     try {
-      setMessages((prev) => [...prev, userMessage]);
       await saveMessage(user.uid, counsellorId, userMessage);
     
       const historyForAI = [...messages, userMessage].slice(-10).map(({ role, content }) => ({ role, content }));
@@ -174,9 +173,11 @@ export function ChatRoom({
        const errorMessage: ChatMessage = { role: 'model', content: "I'm having trouble connecting right now. Please try again in a moment." };
        await saveMessage(user.uid, counsellorId, errorMessage);
     } finally {
-      setIsLoading(false);
+      setIsSending(false);
     }
   };
+
+  const isButtonDisabled = isSending || !input.trim() || !firebaseReady || !persona;
 
   return (
     <div className={cn('min-h-screen w-full p-4 sm:p-6 flex items-center justify-center bg-gradient-to-br', theme.backgroundGradient)}>
@@ -199,7 +200,7 @@ export function ChatRoom({
         </header>
         
         <div ref={chatHistoryRef} className="flex-1 overflow-y-auto p-6 space-y-6 bg-gray-50">
-          {messages.length === 0 && !isLoading && (
+          {messages.length === 0 && !isSending && (
             <div className="text-center text-gray-500 italic py-8">{placeholderText}</div>
           )}
           {messages.map((msg, index) => (
@@ -220,7 +221,7 @@ export function ChatRoom({
               </div>
             </div>
           ))}
-           {isLoading && (
+           {isSending && (
              <div className="flex justify-start">
                 <div className={cn('p-3 rounded-lg max-w-[75%] shadow-sm flex items-center space-x-2', theme.counsellorMessage)}>
                     <Loader2 className="h-5 w-5 animate-spin" />
@@ -243,10 +244,10 @@ export function ChatRoom({
             placeholder="Type your message here..."
             className={cn('flex-1 border-gray-300 p-2 resize-none bg-white text-black', theme.inputRing)}
             rows={1}
-            disabled={isLoading || !firebaseReady}
+            disabled={!firebaseReady}
           />
-          <Button type="submit" className={cn('ml-4 p-3 rounded-lg shadow-md transition', theme.sendButton)} disabled={isLoading || !input.trim() || !firebaseReady || !persona}>
-            {isLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : <Send className="h-6 w-6" />}
+          <Button type="submit" className={cn('ml-4 p-3 rounded-lg shadow-md transition', theme.sendButton)} disabled={isButtonDisabled}>
+            {isSending ? <Loader2 className="h-6 w-6 animate-spin" /> : <Send className="h-6 w-6" />}
           </Button>
         </form>
          <div className="text-center py-2 bg-white rounded-b-xl">
