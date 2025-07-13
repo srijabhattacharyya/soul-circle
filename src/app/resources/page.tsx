@@ -75,7 +75,7 @@ export default function ResourceLibraryPage() {
         <div className="bg-white rounded-xl shadow-md p-6 mb-8 max-w-lg mx-auto">
           <div className="flex flex-col sm:flex-row items-center gap-4">
             <Select onValueChange={setSelectedConcern} value={selectedConcern}>
-              <SelectTrigger className="w-full text-black">
+              <SelectTrigger className="w-full text-black bg-white">
                 <SelectValue placeholder="Select a concern..." />
               </SelectTrigger>
               <SelectContent>
