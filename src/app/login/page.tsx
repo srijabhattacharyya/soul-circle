@@ -45,7 +45,7 @@ export default function LoginPage() {
 
   const onSubmit = async (data: LoginFormValues) => {
     if (!isConfigValid || !auth) {
-        toast({ title: "Offline Mode", description: "Cannot sign in while in offline mode. Please check your Firebase configuration.", variant: 'destructive' });
+        toast({ title: "Offline Mode", description: "Cannot sign in while in offline mode. Please check your Firebase configuration in .env.local.", variant: 'destructive' });
         return;
     }
     setIsSubmitting(true);
@@ -63,9 +63,9 @@ export default function LoginPage() {
       let description = 'An unexpected error occurred. Please try again.';
       switch (error.code) {
         case AuthErrorCodes.INVALID_PASSWORD:
-        case AuthErrorCodes.INVALID_credential:
         case 'auth/wrong-password':
         case 'auth/user-not-found':
+        case AuthErrorCodes.INVALID_CREDENTIAL:
           description = 'Incorrect email or password.';
           break;
         case AuthErrorCodes.EMAIL_EXISTS:
@@ -76,7 +76,7 @@ export default function LoginPage() {
           description = 'The password is too weak. Please use at least 6 characters.';
           break;
         case 'auth/invalid-api-key':
-             description = 'The provided API Key is not valid. Please check your Firebase configuration.';
+             description = 'The provided API Key is not valid. Please check your Firebase configuration in .env.local.';
              break;
         default:
           description = error.message;
