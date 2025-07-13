@@ -163,7 +163,7 @@ export default function InnerWeatherPage() {
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-indigo-100 to-cyan-100 p-4 sm:p-8 flex items-center justify-center">
       <div className="bg-white rounded-xl shadow-2xl p-8 sm:p-10 max-w-xl w-full">
-        <h1 className="text-indigo-700 font-bold text-4xl mb-2">SoulCircle</h1>
+        <h1 className="text-indigo-700 font-bold text-4xl mb-2">Inner Weather</h1>
         <p className="text-gray-600 text-lg mb-8">Check in with the climate of your mind.</p>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
