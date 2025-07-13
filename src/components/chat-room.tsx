@@ -12,7 +12,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Loader2, Send } from 'lucide-react';
 import { doc, onSnapshot, type Timestamp } from 'firebase/firestore';
-import { db } from '@/lib/firebase/config';
+import { db, isConfigValid } from '@/lib/firebase/config';
 import Link from 'next/link';
 
 export type ChatMessage = {
@@ -62,24 +62,19 @@ export function ChatRoom({
   const [isLoading, setIsLoading] = useState(false);
   const [persona, setPersona] = useState<string | null>(null);
   const chatHistoryRef = useRef<HTMLDivElement>(null);
-  const [firebaseActive, setFirebaseActive] = useState(false);
 
   useEffect(() => {
-    // Check if db is initialized before trying to use it.
-    if (db) {
-        setFirebaseActive(true);
-    } else {
-        setFirebaseActive(false);
+    if (!isConfigValid) {
         toast({
             title: 'Connection Error',
             description: 'Cannot connect to the chat service. Please try again later.',
             variant: 'destructive',
         });
     }
-  }, []);
+  }, [toast]);
 
   useEffect(() => {
-    if (user && firebaseActive) {
+    if (user && isConfigValid) {
       // Fetch counsellor persona
       getCounsellorPersona(counsellorId)
         .then(setPersona)
@@ -112,7 +107,7 @@ export function ChatRoom({
 
       return () => unsubscribe();
     }
-  }, [user, counsellorId, toast, firebaseActive]);
+  }, [user, counsellorId, toast]);
 
   useEffect(() => {
     // Auto-scroll to bottom
@@ -124,7 +119,7 @@ export function ChatRoom({
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || !user || !persona || !firebaseActive) return;
+    if (!input.trim() || !user || !persona || !isConfigValid) return;
 
     const userMessage: ChatMessage = { role: 'user', content: input };
     setInput('');
@@ -230,9 +225,9 @@ export function ChatRoom({
             placeholder="Type your message here..."
             className={cn('flex-1 border-gray-300 p-2 resize-none bg-white text-black', theme.inputRing)}
             rows={1}
-            disabled={isLoading || !firebaseActive}
+            disabled={isLoading || !isConfigValid}
           />
-          <Button type="submit" className={cn('ml-4 p-3 rounded-lg shadow-md transition', theme.sendButton)} disabled={isLoading || !input.trim() || !firebaseActive}>
+          <Button type="submit" className={cn('ml-4 p-3 rounded-lg shadow-md transition', theme.sendButton)} disabled={isLoading || !input.trim() || !isConfigValid}>
             {isLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : <Send className="h-6 w-6" />}
           </Button>
         </form>
