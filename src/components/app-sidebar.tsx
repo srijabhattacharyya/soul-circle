@@ -88,22 +88,20 @@ export function AppSidebar() {
             <NavLink href="/legal"><Scale /><span>Legal</span></NavLink>
             <NavLink href="/resources"><BookHeart /><span>Resources</span></NavLink>
 
-            {user && (
-                <>
-                    <hr className="my-2 border-border"/>
-                    <NavSubMenu title="My Circle" icon={<User />}>
-                        <NavSubLink href="/profile"><User /><span>Profile</span></NavSubLink>
-                        <NavSubLink href="/inner-weather"><CloudSun /><span>Inner Weather</span></NavSubLink>
-                        <NavSubLink href="/mind-haven"><BookHeart /><span>Mind Haven</span></NavSubLink>
-                        <NavSubLink href="/soothe-studio"><Zap /><span>Soothe Studio</span></NavSubLink>
-                        <NavSubLink href="/settings"><Settings /><span>Settings</span></NavSubLink>
-                    </NavSubMenu>
-                </>
-            )}
+            <>
+                <hr className="my-2 border-border"/>
+                <NavSubMenu title="My Circle" icon={<User />}>
+                    <NavSubLink href="/profile"><User /><span>Profile</span></NavSubLink>
+                    <NavSubLink href="/inner-weather"><CloudSun /><span>Inner Weather</span></NavSubLink>
+                    <NavSubLink href="/mind-haven"><BookHeart /><span>Mind Haven</span></NavSubLink>
+                    <NavSubLink href="/soothe-studio"><Zap /><span>Soothe Studio</span></NavSubLink>
+                    <NavSubLink href="/settings"><Settings /><span>Settings</span></NavSubLink>
+                </NavSubMenu>
+            </>
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
-         {user && <NavLink href="/logout"><LogOut /><span>Logout</span></NavLink>}
+         <NavLink href="/logout"><LogOut /><span>Logout</span></NavLink>
       </SidebarFooter>
     </>
   );
