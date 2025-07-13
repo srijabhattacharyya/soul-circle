@@ -44,6 +44,9 @@ type ChatRoomProps = {
   loadingMessage: string;
 };
 
+const GENERIC_PERSONA = "You are a friendly and supportive AI assistant. Your goal is to listen, be empathetic, and help the user talk through their feelings. You are not a licensed therapist, but a caring companion.";
+
+
 export function ChatRoom({
   counsellorId,
   counsellorName,
@@ -65,39 +68,45 @@ export function ChatRoom({
 
   // Effect to fetch the counsellor's persona
   useEffect(() => {
-    if (!firebaseReady || !counsellorId || !user) {
-      if (!firebaseReady) {
-          toast({
-              title: 'Offline Mode',
-              description: 'Chat features are disabled. Please check your Firebase configuration.',
-              variant: 'destructive',
-          });
-      }
-      return;
-    }
-
     let isMounted = true;
+    
     const fetchPersona = async () => {
+      if (!firebaseReady || !counsellorId || !user) {
+        if (!firebaseReady) {
+          toast({
+            title: 'Offline Mode',
+            description: 'Chat features are disabled. Using a generic assistant.',
+            variant: 'destructive',
+          });
+          if(isMounted) setPersona(GENERIC_PERSONA);
+        }
+        return;
+      }
+      
       try {
-        const p = await getCounsellorPersona(counsellorId);
+        const fetchedPersona = await getCounsellorPersona(counsellorId);
         if (isMounted) {
-          if (p) {
-            setPersona(p);
+          if (fetchedPersona) {
+            setPersona(fetchedPersona);
           } else {
+            console.warn(`Persona for counsellorId "${counsellorId}" not found in Firestore. Falling back to generic persona.`);
             toast({
-              title: 'Error',
-              description: 'Could not load counsellor details.',
+              title: 'Counsellor Not Found',
+              description: 'Using a generic assistant as the persona could not be loaded.',
               variant: 'destructive',
             });
+            setPersona(GENERIC_PERSONA);
           }
         }
       } catch (error) {
         if (isMounted) {
+          console.error('Failed to fetch counsellor persona:', error);
           toast({
             title: 'Error',
-            description: 'Failed to fetch counsellor details.',
+            description: 'Failed to fetch counsellor details. Using a generic assistant.',
             variant: 'destructive',
           });
+          setPersona(GENERIC_PERSONA);
         }
       }
     };
@@ -117,11 +126,11 @@ export function ChatRoom({
     const docRef = doc(db, 'chats', chatId);
     
     const unsubscribe = onSnapshot(docRef, (docSnap) => {
-    if (docSnap.exists()) {
-        setMessages(docSnap.data().messages || []);
-    } else {
-        setMessages([]);
-    }
+      if (docSnap.exists()) {
+          setMessages(docSnap.data().messages || []);
+      } else {
+          setMessages([]);
+      }
     }, (error) => {
         toast({
         title: 'Error',
@@ -144,7 +153,7 @@ export function ChatRoom({
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isSending || !input.trim() || !user || !persona || !firebaseReady) return;
+    if (isSending || !input.trim() || !user || !persona) return;
 
     const userMessage: ChatMessage = { role: 'user', content: input };
     const currentInput = input;
@@ -152,9 +161,12 @@ export function ChatRoom({
     setIsSending(true);
     
     try {
-      await saveMessage(user.uid, counsellorId, userMessage);
+      if (firebaseReady) {
+        await saveMessage(user.uid, counsellorId, userMessage);
+      }
     
       const historyForAI = [...messages, userMessage].slice(-10).map(({ role, content }) => ({ role, content }));
+      
       const aiResult = await chatWithCounsellor({
         persona,
         history: historyForAI,
@@ -162,7 +174,13 @@ export function ChatRoom({
       });
       
       const counsellorMessage: ChatMessage = { role: 'model', content: aiResult.response };
-      await saveMessage(user.uid, counsellorId, counsellorMessage);
+      
+      if (firebaseReady) {
+        await saveMessage(user.uid, counsellorId, counsellorMessage);
+      } else {
+        // Handle offline mode: just update local state
+        setMessages(prev => [...prev, userMessage, counsellorMessage]);
+      }
 
     } catch (error) {
       toast({
@@ -171,13 +189,17 @@ export function ChatRoom({
         variant: 'destructive',
       });
        const errorMessage: ChatMessage = { role: 'model', content: "I'm having trouble connecting right now. Please try again in a moment." };
-       await saveMessage(user.uid, counsellorId, errorMessage);
+       if(firebaseReady) {
+         await saveMessage(user.uid, counsellorId, errorMessage);
+       } else {
+         setMessages(prev => [...prev, userMessage, errorMessage]);
+       }
     } finally {
       setIsSending(false);
     }
   };
 
-  const isButtonDisabled = isSending || !input.trim() || !firebaseReady || !persona;
+  const isButtonDisabled = isSending || !input.trim() || !persona;
 
   return (
     <div className={cn('min-h-screen w-full p-4 sm:p-6 flex items-center justify-center bg-gradient-to-br', theme.backgroundGradient)}>
@@ -244,7 +266,7 @@ export function ChatRoom({
             placeholder="Type your message here..."
             className={cn('flex-1 border-gray-300 p-2 resize-none bg-white text-black', theme.inputRing)}
             rows={1}
-            disabled={!firebaseReady}
+            disabled={isSending}
           />
           <Button type="submit" className={cn('ml-4 p-3 rounded-lg shadow-md transition', theme.sendButton)} disabled={isButtonDisabled}>
             {isSending ? <Loader2 className="h-6 w-6 animate-spin" /> : <Send className="h-6 w-6" />}
