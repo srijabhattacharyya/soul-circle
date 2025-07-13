@@ -65,6 +65,11 @@ export function ChatRoom({
 
   // Effect to fetch the counsellor's persona
   useEffect(() => {
+    console.log('[DEBUG] Persona fetch effect triggered.');
+    console.log('[DEBUG] counsellorId:', counsellorId);
+    console.log('[DEBUG] firebaseReady:', firebaseReady);
+    console.log('[DEBUG] user:', user ? `UID: ${user.uid}`: 'null');
+
     if (!firebaseReady || !counsellorId) {
         if (!firebaseReady) {
             toast({
@@ -72,18 +77,24 @@ export function ChatRoom({
                 description: 'Chat features are disabled. Please check your Firebase configuration.',
                 variant: 'destructive',
             });
+            console.log('[DEBUG] Persona fetch skipped: Firebase not ready.');
+        } else {
+             console.log('[DEBUG] Persona fetch skipped: counsellorId not available.');
         }
         return;
     }
 
     let isMounted = true;
+    console.log('[DEBUG] Attempting to fetch persona...');
     
     getCounsellorPersona(counsellorId)
         .then(p => {
             if (isMounted) {
                 if (p) {
                     setPersona(p);
+                    console.log('[DEBUG] Persona fetched successfully.');
                 } else {
+                    console.log('[DEBUG] Persona fetch failed: No persona found for this ID.');
                     toast({
                         title: 'Error',
                         description: 'Could not load counsellor details.',
@@ -92,7 +103,8 @@ export function ChatRoom({
                 }
             }
         })
-        .catch(() => {
+        .catch((error) => {
+             console.error('[DEBUG] Persona fetch caught an error:', error);
             if (isMounted) {
                 toast({
                     title: 'Error',
@@ -104,7 +116,7 @@ export function ChatRoom({
         
     return () => { isMounted = false; };
 
-  }, [counsellorId, firebaseReady, toast]);
+  }, [counsellorId, firebaseReady, toast, user]);
 
 
   // Effect for real-time chat updates
