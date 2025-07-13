@@ -397,7 +397,7 @@ export default function ProfilePage() {
                 </div>
                 <div className="md:col-span-2">
                   <Label htmlFor="lifeSituation" className='text-black'>Current Life Situation</Label>
-                  <Controller name="lifeSituation" control={control} render={({ field }) => <Textarea {...field} id="lifeSituation" placeholder="e.g., living alone/with family, employment status, recent life changes" className="text-black" />} />
+                  <Controller name="lifeSituation" control={control} render={({ field }) => <Textarea {...field} id="lifeSituation" placeholder="e.g., living alone/with family, employment status, recent life changes" className="text-black bg-white" />} />
                 </div>
                 <div className="md:col-span-2">
                   <Label className='text-black'>Support System</Label>
@@ -463,7 +463,7 @@ export default function ProfilePage() {
                 </div>
                 <div>
                     <Label htmlFor="knownTriggers" className='text-black'>Known Triggers</Label>
-                    <Controller name="knownTriggers" control={control} render={({ field }) => <Textarea {...field} id="knownTriggers" className="text-black"/>} />
+                    <Controller name="knownTriggers" control={control} render={({ field }) => <Textarea {...field} id="knownTriggers" className="text-black bg-white"/>} />
                 </div>
                 <div>
                   <Label className='text-black'>Have you ever tried coping techniques?</Label>
@@ -518,7 +518,7 @@ export default function ProfilePage() {
               <AccordionContent className="pt-4 grid grid-cols-1 gap-6">
                 <div>
                   <Label htmlFor="dailyRoutine" className='text-black'>Describe your daily routine</Label>
-                  <Controller name="dailyRoutine" control={control} render={({ field }) => <Textarea {...field} id="dailyRoutine" placeholder="Include sleep, meals, work, self-care, etc." className="text-black" />} />
+                  <Controller name="dailyRoutine" control={control} render={({ field }) => <Textarea {...field} id="dailyRoutine" placeholder="Include sleep, meals, work, self-care, etc." className="text-black bg-white" />} />
                 </div>
                 <div>
                   <Label className='text-black'>Substance use</Label>
@@ -598,7 +598,7 @@ export default function ProfilePage() {
                 </div>
                 <div>
                   <Label htmlFor="therapyConcerns" className='text-black'>Any fears or concerns about therapy?</Label>
-                  <Controller name="therapyConcerns" control={control} render={({ field }) => <Textarea {...field} id="therapyConcerns" className="text-black" />} />
+                  <Controller name="therapyConcerns" control={control} render={({ field }) => <Textarea {...field} id="therapyConcerns" className="text-black bg-white" />} />
                 </div>
               </AccordionContent>
             </AccordionItem>
@@ -636,5 +636,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-
-    
