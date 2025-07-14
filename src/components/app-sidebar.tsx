@@ -26,6 +26,7 @@ import {
     CloudSun,
     Zap,
     Settings,
+    LogIn,
     LogOut,
     ChevronDown,
     HeartHandshake,
@@ -120,9 +121,13 @@ export function AppSidebar() {
             )}
         </SidebarMenu>
       </SidebarContent>
-       {user && (
+       {user ? (
           <SidebarFooter>
             <NavLink href="/logout"><LogOut /><span>Logout</span></NavLink>
+          </SidebarFooter>
+        ) : (
+          <SidebarFooter>
+            <NavLink href="/login"><LogIn /><span>Login to view more</span></NavLink>
           </SidebarFooter>
         )}
     </>
