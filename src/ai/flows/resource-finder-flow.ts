@@ -45,6 +45,8 @@ const prompt = ai.definePrompt({
   Provide a diverse set of resource types if possible (e.g., articles, videos, tools, apps, or official helplines).
   Ensure the links are from reputable, well-known, and current sources. Strongly prioritize resources published within the last 2-3 years to ensure the links are active and the information is up-to-date. Avoid obscure blogs or very old content.
 
+  If you are suggesting a YouTube video, it is crucial that you prioritize content from well-established, reputable channels (e.g., official health organizations, universities, well-known psychologists) and ensure the video was published recently (within the last 2-3 years) to maximize the likelihood that it is still available.
+
   Concern: {{{concern}}}
 
   {{#if userInput}}
