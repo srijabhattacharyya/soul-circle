@@ -113,7 +113,7 @@ export default function LoginPage() {
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-4">
       <div className="w-full max-w-md text-center">
         <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
-          {isLoginView ? 'Welcome Back' : 'Create Your Account'}
+          {isLoginView ? 'Welcome' : 'Create Your Account'}
         </h1>
         <p className="text-gray-600 mb-8 md:text-lg">
           {isLoginView ? 'Sign in to continue your journey.' : 'Join SoulCircle to get started.'}
