@@ -13,7 +13,7 @@ import { z } from 'zod';
 import { Loader2, LogIn, UserPlus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { isConfigValid, auth } from '@/lib/firebase/config';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, AuthErrorCodes } from 'firebase/auth';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, AuthErrorCodes, getAdditionalUserInfo } from 'firebase/auth';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Invalid email address.' }),
@@ -51,13 +51,21 @@ export default function LoginPage() {
     setIsSubmitting(true);
     try {
       if (isLoginView) {
-        await signInWithEmailAndPassword(auth, data.email, data.password);
+        const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
         toast({ title: 'Success', description: 'Logged in successfully!' });
-        router.push('/');
+        router.push('/'); // Redirect existing user to dashboard (via root)
       } else {
-        await createUserWithEmailAndPassword(auth, data.email, data.password);
-        toast({ title: 'Success', description: 'Account created! Please complete your profile.' });
-        router.push('/profile');
+        const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
+        const isNewUser = getAdditionalUserInfo(userCredential)?.isNewUser ?? false;
+
+        if (isNewUser) {
+            toast({ title: 'Success', description: 'Account created! Please complete your profile.' });
+            router.push('/profile'); // Redirect new user to profile page
+        } else {
+            // This case is unlikely but handles scenarios where the user was created but didn't get redirected
+            toast({ title: 'Success', description: 'Welcome back!' });
+            router.push('/');
+        }
       }
     } catch (error: any) {
       console.error(error);
