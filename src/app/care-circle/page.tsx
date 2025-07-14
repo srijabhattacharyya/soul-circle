@@ -1,4 +1,6 @@
 
+'use client'
+
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -10,6 +12,9 @@ import {
 } from '@/components/ui/card';
 import Image from 'next/image';
 import Link from 'next/link';
+import { generatePortrait } from '@/ai/flows/generate-portrait-flow';
+import { useEffect, useState } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const counsellors = [
   {
@@ -75,6 +80,47 @@ const counsellors = [
   },
 ];
 
+const CounsellorImage = ({ counsellor }: { counsellor: typeof counsellors[0] }) => {
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (counsellor.id === 'rishi_bhattacharyya' && !counsellor.imageUrl.startsWith('data:')) {
+      const generateAndSetImage = async () => {
+        setIsLoading(true);
+        try {
+          const result = await generatePortrait({ prompt: `A professional, kind-looking Indian man in his late 30s named Rishi Bhattacharyya, a spiritual and wellness coach. He has a calm and wise presence. The background should be serene and simple.` });
+          setImageUrl(result.imageUrl);
+        } catch (error) {
+          console.error("Failed to generate portrait for Rishi:", error);
+          // Fallback to the original potentially broken path or a placeholder
+          setImageUrl(counsellor.imageUrl);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      generateAndSetImage();
+    } else {
+      setImageUrl(counsellor.imageUrl);
+    }
+  }, [counsellor]);
+
+  if (isLoading || !imageUrl) {
+    return <Skeleton className="w-full h-[300px]" />;
+  }
+
+  return (
+    <Image 
+      src={imageUrl}
+      alt={`Photo of ${counsellor.name}`}
+      width={400}
+      height={300}
+      className="w-full h-auto object-cover"
+      data-ai-hint="portrait professional"
+    />
+  );
+}
+
 
 export default function CareCirclePage() {
     return (
@@ -89,14 +135,7 @@ export default function CareCirclePage() {
                 {counsellors.map(counsellor => (
                     <Card key={counsellor.id} className="flex flex-col text-center overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-2xl bg-white">
                         <CardHeader className="p-0">
-                           <Image 
-                             src={counsellor.imageUrl}
-                             alt={`Photo of ${counsellor.name}`}
-                             width={400}
-                             height={300}
-                             className="w-full h-auto object-cover"
-                             data-ai-hint="portrait professional"
-                           />
+                           <CounsellorImage counsellor={counsellor} />
                         </CardHeader>
                         <CardContent className="p-6 flex-grow">
                             <CardTitle className="text-2xl font-bold text-gray-900">{counsellor.name}</CardTitle>
