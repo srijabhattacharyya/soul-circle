@@ -108,7 +108,6 @@ export function AppSidebar() {
                 </NavSubMenu>
                 <NavLink href="/resources"><Library /><span>Resource Library</span></NavLink>
                  <hr className="my-2 border-border"/>
-                 <NavLink href="/profile"><User /><span>My Profile</span></NavLink>
                  <NavLink href="/settings"><Settings /><span>Settings</span></NavLink>
                  <NavLink href="/logout"><LogOut /><span>Logout</span></NavLink>
               </>
@@ -123,6 +122,15 @@ export function AppSidebar() {
             )}
         </SidebarMenu>
       </SidebarContent>
+      {user && (
+        <SidebarFooter>
+            <SidebarMenu>
+                <NavLink href="/profile"><User /><span>My Profile</span></NavLink>
+                <NavLink href="/learn-more"><Info /><span>About</span></NavLink>
+                <NavLink href="/legal"><Scale /><span>Legal & Privacy</span></NavLink>
+            </SidebarMenu>
+        </SidebarFooter>
+      )}
     </>
   );
 }
