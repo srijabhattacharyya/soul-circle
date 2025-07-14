@@ -42,16 +42,16 @@ const prompt = ai.definePrompt({
       role: 'user',
       content: `
       {{#each history}}
-        {{#if (eq role 'user')}}
-          User: {{{content}}}
-        {{/if}}
-        {{#if (eq role 'model')}}
-          AI: {{{content}}}
-        {{/if}}
+        {{#if (eq role "user")}}
+User: {{{content}}}
+        {{~/if}}
+        {{#if (eq role "model")}}
+AI: {{{content}}}
+        {{~/if}}
       {{/each}}
       
-      User: {{{message}}}
-      `,
+User: {{{message}}}
+      AI:`,
     },
   ],
   config: {
