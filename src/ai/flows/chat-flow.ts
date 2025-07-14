@@ -48,7 +48,7 @@ const chatFlow = ai.defineFlow(
     const history = await getMessages(input.userId, input.counsellorId, 10);
     
     const { output } = await ai.generate({
-        model: 'googleai/gemini-pro',
+        model: 'googleai/gemini-2.0-flash',
         prompt: input.message,
         history: history.map(m => ({role: m.role, content: m.content})),
         system: `System Instruction: You must follow this persona: ${input.persona}\n\nYour goal is to be a supportive and empathetic listener. You are not a licensed therapist, but a caring companion.\nGuide the conversation naturally. Do not give direct advice, but help the user explore their feelings through reflective questions.\nKeep your responses conversational and not too long.`
@@ -68,3 +68,4 @@ const chatFlow = ai.defineFlow(
     return { response: responseText };
   }
 );
+
