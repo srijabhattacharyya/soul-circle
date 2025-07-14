@@ -89,7 +89,7 @@ const CounsellorImage = ({ counsellor }: { counsellor: typeof counsellors[0] }) 
       const generateAndSetImage = async () => {
         setIsLoading(true);
         try {
-          const result = await generatePortrait({ prompt: `A professional, kind-looking Indian man in his late 30s named Rishi Bhattacharyya, a spiritual and wellness coach. He has a calm and wise presence. The background should be serene and simple.` });
+          const result = await generatePortrait({ prompt: `A professional, kind-looking Indian man in his late 30s named Rishi Bhattacharyya, a spiritual and wellness coach. He has a calm and wise presence. The background should be serene and simple. The image should have a landscape orientation with a 4:3 aspect ratio.` });
           setImageUrl(result.imageUrl);
         } catch (error) {
           console.error("Failed to generate portrait for Rishi:", error);
@@ -115,7 +115,7 @@ const CounsellorImage = ({ counsellor }: { counsellor: typeof counsellors[0] }) 
       alt={`Photo of ${counsellor.name}`}
       width={400}
       height={300}
-      className="w-full h-auto object-cover"
+      className="w-full h-[300px] object-cover"
       data-ai-hint="portrait professional"
     />
   );
