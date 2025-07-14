@@ -87,7 +87,6 @@ export function AppSidebar() {
             <Link href="/" className="font-bold text-lg text-foreground">
                 SoulCircle
             </Link>
-            <SidebarTrigger className='hidden md:flex' />
         </div>
       </SidebarHeader>
       <SidebarContent>
