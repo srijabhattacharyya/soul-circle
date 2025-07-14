@@ -1,5 +1,4 @@
 import type {NextConfig} from 'next';
-require('dotenv').config({ path: './src/app/.env.local' });
 
 const nextConfig: NextConfig = {
   /* config options here */
