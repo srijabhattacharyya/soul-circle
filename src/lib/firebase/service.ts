@@ -1,7 +1,7 @@
 
 'use server';
 
-import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs, Timestamp, addDoc, deleteDoc, writeBatch, updateDoc, arrayUnion, orderBy } from 'firebase/firestore';
+import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs, Timestamp, addDoc, deleteDoc, writeBatch, updateDoc, arrayUnion, orderBy, limit } from 'firebase/firestore';
 import { db, isConfigValid, auth } from './config';
 import { getAuth, updateProfile } from 'firebase/auth';
 import type { ProfileFormValues } from '@/app/profile/form-schema';
@@ -334,4 +334,18 @@ export async function saveMessage(userId: string, counsellorId: string, message:
     }
 }
 
+export async function getMessages(userId: string, counsellorId: string, messageLimit: number = 20): Promise<ChatMessage[]> {
+    if (!db) return [];
+    const chatId = `${userId}_${counsellorId}`;
+    const docRef = doc(db, 'chats', chatId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+        const messages = docSnap.data().messages || [];
+        // The array is already ordered by timestamp when saved.
+        // We just need to get the last `messageLimit` messages.
+        return messages.slice(-messageLimit);
+    }
+    return [];
+}
     

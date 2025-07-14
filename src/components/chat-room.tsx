@@ -11,7 +11,7 @@ import Image from 'next/image';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Loader2, Send } from 'lucide-react';
-import { doc, onSnapshot, type Timestamp } from 'firebase/firestore';
+import { doc, onSnapshot, type Timestamp, query, collection, orderBy } from 'firebase/firestore';
 import { db, isConfigValid } from '@/lib/firebase/config';
 import Link from 'next/link';
 
@@ -175,13 +175,12 @@ export function ChatRoom({
       if (firebaseReady) {
         await saveMessage(user.uid, counsellorId, userMessage);
       }
-    
-      const historyForAI = messages.slice(-10).map(({ role, content }) => ({ role, content }));
       
       const aiResult = await chatWithCounsellor({
         persona,
-        history: historyForAI,
         message: currentInput,
+        userId: user.uid,
+        counsellorId,
       });
       
       const counsellorMessage: ChatMessage = { role: 'model', content: aiResult.response };
@@ -194,6 +193,7 @@ export function ChatRoom({
       }
 
     } catch (error) {
+      console.error("Error during chat:", error);
       toast({
         title: 'Error',
         description: 'The AI could not respond. Please try again.',
@@ -201,6 +201,9 @@ export function ChatRoom({
       });
        const errorMessage: ChatMessage = { role: 'model', content: "I'm having trouble connecting right now. Please try again in a moment." };
        if(firebaseReady) {
+         // Revert the user message on error by refetching
+         // This is handled by the onSnapshot listener automatically.
+         // But we can add the error message manually.
          await saveMessage(user.uid, counsellorId, errorMessage);
        } else {
          setMessages(prev => [...prev, userMessage, errorMessage]);
@@ -223,6 +226,7 @@ export function ChatRoom({
               width={60}
               height={60}
               className={cn('rounded-full border-2', theme.avatarBorder)}
+              data-ai-hint="portrait professional"
             />
             <div className="ml-4">
               <h1 className={cn('text-xl font-semibold', theme.counsellorName)}>{counsellorName}</h1>

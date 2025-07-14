@@ -9,6 +9,8 @@
  */
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
+import { getMessages } from '@/lib/firebase/service';
+import type { ChatMessage } from '@/components/chat-room';
 
 const ChatInputSchema = z.object({
   persona: z
@@ -16,15 +18,9 @@ const ChatInputSchema = z.object({
     .describe(
       "The system prompt defining the AI counsellor's personality and instructions."
     ),
-  history: z
-    .array(
-      z.object({
-        role: z.enum(['user', 'model']),
-        content: z.string(),
-      })
-    )
-    .describe('The history of the conversation.'),
   message: z.string().describe('The latest message from the user.'),
+  userId: z.string().describe('The user ID for the chat.'),
+  counsellorId: z.string().describe('The counsellor ID for the chat.'),
 });
 
 export type ChatInput = z.infer<typeof ChatInputSchema>;
@@ -33,6 +29,7 @@ export type ChatOutput = { response: string };
 const ChatOutputSchema = z.object({
   response: z.string().describe("The AI counsellor's response."),
 });
+
 
 export async function chatWithCounsellor(input: ChatInput): Promise<ChatOutput> {
   return chatFlow(input);
@@ -47,14 +44,19 @@ const chatFlow = ai.defineFlow(
   },
   async (input) => {
     
+    // Fetch the most recent history directly from Firestore
+    const history = await getMessages(input.userId, input.counsellorId, 10);
+    
     const { output } = await ai.generate({
         model: 'googleai/gemini-pro',
         prompt: input.message,
-        history: input.history.map(m => ({role: m.role, content: m.content})),
+        history: history.map(m => ({role: m.role, content: m.content})),
         system: `System Instruction: You must follow this persona: ${input.persona}\n\nYour goal is to be a supportive and empathetic listener. You are not a licensed therapist, but a caring companion.\nGuide the conversation naturally. Do not give direct advice, but help the user explore their feelings through reflective questions.\nKeep your responses conversational and not too long.`
     });
 
-    if (!output || typeof output !== 'string') {
+    const responseText = (output as any)?.text;
+
+    if (!responseText) {
         const safetyFeedback = (output as any)?.usage?.safety?.feedback;
         if(safetyFeedback){
             console.error("Safety block detected in chat flow", safetyFeedback);
@@ -63,6 +65,6 @@ const chatFlow = ai.defineFlow(
       return { response: 'Sorry, I couldn’t understand that. Please try again.' };
     }
 
-    return { response: output };
+    return { response: responseText };
   }
 );
