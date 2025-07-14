@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getAuth, signOut } from 'firebase/auth';
 import { useAuth } from '@/components/auth-provider';
-import { saveUserFeedback } from '@/lib/firebase/service';
+import { saveUserFeedback, deleteUserChats } from '@/lib/firebase/service';
 import { Loader2, Star, Heart, Sun, Notebook } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
@@ -67,13 +67,16 @@ export default function LogoutPage() {
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
-        if (isConfigValid) {
+        if (isConfigValid && user) {
+            // Delete chat history before logging out
+            await deleteUserChats(user.uid);
+
             const auth = getAuth();
             await signOut(auth);
         }
         toast({
             title: 'Logged Out',
-            description: 'You have been successfully logged out.',
+            description: 'You have been successfully logged out and your chat history has been cleared.',
         });
         router.push('/login');
     } catch (error) {

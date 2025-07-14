@@ -364,4 +364,26 @@ export async function getMessages(userId: string, counsellorId: string, messageL
     }
     return [];
 }
-    
+
+export async function deleteUserChats(userId: string) {
+    if (!db) throw new Error("Firestore is not initialized.");
+    try {
+        const userChatsQuery = query(collection(db, 'chats'), where('uid', '==', userId));
+        const querySnapshot = await getDocs(userChatsQuery);
+        
+        if (querySnapshot.empty) {
+            return; // No chats to delete
+        }
+
+        const batch = writeBatch(db);
+        querySnapshot.forEach((doc) => {
+            batch.delete(doc.ref);
+        });
+
+        await batch.commit();
+        console.log(`Deleted chat history for user: ${userId}`);
+    } catch (error) {
+        console.error('Error deleting user chats:', error);
+        throw new Error('Failed to delete user chats.');
+    }
+}
