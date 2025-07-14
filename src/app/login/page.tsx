@@ -53,11 +53,12 @@ export default function LoginPage() {
       if (isLoginView) {
         await signInWithEmailAndPassword(auth, data.email, data.password);
         toast({ title: 'Success', description: 'Logged in successfully!' });
+        router.push('/');
       } else {
         await createUserWithEmailAndPassword(auth, data.email, data.password);
-        toast({ title: 'Success', description: 'Account created successfully! You are now logged in.' });
+        toast({ title: 'Success', description: 'Account created! Please complete your profile.' });
+        router.push('/profile');
       }
-      router.push('/');
     } catch (error: any) {
       console.error(error);
       let description = 'An unexpected error occurred. Please try again.';
