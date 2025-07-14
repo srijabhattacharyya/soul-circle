@@ -38,48 +38,6 @@ export async function chatWithCounsellor(input: ChatInput): Promise<ChatOutput> 
   return chatFlow(input);
 }
 
-const chatPrompt = ai.definePrompt({
-  name: 'chatPrompt',
-  input: { schema: ChatInputSchema },
-  output: { schema: z.string().describe("The AI counsellor's response.") },
-  system: `System Instruction: You must follow this persona: {{{persona}}}
-
-  Your goal is to be a supportive and empathetic listener. You are not a licensed therapist, but a caring companion.
-  Guide the conversation naturally. Do not give direct advice, but help the user explore their feelings through reflective questions.
-  Keep your responses conversational and not too long.
-  `,
-  messages: [
-    { role: 'user', content: "Understood. I will follow my persona instructions and engage in a supportive conversation." },
-    { role: 'model', content: "Okay, I am ready." },
-    ...ChatInputSchema.shape.history.parse([]).map((msg: any) => ({
-        role: msg.role,
-        content: msg.content,
-    })),
-    { role: 'user', content: '{{{message}}}' },
-  ],
-  config: {
-    model: 'googleai/gemini-pro',
-    safetySettings: [
-        {
-            category: 'HARM_CATEGORY_HATE_SPEECH',
-            threshold: 'BLOCK_ONLY_HIGH',
-        },
-        {
-            category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
-            threshold: 'BLOCK_MEDIUM_AND_ABOVE',
-        },
-        {
-            category: 'HARM_CATEGORY_HARASSMENT',
-            threshold: 'BLOCK_MEDIUM_AND_ABOVE',
-        },
-        {
-            category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
-            threshold: 'BLOCK_MEDIUM_AND_ABOVE',
-        },
-    ]
-  },
-  
-});
 
 const chatFlow = ai.defineFlow(
   {

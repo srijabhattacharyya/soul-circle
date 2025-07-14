@@ -176,7 +176,7 @@ export function ChatRoom({
         await saveMessage(user.uid, counsellorId, userMessage);
       }
     
-      const historyForAI = [...messages, userMessage].slice(-10).map(({ role, content }) => ({ role, content }));
+      const historyForAI = messages.slice(-10).map(({ role, content }) => ({ role, content }));
       
       const aiResult = await chatWithCounsellor({
         persona,
