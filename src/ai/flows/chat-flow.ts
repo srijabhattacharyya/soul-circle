@@ -63,7 +63,7 @@ const chatFlow = ai.defineFlow(
       }
     });
 
-    const output = llmResponse.output();
+    const output = llmResponse.output;
     if (!output) {
         throw new Error("AI failed to generate a valid response.");
     }
