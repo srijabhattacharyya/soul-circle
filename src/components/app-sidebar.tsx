@@ -110,6 +110,7 @@ export function AppSidebar() {
                  <hr className="my-2 border-border"/>
                  <NavLink href="/profile"><User /><span>My Profile</span></NavLink>
                  <NavLink href="/settings"><Settings /><span>Settings</span></NavLink>
+                 <NavLink href="/logout"><LogOut /><span>Logout</span></NavLink>
               </>
             ) : (
                  <>
@@ -122,11 +123,6 @@ export function AppSidebar() {
             )}
         </SidebarMenu>
       </SidebarContent>
-       {user && (
-          <SidebarFooter>
-            <NavLink href="/logout"><LogOut /><span>Logout</span></NavLink>
-          </SidebarFooter>
-        )}
     </>
   );
 }
