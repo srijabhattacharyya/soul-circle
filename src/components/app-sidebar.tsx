@@ -96,7 +96,7 @@ export function AppSidebar() {
             {user ? (
               <>
                 <NavLink href="/"><Home /><span>Dashboard</span></NavLink>
-                <NavSubMenu title="My Tools" icon={<User />} paths={['/care-circle', '/inner-weather', '/mind-haven', '/soothe-studio']}>
+                <NavSubMenu title="My Tools" icon={<User />} paths={['/care-circle', '/inner-weather', '/mind-haven', '/soothe-studio', '/care-circle/rishi-bhattacharyya']}>
                     <NavSubLink href="/care-circle"><HeartHandshake /><span>Care Circle</span></NavSubLink>
                     <NavSubLink href="/inner-weather"><CloudSun /><span>Inner Weather</span></NavSubLink>
                     <NavSubLink href="/mind-haven"><BookHeart /><span>Mind Haven</span></NavSubLink>
