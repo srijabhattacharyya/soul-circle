@@ -1,3 +1,4 @@
+
 'use client';
 import { ChatRoom, type ChatRoomTheme } from '@/components/chat-room';
 
@@ -41,7 +42,7 @@ export default function DrAnanyaPage() {
       counsellorName="Dr. Ananya Banerjee"
       roomName="The Listening Room"
       tagline="Because being heard is the first step to healing."
-      avatarSrc="https://placehold.co/60x60/FEE2E2/991B1B.png?text=AB"
+      avatarSrc="/images/ananya-banerjee.png"
       theme={ananyaTheme}
       headerIcon={<AnanyaIcon />}
       placeholderText="You’re chatting with Dr. Ananya Banerjee. This space is private and judgment-free."
