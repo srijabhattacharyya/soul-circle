@@ -24,7 +24,9 @@ export default function JournalHistoryPage() {
       setIsLoading(true);
       getJournalHistory(user.uid)
         .then(data => {
-          setEntries(data);
+          // Sort entries by timestamp descending, as orderBy was removed from query
+          const sortedData = data.sort((a, b) => b.timestamp.toDate().getTime() - a.timestamp.toDate().getTime());
+          setEntries(sortedData);
         })
         .catch(error => console.error(error))
         .finally(() => setIsLoading(false));

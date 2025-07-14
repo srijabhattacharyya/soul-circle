@@ -154,14 +154,15 @@ export async function getJournalHistory(userId: string): Promise<JournalEntry[]>
     try {
         const q = query(
             collection(db, 'journals'),
-            where('uid', '==', userId),
-            orderBy('timestamp', 'desc')
+            where('uid', '==', userId)
+            // NOTE: orderBy clause removed to prevent requiring a composite index.
+            // Sorting will be handled on the client side.
         );
         const querySnapshot = await getDocs(q);
         return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as JournalEntry));
     } catch (error) {
         console.error('Error getting journal history:', error);
-        throw new Error('Failed to save journal history.');
+        throw new Error('Failed to get journal history.');
     }
 }
 
