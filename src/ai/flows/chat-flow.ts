@@ -47,12 +47,6 @@ const chatFlow = ai.defineFlow(
   },
   async (input) => {
     
-    // We need to create a temporary history that includes the new message to pass to the prompt
-    const fullHistory = [
-      ...input.history,
-      { role: 'user' as const, content: input.message },
-    ];
-    
     const { output } = await ai.generate({
         model: 'googleai/gemini-pro',
         prompt: input.message,
