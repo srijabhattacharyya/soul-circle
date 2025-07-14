@@ -35,7 +35,7 @@ export default function KabirPage() {
     <ChatRoom
       counsellorId="kabir_islam"
       counsellorName="Kabir Islam"
-      roomName="TalkNest"
+      roomName="SoulCircle"
       tagline="A cozy place to unburden."
       avatarSrc="/images/kabir-islam.png"
       theme={kabirTheme}
