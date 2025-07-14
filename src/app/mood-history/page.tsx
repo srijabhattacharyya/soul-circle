@@ -38,7 +38,9 @@ export default function MoodHistoryPage() {
       setError(null);
       getMoodHistory(user.uid)
         .then(data => {
-          setMoodData(data);
+          // Sort data by date descending, as we removed it from the query
+          const sortedData = data.sort((a, b) => b.date.toDate().getTime() - a.date.toDate().getTime());
+          setMoodData(sortedData);
         })
         .catch(err => {
           console.error(err);

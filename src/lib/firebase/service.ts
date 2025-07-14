@@ -114,8 +114,9 @@ export async function getMoodHistory(userId: string): Promise<MoodEntry[]> {
     try {
         const q = query(
             collection(db, 'moodTracker'),
-            where('uid', '==', userId),
-            orderBy('date', 'desc')
+            where('uid', '==', userId)
+            // NOTE: orderBy clause removed to prevent requiring a composite index.
+            // Sorting will be handled on the client side.
         );
         const querySnapshot = await getDocs(q);
         return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as MoodEntry));
