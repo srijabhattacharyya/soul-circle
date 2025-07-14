@@ -58,15 +58,13 @@ const chatFlow = ai.defineFlow(
       config: {
         temperature: 0.8,
       },
-      output: {
-        schema: ChatOutputSchema,
-      }
     });
 
-    const output = llmResponse.output;
-    if (!output) {
+    const responseText = llmResponse.text;
+    if (!responseText) {
         throw new Error("AI failed to generate a valid response.");
     }
-    return output;
+
+    return { response: responseText };
   }
 );
