@@ -17,7 +17,7 @@ import Link from 'next/link';
 
 export type ChatMessage = {
   role: 'user' | 'model';
-  content: string;
+  content: any; // Can be string or array of parts
   timestamp?: Timestamp;
 };
 
@@ -166,7 +166,7 @@ export function ChatRoom({
     e.preventDefault();
     if (isSending || !input.trim() || !user || !persona) return;
 
-    const userMessage: ChatMessage = { role: 'user', content: input };
+    const userMessage: ChatMessage = { role: 'user', content: [{text: input}] };
     const currentInput = input;
     setInput('');
     setIsSending(true);
@@ -183,7 +183,7 @@ export function ChatRoom({
         counsellorId,
       });
       
-      const counsellorMessage: ChatMessage = { role: 'model', content: aiResult.response };
+      const counsellorMessage: ChatMessage = { role: 'model', content: [{text: aiResult.response}] };
       
       if (firebaseReady) {
         await saveMessage(user.uid, counsellorId, counsellorMessage);
@@ -199,7 +199,7 @@ export function ChatRoom({
         description: 'The AI could not respond. Please try again.',
         variant: 'destructive',
       });
-       const errorMessage: ChatMessage = { role: 'model', content: "I'm having trouble connecting right now. Please try again in a moment." };
+       const errorMessage: ChatMessage = { role: 'model', content: [{text: "I'm having trouble connecting right now. Please try again in a moment." }]};
        if(firebaseReady) {
          // Revert the user message on error by refetching
          // This is handled by the onSnapshot listener automatically.
@@ -214,6 +214,13 @@ export function ChatRoom({
   };
 
   const isButtonDisabled = isSending || !input.trim() || isPersonaLoading;
+
+  const renderContent = (content: any) => {
+    if (Array.isArray(content)) {
+        return content.map(part => part.text || '').join('');
+    }
+    return content;
+  }
 
   return (
     <div className={cn('min-h-screen w-full p-4 sm:p-6 flex items-center justify-center bg-gradient-to-br', theme.backgroundGradient)}>
@@ -262,7 +269,7 @@ export function ChatRoom({
                   msg.role === 'user' ? theme.userMessage : theme.counsellorMessage
                 )}
               >
-                {msg.content}
+                {renderContent(msg.content)}
               </div>
             </div>
           ))}

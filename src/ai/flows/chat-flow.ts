@@ -47,18 +47,18 @@ const chatFlow = ai.defineFlow(
     // Fetch the most recent history directly from Firestore
     const history = await getMessages(input.userId, input.counsellorId, 10);
     
-    const { output } = await ai.generate({
+    const response = await ai.generate({
         model: 'googleai/gemini-2.0-flash',
         prompt: input.message,
-        history: history.map(m => ({role: m.role, content: m.content})),
+        history: history.map(m => ({role: m.role, content: m.content.map(p => p)})),
         system: `System Instruction: You must follow this persona: ${input.persona}\n\nYour goal is to be a supportive and empathetic listener. You are not a licensed therapist, but a caring companion.\nGuide the conversation naturally. Do not give direct advice, but help the user explore their feelings through reflective questions.\nKeep your responses conversational and not too long.`
     });
 
-    const responseText = (output as any)?.text;
+    const responseText = response.text;
 
     if (!responseText) {
-        const safetyFeedback = (output as any)?.usage?.safety?.feedback;
-        if(safetyFeedback){
+        const safetyFeedback = response.safetyFeedback;
+        if(safetyFeedback && safetyFeedback.length > 0){
             console.error("Safety block detected in chat flow", safetyFeedback);
             return { response: "I'm sorry, I cannot respond to that. The topic is outside my ability to discuss safely." };
         }
@@ -68,4 +68,3 @@ const chatFlow = ai.defineFlow(
     return { response: responseText };
   }
 );
-

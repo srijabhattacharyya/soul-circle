@@ -344,7 +344,11 @@ export async function getMessages(userId: string, counsellorId: string, messageL
         const messages = docSnap.data().messages || [];
         // The array is already ordered by timestamp when saved.
         // We just need to get the last `messageLimit` messages.
-        return messages.slice(-messageLimit);
+        return messages.slice(-messageLimit).map((msg: any) => ({
+            ...msg,
+            // Ensure content is always an array of parts for consistency
+            content: Array.isArray(msg.content) ? msg.content : [{ text: msg.content }]
+        }));
     }
     return [];
 }
