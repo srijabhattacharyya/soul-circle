@@ -206,6 +206,8 @@ export default function ProfilePage() {
       majorStressorsOther: '',
       willingness: '',
       moodRating: [5],
+      counsellingGoals: [],
+      counsellingGoalsOther: '',
       selfHarmThoughts: '',
       therapyConcerns: '',
       consent: false,
