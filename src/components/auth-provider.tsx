@@ -1,12 +1,12 @@
 
 'use client';
 
+import * as React from 'react';
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import { onAuthStateChanged, type User } from 'firebase/auth';
 import { auth, isConfigValid } from '@/lib/firebase/config';
 import { usePathname, useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
-import * as React from 'react';
 
 type AuthContextType = {
   user: User | null;
@@ -16,7 +16,7 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType>({ user: null, loading: true, firebaseReady: false });
 
-const publicPaths = ['/login', '/about', '/legal', '/learn-more', '/care-circle', '/learn-further'];
+const publicPaths = ['/login', '/about', '/legal', '/learn-more', '/care-circle', '/learn-further', '/profile'];
 
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
