@@ -117,13 +117,6 @@ export function AppSidebar() {
                     <NavLink href="/care-circle"><HeartHandshake /><span>Meet the Counsellors</span></NavLink>
                 </>
             )}
-
-            {process.env.NODE_ENV === 'development' && (
-                <>
-                    <hr className="my-2 border-border"/>
-                    <NavLink href="/seed-data"><Database /><span>Seed Data</span></NavLink>
-                </>
-            )}
         </SidebarMenu>
       </SidebarContent>
        {user && (
