@@ -12,14 +12,14 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// This check is crucial. It verifies if the environment variable is loaded.
-export const isConfigValid = !!firebaseConfig.apiKey;
+// This check is crucial. It verifies if the environment variables are loaded.
+export const isConfigValid = !!firebaseConfig.apiKey && !!process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 
 let app: FirebaseApp;
 let auth: Auth;
 let db: Firestore;
 
-if (isConfigValid) {
+if (firebaseConfig.apiKey) {
     // If the config is valid, initialize Firebase services.
     app = getApps().length ? getApp() : initializeApp(firebaseConfig);
     auth = getAuth(app);
