@@ -10,7 +10,7 @@ import type { JournalFormValues } from '@/app/mind-haven/form-schema';
 import type { ChatMessage } from '@/components/chat-room';
 
 // USER PROFILE
-export async function getUserProfile(userId: string) {
+export async function getUserProfile(userId: string): Promise<ProfileFormValues | null> {
   if (!db) return null; // Return null if db is not initialized
   try {
     const docRef = doc(db, 'userProfiles', userId);
@@ -19,11 +19,13 @@ export async function getUserProfile(userId: string) {
     if (docSnap.exists()) {
       return docSnap.data() as ProfileFormValues;
     } else {
+      console.log(`No profile found for user: ${userId}`);
       return null;
     }
   } catch (error) {
     console.error('Error fetching user profile:', error);
-    throw new Error('Failed to fetch user profile.');
+    // Don't throw, just return null to allow graceful handling in the UI
+    return null;
   }
 }
 

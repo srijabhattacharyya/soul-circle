@@ -1,11 +1,14 @@
 
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/components/auth-provider';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { BookHeart, CloudSun, HeartHandshake, Zap, BarChart, Notebook, Star } from 'lucide-react';
+import { BookHeart, CloudSun, HeartHandshake, Zap, BarChart, Notebook, Star, Target, Check, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { getUserProfile, type ProfileFormValues } from '@/lib/firebase/service';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const features = [
   {
@@ -44,9 +47,55 @@ const quickAccess = [
     { title: "Saved Items", icon: <Star className="mr-2 h-4 w-4" />, link: "/saved-items"},
 ]
 
+const ProfilePromptCard = () => (
+    <Card className="mt-12 bg-gradient-to-r from-blue-100 to-indigo-100 border-indigo-200 shadow-lg animate-fade-in">
+        <CardHeader>
+            <CardTitle className="text-2xl text-indigo-800 flex items-center gap-2">
+                <Target className="h-6 w-6" />
+                Complete Your Profile – Unlock a Personalized Experience!
+            </CardTitle>
+            <CardDescription className="text-indigo-700">
+                Help us get to know you better so our expert counsellors can guide you with tailored advice and opportunities. 💬
+            </CardDescription>
+        </CardHeader>
+        <CardContent>
+            <p className="mb-4 font-semibold text-gray-700">✨ It only takes a minute, and it opens the door to:</p>
+            <ul className="space-y-2 mb-6 text-gray-600">
+                <li className="flex items-center gap-2"><Check className="h-5 w-5 text-green-500" /> Personalized guidance</li>
+                <li className="flex items-center gap-2"><Check className="h-5 w-5 text-green-500" /> Smarter career suggestions</li>
+                <li className="flex items-center gap-2"><Check className="h-5 w-5 text-green-500" /> Faster support</li>
+                <li className="flex items-center gap-2"><Check className="h-5 w-5 text-green-500" /> Better outcomes</li>
+            </ul>
+             <p className="text-sm text-gray-500 italic mb-4">🔍 Your journey starts with you. Let’s make it amazing – complete your profile now! 🚀</p>
+            <Button asChild>
+                <Link href="/profile">
+                    Complete Profile Now <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+            </Button>
+        </CardContent>
+    </Card>
+);
+
+
 export function Dashboard() {
   const { user } = useAuth();
-  const userName = user?.displayName?.split(' ')[0] || user?.email?.split('@')[0] || 'friend';
+  const [profile, setProfile] = useState<ProfileFormValues | null>(null);
+  const [isLoadingProfile, setIsLoadingProfile] = useState(true);
+
+  useEffect(() => {
+    async function fetchProfile() {
+      if (user) {
+        setIsLoadingProfile(true);
+        const userProfile = await getUserProfile(user.uid);
+        setProfile(userProfile);
+        setIsLoadingProfile(false);
+      }
+    }
+    fetchProfile();
+  }, [user]);
+
+  const userName = profile?.name?.split(' ')[0] || user?.email?.split('@')[0] || 'friend';
+  const isProfileComplete = !!profile?.name && !!profile?.age;
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-indigo-50 via-white to-rose-50 p-4 sm:p-8 pt-24">
@@ -76,6 +125,13 @@ export function Dashboard() {
           ))}
         </div>
         
+        {isLoadingProfile ? (
+            <Skeleton className="h-48 w-full mt-12 rounded-2xl" />
+        ) : !isProfileComplete ? (
+            <ProfilePromptCard />
+        ) : null}
+
+
         <Card className="mt-12 bg-white/70 backdrop-blur-sm rounded-2xl shadow-md border-gray-200">
             <CardHeader>
                 <CardTitle className="text-black">Quick Access</CardTitle>
