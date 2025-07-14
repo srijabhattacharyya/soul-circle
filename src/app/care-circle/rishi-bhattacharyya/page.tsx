@@ -38,7 +38,7 @@ export default function RishiPage() {
       counsellorName="Rishi Bhattacharyya"
       roomName="InnerVoice Chat"
       tagline="Where quiet reflections lead to clarity."
-      avatarSrc="/image/rishi-bhattacharyya.png"
+      avatarSrc="/images/rishi-bhattacharyya.png"
       theme={rishiTheme}
       headerIcon={<RishiIcon />}
       placeholderText="You’re chatting with Rishi Bhattacharyya. This space is private and judgment-free."
