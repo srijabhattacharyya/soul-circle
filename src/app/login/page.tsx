@@ -75,7 +75,7 @@ export default function LoginPage() {
         case 'auth/wrong-password':
         case 'auth/user-not-found':
         case AuthErrorCodes.INVALID_CREDENTIAL:
-          description = 'Incorrect email or password.';
+          description = 'Incorrect email or password. If you are a new user, please Sign Up instead.';
           break;
         case AuthErrorCodes.EMAIL_EXISTS:
         case 'auth/email-already-in-use':
