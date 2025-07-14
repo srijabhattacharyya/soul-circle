@@ -37,7 +37,7 @@ export default function ZoyaPage() {
       counsellorName="Zoya"
       roomName="SafeSpace"
       tagline="A gentle, trusted place to open up."
-      avatarSrc="https://placehold.co/60x60/FEE2E2/BE123C.png?text=Z"
+      avatarSrc="/images/zoya.png"
       theme={zoyaTheme}
       headerIcon={<ZoyaIcon />}
       placeholderText="You’re chatting with Zoya. This space is private and judgment-free."
