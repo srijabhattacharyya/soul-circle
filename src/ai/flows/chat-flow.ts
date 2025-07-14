@@ -60,10 +60,7 @@ const chatFlow = ai.defineFlow(
       },
     });
 
-    console.log('Full AI Response:', JSON.stringify(llmResponse, null, 2));
-
     const responseText = llmResponse.text;
-    console.log('Extracted Text:', responseText);
     
     if (!responseText) {
         console.error("AI failed to generate a valid text response.");
