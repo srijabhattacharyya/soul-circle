@@ -37,7 +37,7 @@ export default function RishiPage() {
       counsellorName="Rishi Bhattacharyya"
       roomName="InnerVoice Chat"
       tagline="A space for quiet contemplation."
-      avatarSrc="https://placehold.co/120x120.png"
+      avatarSrc="/images/rishi-bhattacharyya.png"
       theme={rishiTheme}
       headerIcon={<RishiIcon />}
       placeholderText="You’re chatting with Rishi Bhattacharyya. This space is private and judgment-free."

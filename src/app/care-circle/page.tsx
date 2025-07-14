@@ -68,7 +68,7 @@ const counsellors = [
     specialty: 'Spiritual & Wellness Coaching',
     description:
       "Greetings. I am Rishi. Let's explore the connections between your mind, body, and spirit. I am here to guide you toward inner wisdom and tranquility.",
-    imageUrl: 'https://placehold.co/400x300.png',
+    imageUrl: '/images/rishi-bhattacharyya.png',
     link: '/care-circle/rishi-bhattacharyya',
     age: 38,
     gender: 'Male',
