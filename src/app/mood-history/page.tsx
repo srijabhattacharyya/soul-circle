@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/components/auth-provider';
 import { getMoodHistory, type MoodEntry } from '@/lib/firebase/service';
-import { Loader2, Calendar, Smile, Meh, Frown } from 'lucide-react';
+import { Loader2, Calendar, Smile, Meh, Frown, AlertCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { format } from 'date-fns';
@@ -16,6 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 const moodIcons: { [key: number]: React.ReactNode } = {
   1: <Frown className="h-6 w-6 text-red-500" />,
@@ -29,17 +30,21 @@ export default function MoodHistoryPage() {
   const { user } = useAuth();
   const [moodData, setMoodData] = useState<MoodEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (user) {
       setIsLoading(true);
+      setError(null);
       getMoodHistory(user.uid)
         .then(data => {
           setMoodData(data);
         })
-        .catch(error => {
-          console.error(error);
-          // Handle error with a toast or message
+        .catch(err => {
+          console.error(err);
+          // Firestore index errors are the most common cause.
+          // The console log from Firebase will contain a direct link to create it.
+           setError("Could not load mood history. This is often due to a missing database index. Please check your browser's developer console for an error message from Firestore, which may contain a link to create the required index.");
         })
         .finally(() => {
           setIsLoading(false);
@@ -73,7 +78,15 @@ export default function MoodHistoryPage() {
           </p>
         </header>
 
-        {moodData.length > 0 ? (
+         {error && (
+            <Alert variant="destructive" className="mb-8">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+            </Alert>
+        )}
+
+        {!error && moodData.length > 0 ? (
           <div className="space-y-12">
             <Card className="bg-white/80 backdrop-blur-sm shadow-xl rounded-2xl">
               <CardHeader>
@@ -127,13 +140,15 @@ export default function MoodHistoryPage() {
             </Card>
           </div>
         ) : (
-          <Card className="text-center p-12 bg-white/80 backdrop-blur-sm shadow-lg rounded-2xl">
-            <Calendar className="mx-auto h-12 w-12 text-gray-400" />
-            <h2 className="mt-6 text-xl font-semibold text-gray-800">No Mood History Found</h2>
-            <p className="mt-2 text-gray-500">
-              Start logging your daily mood using the "Inner Weather" tool to see your history here.
-            </p>
-          </Card>
+          !error && (
+            <Card className="text-center p-12 bg-white/80 backdrop-blur-sm shadow-lg rounded-2xl">
+              <Calendar className="mx-auto h-12 w-12 text-gray-400" />
+              <h2 className="mt-6 text-xl font-semibold text-gray-800">No Mood History Found</h2>
+              <p className="mt-2 text-gray-500">
+                Start logging your daily mood using the "Inner Weather" tool to see your history here.
+              </p>
+            </Card>
+          )
         )}
       </div>
     </div>
