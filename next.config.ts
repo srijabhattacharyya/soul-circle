@@ -21,9 +21,7 @@ const nextConfig: NextConfig = {
       '*.cluster-6dx7corvpngoivimwvvljgokdw.cloudworkstations.dev',
     ],
   },
-  experimental: {
-    serverComponentsExternalPackages: ['@genkit-ai/googleai', 'firebase'],
-  },
+  serverExternalPackages: ['@genkit-ai/googleai', 'firebase'],
 };
 
 export default nextConfig;
