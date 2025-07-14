@@ -17,7 +17,15 @@ export async function getUserProfile(userId: string): Promise<ProfileFormValues 
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      return docSnap.data() as ProfileFormValues;
+      const data = docSnap.data();
+      // Convert Timestamps to serializable format (ISO strings)
+      if (data.createdAt && data.createdAt instanceof Timestamp) {
+        data.createdAt = data.createdAt.toDate().toISOString();
+      }
+      if (data.updatedAt && data.updatedAt instanceof Timestamp) {
+        data.updatedAt = data.updatedAt.toDate().toISOString();
+      }
+      return data as ProfileFormValues;
     } else {
       console.log(`No profile found for user: ${userId}`);
       return null;

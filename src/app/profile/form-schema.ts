@@ -59,6 +59,10 @@ export const profileSchema = z.object({
   consent: z.literal(true, {
     errorMap: () => ({ message: 'You must agree to the terms and disclaimer to continue.' }),
   }),
+
+  // Add createdAt and updatedAt to the schema
+  createdAt: z.string().optional(),
+  updatedAt: z.string().optional(),
 });
 
 export type ProfileFormValues = z.infer<typeof profileSchema>;
