@@ -22,7 +22,7 @@ const ResourceSchema = z.object({
     title: z.string().describe('The title of the resource.'),
     description: z.string().describe('A brief, 1-2 line description of the resource.'),
     url: z.string().describe('The direct URL to the resource.'),
-    type: z.enum(['Article', 'Video', 'Helpline', 'App', 'Tool', 'Website']).describe('The type of the resource.'),
+    type: z.enum(['Article', 'Tool', 'Helpline', 'App', 'Website']).describe('The type of the resource.'),
 });
 
 const ResourceFinderOutputSchema = z.object({
@@ -42,10 +42,10 @@ const prompt = ai.definePrompt({
   output: { schema: ResourceFinderOutputSchema },
   prompt: `You are an expert in compiling mental health and wellness resources. 
   Your task is to find exactly 3 highly relevant and trusted external resources for the given concern.
-  Provide a diverse set of resource types if possible (e.g., articles, videos, tools, apps, or official helplines).
+  Provide a diverse set of resource types if possible (e.g., articles, tools, apps, or official helplines).
   Ensure the links are from reputable, well-known, and current sources. Strongly prioritize resources published within the last 2-3 years to ensure the links are active and the information is up-to-date. Avoid obscure blogs or very old content.
 
-  If you are suggesting a YouTube video, it is crucial that you prioritize content from well-established, reputable channels (e.g., official health organizations, universities, well-known psychologists) and ensure the video was published recently (within the last 2-3 years) to maximize the likelihood that it is still available.
+  IMPORTANT: Do NOT suggest video resources.
 
   Concern: {{{concern}}}
 
