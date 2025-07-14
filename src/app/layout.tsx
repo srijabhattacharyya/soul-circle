@@ -5,8 +5,6 @@ import { Toaster as HotToaster } from 'react-hot-toast';
 import { cn } from '@/lib/utils';
 import { Inter } from 'next/font/google';
 import { AuthProvider } from '@/components/auth-provider';
-import { Sidebar, SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/components/app-sidebar';
 
 
 export const metadata: Metadata = {
@@ -33,18 +31,11 @@ export default function RootLayout({
         )}
       >
         <AuthProvider>
-            <SidebarProvider>
-                <Sidebar>
-                    <AppSidebar />
-                </Sidebar>
-                 <SidebarInset>
-                    <main>
-                      {children}
-                      <HotToaster />
-                    </main>
-                    <ShadToaster />
-                </SidebarInset>
-            </SidebarProvider>
+          <main>
+            {children}
+            <HotToaster />
+          </main>
+          <ShadToaster />
         </AuthProvider>
       </body>
     </html>
