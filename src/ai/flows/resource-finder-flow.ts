@@ -53,7 +53,8 @@ const prompt = ai.definePrompt({
   {{/if}}
 
   {{#if existingTitles}}
-  Please find new resources that are not in the following list:
+  IMPORTANT: You have already provided the following resources. You MUST find 3 NEW, DIFFERENT resources that are NOT in this list. DO NOT repeat any of the titles listed below.
+  Existing Resources:
   {{#each existingTitles}}
   - {{{this}}}
   {{/each}}
