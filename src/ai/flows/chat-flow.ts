@@ -10,6 +10,7 @@
 
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
+import type {Message} from 'genkit';
 
 const MessageSchema = z.object({
   role: z.enum(['user', 'model']),
@@ -32,42 +33,40 @@ export async function chatWithCounsellor(input: ChatInput): Promise<ChatOutput> 
   return chatFlow(input);
 }
 
-const prompt = ai.definePrompt({
-  name: 'counsellorChatPrompt',
-  input: { schema: ChatInputSchema },
-  output: { schema: ChatOutputSchema },
-  system: '{{{persona}}}',
-  messages: [
-    {
-      role: 'user',
-      content: `
-      {{#each history}}
-        {{#if (eq role "user")}}
-User: {{{content}}}
-        {{~/if}}
-        {{#if (eq role "model")}}
-AI: {{{content}}}
-        {{~/if}}
-      {{/each}}
-      
-User: {{{message}}}
-      AI:`,
-    },
-  ],
-  config: {
-    temperature: 0.8,
-  }
-});
-
-
 const chatFlow = ai.defineFlow(
   {
     name: 'chatFlow',
     inputSchema: ChatInputSchema,
     outputSchema: ChatOutputSchema,
   },
-  async (input) => {
-    const { output } = await prompt(input);
-    return output!;
+  async ({ persona, history, message }) => {
+    
+    const messages: Message[] = [
+        ...history.map((msg) => ({
+            role: msg.role,
+            content: [{ text: msg.content }],
+        })),
+        {
+            role: 'user',
+            content: [{ text: message }],
+        },
+    ];
+
+    const llmResponse = await ai.generate({
+      system: persona,
+      messages: messages,
+      config: {
+        temperature: 0.8,
+      },
+      output: {
+        schema: ChatOutputSchema,
+      }
+    });
+
+    const output = llmResponse.output();
+    if (!output) {
+        throw new Error("AI failed to generate a valid response.");
+    }
+    return output;
   }
 );
