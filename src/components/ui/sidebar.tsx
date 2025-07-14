@@ -68,7 +68,7 @@ const SidebarProvider = React.forwardRef<
     },
     ref
   ) => {
-    const isMobile = useIsMobile()
+    const [isMobile, setIsMobile] = React.useState(false);
     const [openMobile, setOpenMobile] = React.useState(false)
 
     const [_open, _setOpen] = React.useState(defaultOpen)
@@ -107,6 +107,15 @@ const SidebarProvider = React.forwardRef<
       window.addEventListener("keydown", handleKeyDown)
       return () => window.removeEventListener("keydown", handleKeyDown)
     }, [toggleSidebar])
+    
+    React.useEffect(() => {
+      const checkIsMobile = () => {
+        setIsMobile(window.innerWidth < 768);
+      };
+      checkIsMobile();
+      window.addEventListener('resize', checkIsMobile);
+      return () => window.removeEventListener('resize', checkIsMobile);
+    }, []);
 
     const state = open ? "expanded" : "collapsed"
 
@@ -218,7 +227,7 @@ const Sidebar = React.forwardRef<
           <div
             ref={ref}
             className={cn(
-                "group peer hidden md:block text-sidebar-foreground",
+                "group peer hidden text-sidebar-foreground sm:block",
                  className
             )}
             data-state={state}
