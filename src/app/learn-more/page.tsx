@@ -9,28 +9,6 @@ export default function AboutPage() {
       <main className="flex-1">
         <section className="w-full pt-24 md:pt-32 lg:pt-40 pb-6 md:pb-8 lg:pb-0">
           <div className="container px-4 md:px-6 learn-more-page">
-            <div className="flex flex-col items-center justify-center space-y-4">
-              <Image
-                src="https://placehold.co/600x450.png"
-                alt="Founder's Photo"
-                width={600}
-                height={450}
-                className="rounded-lg object-cover"
-                data-ai-hint="portrait founder"
-              />
-              <div className="pt-4 text-center">
-                <p className="text-4xl font-bold text-foreground">
-                  By Srija Bhattacharyya
-                </p>
-                <p className="text-2xl text-foreground/90">
-                  3rd Year Student, B.Tech CSE
-                </p>
-                <p className="text-xl text-foreground/80">
-                  Kalinga Institute of Industrial Technology (KIIT),
-                  Bhubaneswar
-                </p>
-              </div>
-            </div>
             <div className="max-w-3xl mx-auto space-y-4 mt-8">
               <p>
                 During my years of hostel life, I have had countless
