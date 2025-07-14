@@ -150,7 +150,7 @@ export async function getJournalHistory(userId: string): Promise<JournalEntry[]>
         return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as JournalEntry));
     } catch (error) {
         console.error('Error getting journal history:', error);
-        throw new Error('Failed to get journal history.');
+        throw new Error('Failed to save journal history.');
     }
 }
 
@@ -311,7 +311,7 @@ export async function saveMessage(userId: string, counsellorId: string, message:
 
     const messageToSave = {
         ...message,
-        timestamp: serverTimestamp(),
+        timestamp: Timestamp.now(), // Use client-side timestamp for arrays
     };
 
     try {
@@ -324,7 +324,7 @@ export async function saveMessage(userId: string, counsellorId: string, message:
             await setDoc(docRef, {
                 uid: userId,
                 counsellorId,
-                createdAt: serverTimestamp(),
+                createdAt: serverTimestamp(), // Use server timestamp for new doc
                 messages: [messageToSave]
             });
         }
@@ -333,3 +333,5 @@ export async function saveMessage(userId: string, counsellorId: string, message:
         throw new Error('Failed to save message.');
     }
 }
+
+    
