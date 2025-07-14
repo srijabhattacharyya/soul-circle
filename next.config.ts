@@ -1,4 +1,5 @@
 import type {NextConfig} from 'next';
+require('dotenv').config({ path: './src/app/.env.local' });
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -20,6 +21,9 @@ const nextConfig: NextConfig = {
     allowedDevOrigins: [
       '*.cluster-6dx7corvpngoivimwvvljgokdw.cloudworkstations.dev',
     ],
+  },
+  experimental: {
+    serverComponentsExternalPackages: ['@genkit-ai/googleai', 'firebase'],
   },
 };
 
