@@ -44,8 +44,8 @@ const chatFlow = ai.defineFlow(
   },
   async (input) => {
     
-    // Fetch the most recent history directly from Firestore
-    const history = await getMessages(input.userId, input.counsellorId, 10);
+    // History is no longer fetched to provide a "clean slate" experience.
+    const history: ChatMessage[] = [];
     
     const response = await ai.generate({
         model: 'googleai/gemini-2.0-flash',

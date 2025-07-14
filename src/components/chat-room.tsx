@@ -129,32 +129,6 @@ export function ChatRoom({
   }, [counsellorId, firebaseReady, user, toast]);
 
 
-  // Effect for real-time chat updates
-  useEffect(() => {
-    if (!user || !firebaseReady) return;
-
-    const chatId = `${user.uid}_${counsellorId}`;
-    const docRef = doc(db, 'chats', chatId);
-    
-    const unsubscribe = onSnapshot(docRef, (docSnap) => {
-      if (docSnap.exists()) {
-          setMessages(docSnap.data().messages || []);
-      } else {
-          setMessages([]);
-      }
-    }, (error) => {
-        toast({
-        title: 'Error',
-        description: 'Could not load chat history.',
-        variant: 'destructive',
-        });
-    });
-
-    return () => unsubscribe();
-
-  }, [user, counsellorId, firebaseReady, toast]);
-
-
   useEffect(() => {
     chatHistoryRef.current?.scrollTo({
       top: chatHistoryRef.current.scrollHeight,
@@ -170,6 +144,7 @@ export function ChatRoom({
     const currentInput = input;
     setInput('');
     setIsSending(true);
+    setMessages(prev => [...prev, userMessage]);
     
     try {
       if (firebaseReady) {
@@ -187,10 +162,9 @@ export function ChatRoom({
       
       if (firebaseReady) {
         await saveMessage(user.uid, counsellorId, counsellorMessage);
-      } else {
-        // Handle offline mode: just update local state
-        setMessages(prev => [...prev, userMessage, counsellorMessage]);
       }
+      // Update local state with the AI's response
+      setMessages(prev => [...prev, counsellorMessage]);
 
     } catch (error) {
       console.error("Error during chat:", error);
@@ -201,13 +175,10 @@ export function ChatRoom({
       });
        const errorMessage: ChatMessage = { role: 'model', content: [{text: "I'm having trouble connecting right now. Please try again in a moment." }]};
        if(firebaseReady) {
-         // Revert the user message on error by refetching
-         // This is handled by the onSnapshot listener automatically.
-         // But we can add the error message manually.
+         // Save the error message to history
          await saveMessage(user.uid, counsellorId, errorMessage);
-       } else {
-         setMessages(prev => [...prev, userMessage, errorMessage]);
        }
+       setMessages(prev => [...prev.slice(0, -1), errorMessage]); // Replace user message with error
     } finally {
       setIsSending(false);
     }
@@ -273,7 +244,7 @@ export function ChatRoom({
               </div>
             </div>
           ))}
-           {isSending && (
+           {isSending && messages[messages.length-1]?.role === 'user' && (
              <div className="flex justify-start">
                 <div className={cn('p-3 rounded-lg max-w-[75%] shadow-sm flex items-center space-x-2', theme.counsellorMessage)}>
                     <Loader2 className="h-5 w-5 animate-spin" />
