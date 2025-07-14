@@ -117,17 +117,15 @@ export function AppSidebar() {
                     <NavLink href="/learn-more"><Info /><span>About</span></NavLink>
                     <NavLink href="/legal"><Scale /><span>Legal & Privacy</span></NavLink>
                     <NavLink href="/care-circle"><HeartHandshake /><span>Meet the Counsellors</span></NavLink>
+                     <hr className="my-2 border-border"/>
+                    <NavLink href="/login"><LogIn /><span>Login to view more</span></NavLink>
                 </>
             )}
         </SidebarMenu>
       </SidebarContent>
-       {user ? (
+       {user && (
           <SidebarFooter>
             <NavLink href="/logout"><LogOut /><span>Logout</span></NavLink>
-          </SidebarFooter>
-        ) : (
-          <SidebarFooter>
-            <NavLink href="/login"><LogIn /><span>Login to view more</span></NavLink>
           </SidebarFooter>
         )}
     </>
