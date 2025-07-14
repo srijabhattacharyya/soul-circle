@@ -6,6 +6,7 @@ import { onAuthStateChanged, type User } from 'firebase/auth';
 import { auth, isConfigValid } from '@/lib/firebase/config';
 import { usePathname, useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
+import * as React from 'react';
 
 type AuthContextType = {
   user: User | null;

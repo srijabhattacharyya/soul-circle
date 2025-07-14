@@ -29,10 +29,10 @@ import {
     LogOut,
     ChevronDown,
     HeartHandshake,
-    Database,
     LineChart,
     Notebook,
-    Star
+    Star,
+    Library,
 } from 'lucide-react';
 
 const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
@@ -105,6 +105,7 @@ export function AppSidebar() {
                     <NavSubLink href="/journal-history"><Notebook /><span>Journal History</span></NavSubLink>
                     <NavSubLink href="/saved-items"><Star /><span>Saved Items</span></NavSubLink>
                 </NavSubMenu>
+                <NavLink href="/resources"><Library /><span>Resource Library</span></NavLink>
                  <hr className="my-2 border-border"/>
                  <NavLink href="/profile"><User /><span>My Profile</span></NavLink>
                  <NavLink href="/settings"><Settings /><span>Settings</span></NavLink>
