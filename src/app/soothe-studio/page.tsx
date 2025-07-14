@@ -64,15 +64,14 @@ const BreathingCircle = ({ type }: { type: BreathingType }) => {
     if (isActive) {
       const startCycle = () => {
         let stepIndex = 0;
-        let timeInCycle = 0;
         
         const updateStep = () => {
           setCurrentStep(stepIndex);
-          const currentStepDuration = pattern[stepIndex].duration * 1000;
-          timeInCycle += currentStepDuration;
-          stepIndex = (stepIndex + 1) % pattern.length;
-
-          intervalRef.current = setTimeout(updateStep, currentStepDuration);
+          if (pattern[stepIndex]) {
+            const currentStepDuration = pattern[stepIndex].duration * 1000;
+            stepIndex = (stepIndex + 1) % pattern.length;
+            intervalRef.current = setTimeout(updateStep, currentStepDuration);
+          }
         };
         
         updateStep();
@@ -91,7 +90,7 @@ const BreathingCircle = ({ type }: { type: BreathingType }) => {
   }, [isActive, type, pattern]);
 
   const animationDuration = isActive ? `${totalDuration}s` : '0s';
-  const animationClass = isActive && pattern[currentStep].text.includes('Inhale') ? 'animate-inhale' : 'animate-exhale';
+  const animationClass = isActive && pattern[currentStep]?.text.includes('Inhale') ? 'animate-inhale' : 'animate-exhale';
   const textAnimation = isActive ? 'animate-pulse' : '';
 
   return (
@@ -99,14 +98,14 @@ const BreathingCircle = ({ type }: { type: BreathingType }) => {
       <div
         className="w-48 h-48 sm:w-64 sm:h-64 rounded-full bg-gradient-to-br from-blue-200 to-purple-200 flex items-center justify-center transition-transform duration-1000 ease-in-out"
         style={{
-           animation: isActive ? `${pattern[currentStep].text.toLowerCase().includes('inhale') ? 'inhale' : 'exhale'} ${pattern[currentStep].duration}s ease-in-out forwards` : 'none',
+           animation: isActive && pattern[currentStep] ? `${pattern[currentStep].text.toLowerCase().includes('inhale') ? 'inhale' : 'exhale'} ${pattern[currentStep].duration}s ease-in-out forwards` : 'none',
         }}
       >
         <div className="text-center">
           <p className={`text-2xl font-semibold text-indigo-800 ${textAnimation}`}>
-            {isActive ? pattern[currentStep].text : "Ready?"}
+            {isActive && pattern[currentStep] ? pattern[currentStep].text : "Ready?"}
           </p>
-          {isActive && (
+          {isActive && pattern[currentStep] && (
             <p className="text-4xl font-bold text-indigo-600">{pattern[currentStep].duration}</p>
           )}
         </div>
