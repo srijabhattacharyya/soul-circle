@@ -33,16 +33,6 @@ const counsellors = [
     gender: 'Male',
   },
   {
-    id: 'rishi_bhattacharyya',
-    name: 'Rishi Bhattacharyya',
-    specialty: 'Inner Healing, Purpose Discovery',
-    description: "Namaste, I am Rishi. Together, we’ll explore your story—through mindful pauses and the quiet truths of life. The journey within is the most meaningful one.",
-    imageUrl: '/images/rishi-bhattacharyya.png',
-    link: '/care-circle/rishi-bhattacharyya',
-    age: 65,
-    gender: 'Male',
-  },
-  {
     id: 'zoya',
     name: 'Zoya',
     specialty: 'Mood Tracking, Journaling',
