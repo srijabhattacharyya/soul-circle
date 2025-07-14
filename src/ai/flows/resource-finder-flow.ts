@@ -43,7 +43,7 @@ const prompt = ai.definePrompt({
   prompt: `You are an expert in compiling mental health and wellness resources. 
   Your task is to find exactly 3 highly relevant and trusted external resources for the given concern.
   Provide a diverse set of resource types if possible (e.g., articles, videos, tools, apps, or official helplines).
-  Ensure the links are from reputable, well-known, and current sources (e.g., government health organizations like NIMH, respected non-profits like NAMI, academic institutions, or major health publishers like Healthline). Avoid obscure blogs or very old content.
+  Ensure the links are from reputable, well-known, and current sources. Strongly prioritize resources published within the last 2-3 years to ensure the links are active and the information is up-to-date. Avoid obscure blogs or very old content.
 
   Concern: {{{concern}}}
 
