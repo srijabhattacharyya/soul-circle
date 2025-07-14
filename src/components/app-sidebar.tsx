@@ -92,6 +92,7 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
+            <NavLink href="/home"><Home /><span>Home</span></NavLink>
             {user ? (
               <>
                 <NavLink href="/"><Home /><span>Dashboard</span></NavLink>
@@ -113,7 +114,6 @@ export function AppSidebar() {
               </>
             ) : (
                  <>
-                    <NavLink href="/"><Home /><span>Home</span></NavLink>
                     <NavLink href="/learn-more"><Info /><span>About</span></NavLink>
                     <NavLink href="/legal"><Scale /><span>Legal & Privacy</span></NavLink>
                     <NavLink href="/care-circle"><HeartHandshake /><span>Meet the Counsellors</span></NavLink>

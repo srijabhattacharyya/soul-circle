@@ -16,7 +16,7 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType>({ user: null, loading: true, firebaseReady: false });
 
-const publicPaths = ['/login', '/about', '/legal', '/learn-more', '/care-circle', '/learn-further', '/profile'];
+const publicPaths = ['/login', '/about', '/legal', '/learn-more', '/care-circle', '/learn-further', '/profile', '/home'];
 
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
