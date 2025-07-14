@@ -65,17 +65,6 @@ const counsellors = [
     age: 45,
     gender: 'Female',
   },
-  {
-    id: 'rishi_bhattacharyya',
-    name: 'Rishi Bhattacharyya',
-    specialty: 'Spiritual & Wellness Coaching',
-    description:
-      "Greetings. I am Rishi. Let's explore the connections between your mind, body, and spirit. I am here to guide you toward inner wisdom and tranquility.",
-    imageUrl: '/images/rishi-bhattacharyya.png',
-    link: '/care-circle/rishi-bhattacharyya',
-    age: 38,
-    gender: 'Male',
-  },
 ];
 
 
