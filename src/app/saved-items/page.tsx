@@ -28,8 +28,13 @@ export default function SavedItemsPage() {
                 getSavedAffirmations(user.uid),
                 getSavedGoals(user.uid)
             ]);
-            setAffirmations(affirmationsData);
-            setGoals(goalsData);
+            
+            // Sort data on the client-side
+            const sortedAffirmations = affirmationsData.sort((a, b) => b.savedAt.toDate().getTime() - a.savedAt.toDate().getTime());
+            const sortedGoals = goalsData.sort((a, b) => b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime());
+
+            setAffirmations(sortedAffirmations);
+            setGoals(sortedGoals);
         } catch (error) {
             console.error(error);
             toast({ title: "Error", description: "Could not load saved items.", variant: "destructive" });

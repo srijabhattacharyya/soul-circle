@@ -227,14 +227,14 @@ export async function saveUserGoal(userId: string, goalData: Omit<SavedGoal, 'id
 
 export async function getSavedAffirmations(userId: string): Promise<SavedAffirmation[]> {
     if (!db) return [];
-    const q = query(collection(db, 'savedAffirmations'), where('uid', '==', userId), orderBy('savedAt', 'desc'));
+    const q = query(collection(db, 'savedAffirmations'), where('uid', '==', userId));
     const snapshot = await getDocs(q);
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SavedAffirmation));
 }
 
 export async function getSavedGoals(userId: string): Promise<SavedGoal[]> {
     if (!db) return [];
-    const q = query(collection(db, 'userGoals'), where('uid', '==', userId), orderBy('createdAt', 'desc'));
+    const q = query(collection(db, 'userGoals'), where('uid', '==', userId));
     const snapshot = await getDocs(q);
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SavedGoal));
 }
