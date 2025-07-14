@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster as ShadToaster } from '@/components/ui/toaster';
@@ -5,6 +6,8 @@ import { Toaster as HotToaster } from 'react-hot-toast';
 import { cn } from '@/lib/utils';
 import { Inter } from 'next/font/google';
 import { AuthProvider } from '@/components/auth-provider';
+import { AppSidebar } from '@/components/app-sidebar';
+import { SidebarProvider, Sidebar, SidebarInset } from '@/components/ui/sidebar';
 
 
 export const metadata: Metadata = {
@@ -31,10 +34,15 @@ export default function RootLayout({
         )}
       >
         <AuthProvider>
-          <main>
-            {children}
+          <SidebarProvider>
+            <Sidebar>
+              <AppSidebar />
+            </Sidebar>
+            <SidebarInset>
+                {children}
+            </SidebarInset>
             <HotToaster />
-          </main>
+          </SidebarProvider>
           <ShadToaster />
         </AuthProvider>
       </body>
