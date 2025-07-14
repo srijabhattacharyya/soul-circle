@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview An AI flow for handling conversational chat with a persona.
@@ -37,13 +38,22 @@ const prompt = ai.definePrompt({
   output: { schema: ChatOutputSchema },
   system: '{{{persona}}}',
   messages: [
-    ...('{{{history}}}' as any),
-    { role: 'user', content: '{{{message}}}' }
+    {
+      role: 'user',
+      content: `
+      {{#each history}}
+        {{#if (eq role 'user')}}
+          User: {{{content}}}
+        {{/if}}
+        {{#if (eq role 'model')}}
+          AI: {{{content}}}
+        {{/if}}
+      {{/each}}
+      
+      User: {{{message}}}
+      `,
+    },
   ],
-  output: {
-    format: 'json',
-    schema: z.object({ response: z.string() })
-  },
   config: {
     temperature: 0.8,
   }
